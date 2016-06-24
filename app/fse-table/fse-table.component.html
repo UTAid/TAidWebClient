@@ -1,0 +1,12 @@
+<table *ngIf="content">
+  <thead><tr>
+    <th
+      *ngFor="let col of content.columns"
+      (click)="sortOn(col)">{{col.dispName}}</th>
+  </tr></thead>
+  <tbody><tr *ngFor="let row of content.rows">
+    <td *ngFor="let col of content.columns">
+      {{row[col.propName]}}
+    </td>
+  </tr></tbody>
+</table>

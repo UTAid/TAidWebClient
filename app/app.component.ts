@@ -1,19 +1,21 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CORE_DIRECTIVES, FORM_DIRECTIVES } from '@angular/common';
 import { Http, Headers } from '@angular/http';
 
+import {Student} from "./student";
+import {FSETableComponent} from "./fse-table/fse-table.component";
+import {FSETableContent} from "./fse-table/fse-table-content";
 import { AuthenticationService } from './authentication.service';
 
 @Component({
   selector: 'my-app',
-  directives: [ CORE_DIRECTIVES, FORM_DIRECTIVES ],
+  directives: [ CORE_DIRECTIVES, FORM_DIRECTIVES, FSETableComponent ],
   providers: [ AuthenticationService ],
   templateUrl: "app/app.component.html",
 })
 
 export class AppComponent{
-  studentList: string;
+  studentList: FSETableContent<Student>;
   isLogon: boolean;
 
   constructor(public http: Http, private authService: AuthenticationService) {
@@ -48,13 +50,23 @@ export class AppComponent{
   }
 
   getStudents() {
-    this.http.get('http://localhost:8000/api/v0/students/?format=json')
-      .subscribe(
-      data => this.studentList = JSON.stringify(data.json(), null, 2),
-      err => this.studentList = "Could not fetch students: " + err,
-      () => console.log('student fetch complete')
-    );
-
+    let list:Student[] = [
+      {
+        university_id: "999999999",
+        student_number: "888888888",
+        first_name: "Test",
+        last_name: "Ing",
+        email: "test.ing@mail.com"
+      },
+      {
+        university_id: "123456789",
+        student_number: "987654321",
+        first_name: "Angular",
+        last_name: "Django",
+        email: "dj.ango@mail.com"
+      }
+    ];
+    this.studentList = new FSETableContent<Student>(Student.fsetColumnMap, list);
   }
 
 }
