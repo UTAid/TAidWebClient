@@ -2,38 +2,39 @@
   "name": "angular2-quickstart",
   "version": "1.0.0",
   "scripts": {
-    "start": "tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",
-    "lite": "lite-server",
-    "postinstall": "typings install",
-    "tsc": "tsc",
-    "tsc:w": "tsc -w",
+    "gulp": "./node_modules/gulp/bin/gulp.js",
+    "start": "npm run gulp start",
+    "watch": "npm run gulp watch",
+    "clean": "npm run gulp clean",
+    "build": "npm run gulp build",
     "typings": "typings"
   },
   "license": "ISC",
   "dependencies": {
-    "@angular/common":  "2.0.0-rc.2",
-    "@angular/compiler":  "2.0.0-rc.2",
-    "@angular/core":  "2.0.0-rc.2",
-    "@angular/http":  "2.0.0-rc.2",
-    "@angular/platform-browser":  "2.0.0-rc.2",
-    "@angular/platform-browser-dynamic":  "2.0.0-rc.2",
-    "@angular/router":  "2.0.0-rc.2",
-    "@angular/router-deprecated":  "2.0.0-rc.2",
-    "@angular/upgrade":  "2.0.0-rc.2",
-
+    "@angular/common": "2.0.0-rc.2",
+    "@angular/compiler": "2.0.0-rc.2",
+    "@angular/core": "2.0.0-rc.2",
+    "@angular/http": "2.0.0-rc.2",
+    "@angular/platform-browser": "2.0.0-rc.2",
+    "@angular/platform-browser-dynamic": "2.0.0-rc.2",
+    "@angular/router": "2.0.0-rc.2",
+    "@angular/router-deprecated": "2.0.0-rc.2",
+    "@angular/upgrade": "2.0.0-rc.2",
     "systemjs": "0.19.27",
     "core-js": "^2.4.0",
     "reflect-metadata": "^0.1.3",
     "rxjs": "5.0.0-beta.6",
     "zone.js": "^0.6.12",
-
     "angular2-in-memory-web-api": "0.0.12",
     "bootstrap": "^3.3.6"
   },
   "devDependencies": {
-    "concurrently": "^2.0.0",
-    "lite-server": "^2.2.0",
+    "del": "^2.2.1",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-typescript": "^2.13.6",
+    "gulp-util": "^3.0.7",
     "typescript": "^1.8.10",
-    "typings":"^1.0.4"
+    "typings": "^1.0.4"
   }
 }

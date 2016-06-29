@@ -4,8 +4,7 @@ node_modules
 jspm_packages
 link-checker-results.txt
 **/*npm-debug.log.*
-*.js
-*.js.map
+dist/**
 _test-output
 _temp
 
@@ -15,3 +14,4 @@ _temp
 !systemjs.config.js
 !typings/typings.d.ts
 !wallaby.js
+!gulpfile.js

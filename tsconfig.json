@@ -4,7 +4,9 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "build",
+    "rootDir": "src",
+    "project": "src",
+    "outDir": "dist",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "removeComments": false,
@@ -13,5 +15,6 @@
   },
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "compileOnSave": false
 }

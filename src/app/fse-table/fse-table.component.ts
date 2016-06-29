@@ -3,8 +3,9 @@ import {Component, Input, OnInit} from "@angular/core";
 import {FSETableContent, Column, SortOrder} from './fse-table-content';
 
 @Component({
+  moduleId: module.id,
   selector: 'fse-table',
-  templateUrl: 'app/fse-table/fse-table.component.html',
+  templateUrl: 'fse-table.component.html',
 })
 
 // Filterable, Sortable, Editable table.

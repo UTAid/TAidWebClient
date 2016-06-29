@@ -1,1 +1,0 @@
-Transpiled typescript goes here.

@@ -3,7 +3,7 @@ A web client built using Angular2 for [TAid](https://github.com/UTAid/TAidBacken
 
 ## What's being used?
 
-Angular2, NPM, and SystemJS. TypeScript is used instead of vanilla JS.
+Angular2, NPM, gulp, and SystemJS. TypeScript is used instead of vanilla JS.
 
 ## How to run it?
 

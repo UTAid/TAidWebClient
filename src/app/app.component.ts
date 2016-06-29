@@ -8,10 +8,11 @@ import {FSETableContent} from "./fse-table/fse-table-content";
 import { AuthenticationService } from './authentication.service';
 
 @Component({
+  moduleId: module.id,
   selector: 'my-app',
   directives: [ CORE_DIRECTIVES, FORM_DIRECTIVES, FSETableComponent ],
   providers: [ AuthenticationService ],
-  templateUrl: "app/app.component.html",
+  templateUrl: "app.component.html",
 })
 
 export class AppComponent{
