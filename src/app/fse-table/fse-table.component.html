@@ -4,9 +4,20 @@
       *ngFor="let col of content.columns"
       (click)="sortOn(col)">{{col.dispName}}</th>
   </tr></thead>
+
   <tbody><tr *ngFor="let row of content.rows">
-    <td *ngFor="let col of content.columns">
-      {{row[col.propName]}}
+    <td *ngFor="let col of content.columns" (dblclick)="edit(row, col.propName)">
+      <!-- When the selected row and property matches, enable text box. -->
+      <!-- focusme is the selector for FocusMeDirective. It focuses the
+      element on ngAfterViewInit lifecycle event-->
+      <input focusme
+        *ngIf="selectedRow === row && selectedProp === col.propName"
+        [(ngModel)]="row[col.propName]"
+        (keydown.esc)="resetEdit()"
+        (blur)="resetEdit()">
+      <p *ngIf="selectedRow !== row || selectedProp !== col.propName">
+        {{row[col.propName]}}
+      </p>
     </td>
   </tr></tbody>
 </table>
