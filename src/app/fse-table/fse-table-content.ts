@@ -70,13 +70,10 @@ export class FSETableContent<T>{
     switch (order) {
       case SortOrder.ASC:
         this._rows.sort((a, b) => sort(a[col.propName], b[col.propName]));
-        console.log("Sort asc");
         break;
       case SortOrder.DEC:
-        console.log("Sort dec");
         this._rows.sort((a, b) => -1*sort(a[col.propName], b[col.propName]));
         break;
-      default: console.log("Sort none");
     }
   }
 }

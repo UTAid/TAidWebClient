@@ -1,29 +1,15 @@
-import {Component, Input, OnInit, Directive, ElementRef} from "@angular/core";
+import {Component, Input, OnInit, Directive, ElementRef, EventEmitter}
+  from "@angular/core";
+
 import {FSETableContent, Column, SortOrder} from './fse-table-content';
-
-/*
-* An attribute directive that focuses on the selected element on
-* ngAfterViewInit event.
-*/
-@Directive({
-  selector: `[focusme]`
-})
-
-class FocusMeDirective {
-  constructor(private el: ElementRef) {}
-
-  ngAfterViewInit() {
-    this.el.nativeElement.focus();
-  }
-}
-
+import {FSECell} from './fse-cell.component';
 
 /*
 * Filterable, Sortable, Editable table component.
 */
 @Component({
   moduleId: module.id,
-  directives: [FocusMeDirective],
+  directives: [FSECell],
   selector: 'fse-table',
   templateUrl: 'fse-table.component.html',
 })
@@ -35,14 +21,13 @@ export class FSETableComponent<T> implements OnInit{
   private sortColumn: Column;
   private sortOrder: SortOrder;
 
-  // For determining which cell is currently being edited.
-  private selectedRow: T;
-  private selectedProp: string;
-
   ngOnInit(){
     this.sortColumn = new Column('', '');
     this.sortOrder = SortOrder.NONE;
-    this.resetEdit();
+  }
+
+  private isSortedAsc(): boolean {
+    return this.sortOrder === SortOrder.ASC;
   }
 
   private sortOn(col: Column){
@@ -58,17 +43,6 @@ export class FSETableComponent<T> implements OnInit{
       this.sortOrder = SortOrder.ASC;
     }
     this.content.sort(this.sortColumn, this.sortOrder);
-  }
-
-  private edit(row: T, prop: string){
-    this.selectedRow = row;
-    this.selectedProp = prop;
-    this.sortOrder = SortOrder.NONE;
-  }
-
-  private resetEdit(){
-    this.selectedRow = null;
-    this.selectedProp = null;
   }
 
 }
