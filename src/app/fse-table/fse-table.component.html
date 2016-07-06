@@ -2,12 +2,12 @@
   <thead><tr>
     <th
       *ngFor="let col of content.columns"
-      (click)="sortOn(col)">
+      (click)="sortOn(col.dispName)">
       <span>{{col.dispName}}</span>
-      <span *ngIf="sortColumn === col"
+      <span *ngIf="sortColumn === col.dispName"
         class="fa"
-        [class.fa-chevron-up]="isSortedAsc()"
-        [class.fa-chevron-down]="!isSortedAsc()">
+        [class.fa-chevron-up]="isSortedAsc"
+        [class.fa-chevron-down]="!isSortedAsc">
       </span>
     </th>
   </tr></thead>
@@ -15,6 +15,7 @@
     <td *ngFor="let col of content.columns"
       fse-cell
       [row]="row"
-      [property]="col.propName">
+      [col]="col"
+      (edited)=resetSort()>
   </tr></tbody>
 </table>

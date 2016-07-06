@@ -5,10 +5,27 @@ export class Student{
   last_name: string;
   email: string;
 
-  static fsetColumnMap: {[id:string]: string;} = {
-    "university_id": "ID",
-    "first_name": "First Name",
-    "last_name": "Last Name",
-    "email": "Email",
-  };
+  static fsetColumnMap: {
+    [dispName: string]: {
+      setter: (v: string, o: Student) => void,
+      getter: (o: Student) => string
+    } } =
+    {
+      "ID": {
+        setter: (v, o) => o.university_id = v,
+        getter: (o) => o.university_id,
+      },
+      "First Name": {
+        setter: (v, o) => o.first_name = v,
+        getter: (o) => o.first_name,
+      },
+      "Last Name": {
+        setter: (v, o) => o.last_name = v,
+        getter: (o) => o.last_name,
+      },
+      "Email": {
+        setter: (v, o) => o.email = v,
+        getter: (o) => o.email,
+      },
+    };
 }
