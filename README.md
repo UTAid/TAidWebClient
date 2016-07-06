@@ -1,38 +1,31 @@
-# TAid Web Front-end
-A web client built using Angular2 for [TAid](https://github.com/UTAid/TAidBackend)
+# TAidWebClient
 
-## What's being used?
+This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.9.
 
-Angular2, NPM, gulp, and SystemJS. TypeScript is used instead of vanilla JS.
+## Development server
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## How to run it?
+## Code scaffolding
 
-#### Set up the Django backend
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/route/class`.
 
-Set up the [TAid Django backend](https://github.com/UTAid/TAidBackend/tree/cors)
-in a seperate directory (**use the `cors` branch**! See below). Run migrations if
-needed, and create a superuser `python manage.py createsuperuser`. We will be
-using this user to login. Finally, run the server `python manage.py runserver 8000`.
+## Build
 
-**cors:** Since the client is being served on a different port, your browser
-will reject Django's response (unless it's IE, of course). A CORS (Cross-Origin
-Resource Sharing) middleware is needed. Make sure you are using the code from
-the `cors` branch.
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
-#### Set up the client
+## Running unit tests
 
-1. Install NPM (Node package manager) v5.x
-  * For linux instructions, see here: https://github.com/nodesource/distributions/blob/master/README.md
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-2. `cd` to root directory, run `npm install`
-  * Errors and warnings may appear. Warnings can be safely ignored. Errors can
-  be ignored unless they appear at the end of `npm install`
+## Running end-to-end tests
 
-3. Run `npm start`. It starts the client server, and a browser window will open.
-  * This also syncs the browser with the typescript compiler. Whenever there is
-  a change in the client files, the browser will automatically refresh.
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Before running the tests make sure you are serving the app via `ng serve`.
 
-## Notes
+## Deploying to Github Pages
 
-If there is something before the experimental stage, this repo would be it.
-'Smashing keys untill it works' stage would be fitting...
+Run `ng github-pages:deploy` to deploy to Github Pages.
+
+## Further help
+
+To get more help on the `angular-cli` use `ng --help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

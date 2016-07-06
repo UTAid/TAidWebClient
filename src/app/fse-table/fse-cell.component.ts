@@ -35,9 +35,9 @@ class FocusOnEditDirective {
       *ngIf="edit"
       [(ngModel)]="value"
       (blur)="requestEditReset()">
-    <p *ngIf="!edit" (dblclick)="requestEdit()">
+    <div *ngIf="!edit" (dblclick)="requestEdit()">
       {{value}}
-    </p>
+    </div>
   `
 })
 

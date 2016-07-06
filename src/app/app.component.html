@@ -1,36 +1,4 @@
-<header>
-  <h1 class="title">Angular 2 HTTP</h1>
-</header>
-<section *ngIf="!isLogon">
-  <h2>Login</h2>
-  <form role="form">
-    <div ng-control-group="credentials">
-      <label for="username">Username</label>
-      <input
-        type="text"
-        #username
-        id="username"
-        ng-control="username"
-        required>
-      <label for="password">Password</label>
-      <input
-        type="password"
-        #password
-        id="password"
-        ng-control="password"
-        required>
-    </div>
-    <button (click)="authenticate(username, password)">Login!</button>
-  </form>
-</section>
-
-<section *ngIf="isLogon">
-  <button (click)="logout()">Logout!</button>
-</section>
-
-<section>
-  <h2>Student List</h2>
-  <hr>
-  <fse-table [content]="studentList"></fse-table>
-  <button (click)="getStudents()">Get Students</button>
-</section>
+<h2>Student List</h2>
+<hr>
+<fse-table [content]="studentList"></fse-table>
+<button (click)="getStudents()">Get Students</button>
