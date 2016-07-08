@@ -1,21 +1,35 @@
-<table *ngIf="content">
+<table #interceptor class="table table-bordered" tabindex="0"
+  *ngIf="content"
+  (keydown)=navInputHandler($event)>
+  <!--
+  tabindex attr makes the table focus-able, and therefore generate
+  key-press events.
+  -->
   <thead><tr>
     <th
       *ngFor="let col of content.columns"
       (click)="sortOn(col.dispName)">
       <span>{{col.dispName}}</span>
-      <span *ngIf="sortColumn === col.dispName"
+      <span
         class="fa"
         [class.fa-chevron-up]="isSortedAsc"
-        [class.fa-chevron-down]="!isSortedAsc">
+        [class.fa-chevron-down]="!isSortedAsc"
+        [style.visibility]="sortColumn === col.dispName ? 'inherit' : 'hidden'">
       </span>
     </th>
   </tr></thead>
-  <tbody><tr *ngFor="let row of content.rows">
-    <td *ngFor="let col of content.columns"
-      fse-cell
-      [row]="row"
-      [col]="col"
-      (edited)=resetSort()>
+  <tbody><tr *ngFor="let row of content.rows; let i=index">
+    <td *ngFor="let col of content.columns; let j=index">
+      <div
+        fse-cell
+        [class.selected]="isCellSelected(i, j)"
+        [row]="i"
+        [col]="j"
+        [value]="col.getter(row)"
+        [editRequestSubject]="editRequestSubject"
+        (valueChange)="col.setter($event, row); resetSort();"
+        (select)="selectCell($event[0], $event[1])"
+        (editExit)="navInputFocus()"></div>
+    </td>
   </tr></tbody>
 </table>

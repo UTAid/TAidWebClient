@@ -11,22 +11,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css">
 </head>
 <body>
   <app-root>Loading...</app-root>
 
-
-
     {{#each scripts.polyfills}}
     <script src="{{.}}"></script>
     {{/each}}
-    <script>
-      System.import('system-config.js').then(function () {
-        System.import('main');
-      }).catch(console.error.bind(console));
-    </script>
+    <script src="vendor/ng2-bootstrap/bundles/ng2-bootstrap.min.js"></script>
 
+
+    <script>
+      System.import('system-config.js').then(
+        function () { System.import('main'); })
+        .catch(console.error.bind(console));
+    </script>
 
 
 </body>

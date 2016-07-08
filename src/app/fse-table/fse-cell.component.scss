@@ -1,0 +1,15 @@
+@import 'colors';
+
+div {
+  padding: 0.5em;
+  &[contenteditable] {
+    background-color: $editing;
+  }
+  /deep/ div, /deep/ br {
+    display: none;
+  }
+  &.novalue {
+    color: $hover;
+    font-style: italic;
+  }
+}

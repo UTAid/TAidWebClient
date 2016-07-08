@@ -15,9 +15,30 @@
     "target": "es5",
     "inlineSources": true
   },
-
+  "filesGlob": [
+    "./**/*.ts"
+  ],
   "files": [
-    "main.ts",
-    "typings.d.ts"
-  ]
+    "./app/app.component.ts",
+    "./app/authentication.service.ts",
+    "./app/environment.ts",
+    "./app/fse-table/fse-cell.component.ts",
+    "./app/fse-table/fse-table-content.ts",
+    "./app/fse-table/fse-table.component.spec.ts",
+    "./app/fse-table/fse-table.component.ts",
+    "./app/fse-table/index.ts",
+    "./app/fse-table/keymap.ts",
+    "./app/fse-table/test.ts",
+    "./app/index.ts",
+    "./app/shared/index.ts",
+    "./app/student.service.ts",
+    "./app/student.ts",
+    "./app/with-crid-request-options.ts",
+    "./main.ts",
+    "./system-config.ts",
+    "./typings.d.ts"
+  ],
+  "atom": {
+    "rewriteTsconfig": true
+  }
 }

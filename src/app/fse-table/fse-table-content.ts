@@ -77,8 +77,18 @@ export class FSETableContent<T>{
     return ret;
   }
 
+  get width(): number {
+    let ret = 0;
+    this.forShownColumns(() => ret += 1);
+    return ret;
+  }
+
   get rows(): T[]{
     return this._rows;
+  }
+
+  get height(){
+    return this._rows.length;
   }
 
   /*
