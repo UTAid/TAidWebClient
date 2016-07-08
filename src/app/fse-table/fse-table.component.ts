@@ -3,9 +3,10 @@ import {
 } from "@angular/core";
 import {Subject} from 'rxjs/Subject';
 
-import {FSETableContent, SortOrder} from './fse-table-content';
-import {FSECell} from './fse-cell.component';
-import {KeyMap, getKeyMap} from './keymap'
+import {FSETableContent} from './fse-table-content';
+import {FSECellComponent} from './fse-cell';
+import {SortOrder} from './shared/column'
+import {KeyMap, getKeyMap} from './shared/keymap'
 
 /*
 * Filterable, Sortable, Editable table component.
@@ -14,7 +15,7 @@ import {KeyMap, getKeyMap} from './keymap'
 */
 @Component({
   moduleId: module.id,
-  directives: [FSECell],
+  directives: [FSECellComponent],
   selector: '[fse-table]',
   templateUrl: 'fse-table.component.html',
   styleUrls: ['fse-table.component.css'],
@@ -23,7 +24,7 @@ import {KeyMap, getKeyMap} from './keymap'
 export class FSETableComponent<T> implements OnInit{
 
   @Input() content: FSETableContent<T>;
-  @ViewChild('interceptor') navInput;
+  @ViewChild('navInput') navInput;
 
   // Observer that cells listen to for edit-mode requests.
   private editRequestSubject: Subject<[number, number]> = new Subject();

@@ -39,6 +39,7 @@ const barrels: string[] = [
   'app',
   'app/shared',
   'app/fse-table',
+  'app/fse-table/fse-cell',
   /** @cli-barrel */
 ];
 

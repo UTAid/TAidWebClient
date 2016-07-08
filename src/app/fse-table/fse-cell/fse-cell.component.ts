@@ -2,8 +2,8 @@ import {Component, Directive, Input, Output, ElementRef, EventEmitter, OnInit,
   ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 
-import {Column} from './fse-table-content';
-import {KeyMap, getKeyMap} from './keymap';
+import {Column} from '../shared/column';
+import {KeyMap, getKeyMap} from '../shared/keymap';
 
 /*
 * Directive for an editable input field within a fse-cell.
@@ -55,21 +55,10 @@ class FSETableInputDirective {
   selector: '[fse-cell]',
   changeDetection: ChangeDetectionStrategy.OnPush, // All inputs immutable.
   directives: [FSETableInputDirective],
-  template: `
-    <div fse-table-input contenteditable
-      *ngIf="edit"
-      [textContent]="value"
-      (blur)="requestEditReset($event)"></div>
-    <div *ngIf="!edit"
-      [class.novalue]="!value"
-      (click)="processClick()"
-      (dblclick)="processDblClick()">
-      {{value ? value : "None"}}
-    </div>
-  `,
-  styleUrls: ['fse-cell.component.css']
+  templateUrl: './fse-cell.component.html',
+  styleUrls: ['./fse-cell.component.css']
 })
-export class FSECell<T> implements OnInit{
+export class FSECellComponent<T> implements OnInit{
   // Contents of this cell.
   @Input() value: string;
   // row and column index within table.

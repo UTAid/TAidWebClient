@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import {FSETableComponent} from './fse-table/fse-table.component';
-import {FSETableContent} from './fse-table/fse-table-content';
+import {FSETableComponent, FSETableContent} from './fse-table/';
 import {Student} from './student';
 
 @Component({
