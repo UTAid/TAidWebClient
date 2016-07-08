@@ -86,6 +86,7 @@ export class FSETableComponent<T> implements OnInit{
   // Navigation handler for changing the selected cell.
   private navInputHandler(event:KeyboardEvent){
     event.preventDefault();
+    event.stopPropagation();
     let nav = getKeyMap(event);
 
     if (nav.up) this.navUp();

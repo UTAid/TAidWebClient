@@ -3,8 +3,6 @@
   [textContent]="value"
   (blur)="requestEditReset($event)"></div>
 <div *ngIf="!edit"
-  [class.novalue]="!value"
-  (click)="processClick()"
-  (dblclick)="processDblClick()">
+  [class.novalue]="!value">
   {{value ? value : "None"}}
 </div>

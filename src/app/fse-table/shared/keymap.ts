@@ -9,6 +9,8 @@ export class KeyMap{
   ctrl = false;
   alt = false;
   escape = false;
+
+  modifier = false;
 }
 
 export function getKeyMap(event: KeyboardEvent){
@@ -16,6 +18,8 @@ export function getKeyMap(event: KeyboardEvent){
   ret.alt = event.altKey;
   ret.ctrl = event.ctrlKey;
   ret.shift = event.shiftKey;
+  ret.modifier = ret.alt || ret.ctrl || ret.shift;
+
   switch (event.keyCode){
     case 9: ret.tab = true; break;
     case 13: ret.enter = true; break;

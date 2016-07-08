@@ -27,8 +27,9 @@
         [col]="j"
         [value]="col.getter(row)"
         [editRequestSubject]="editRequestSubject"
+        (click)="selectCell(i, j)"
+        (dblclick)="triggerEdit()"
         (valueChange)="col.setter($event, row); resetSort();"
-        (select)="selectCell($event[0], $event[1])"
         (editExit)="navInputFocus()"></div>
     </td>
   </tr></tbody>

@@ -14,6 +14,8 @@ import {KeyMap, getKeyMap} from '../shared/keymap';
   selector: `[fse-table-input]`,
   host: {
     "(keydown)": "processKeydown($event)",
+    "(click)": "$event.stopPropagation()",
+    "(dblclick)": "$event.stopPropagation()"
   }
 })
 class FSETableInputDirective {
@@ -68,19 +70,12 @@ export class FSECellComponent<T> implements OnInit{
   @Input() editRequestSubject: Subject<[number, number]>;
   // Emitted when value changes are confirmed.
   @Output() valueChange = new EventEmitter<string>();
-  // Emitted when cell is selected.
-  @Output() select = new EventEmitter<[number, number]>();
   // Emitted when exiting editing mode.
   @Output() editExit = new EventEmitter<[number, number]>();
-  // Emitted when entering editing model
+  // Emitted when entering editing mode
   @Output() editEnter = new EventEmitter<[number, number]>();
 
   private edit = false; // Whether editing mode is enabled.
-
-  // Timer and toggle to prevent 2 click events from being triggered during
-  // dblclick.
-  private timer = 0;
-  private preventClick = false;
 
   constructor (private cd: ChangeDetectorRef) {};
 
@@ -91,26 +86,6 @@ export class FSECellComponent<T> implements OnInit{
         this.cd.markForCheck();
       }
     })
-  }
-
-  private processClick(){
-    // Do not process click if actively preventing, or editing.
-    if (this.preventClick || this.edit) return;
-
-    this.preventClick = true;
-    let payload: [number, number] = [this.row, this.col];
-    this.select.emit(payload);
-    console.log('emit select: ' + payload);
-    // Disable click event for 500ms after first click.
-    this.timer = setTimeout(() => {
-      this.preventClick = false;
-    }, 500);
-  }
-
-  private processDblClick(){
-    clearTimeout(this.timer);
-    this.preventClick = false;
-    this.requestEdit();
   }
 
   private requestEdit(){
