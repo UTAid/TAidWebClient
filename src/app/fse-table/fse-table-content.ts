@@ -7,6 +7,7 @@ import {Column, SortOrder} from "./shared/column";
 export class FSETableContent<T>{
   private _cols: { [dispName: string]: Column<T> };
   private _rows: T[];
+  private filtered_rows: T[];
 
   constructor(
     // Maps a display name of a column to a property within T.
@@ -22,6 +23,7 @@ export class FSETableContent<T>{
         "Can not create FSETable content with no displayed properties.");
     }
     this._rows = rows;
+    this.filtered_rows = this._rows.slice(0);
   }
 
   public add(row: T, index:number = 0){
@@ -30,6 +32,23 @@ export class FSETableContent<T>{
 
   public remove(index:number = -1){
     return this._rows.splice(index, 1);
+  }
+
+  public applyFilter(filter: (o: T) => boolean){
+    this.filtered_rows = this._rows.filter(filter);
+  }
+
+  public removeFilter(){
+    this.filtered_rows = this._rows.slice(0);
+  }
+
+  public applyFilterAll(val: string){
+    this.applyFilter((o: T) => {
+      for (let col of this.columns)
+        if (col.getter(o).toLowerCase().indexOf(val.toLowerCase()) >= 0)
+          return true;
+      return false;
+    });
   }
 
   /*
@@ -71,11 +90,11 @@ export class FSETableContent<T>{
   }
 
   get rows(): T[]{
-    return this._rows;
+    return this.filtered_rows;
   }
 
   get height(){
-    return this._rows.length;
+    return this.filtered_rows.length;
   }
 
   /*
@@ -85,11 +104,11 @@ export class FSETableContent<T>{
     let col: Column<T> = this._cols[c];
     switch (order) {
       case SortOrder.ASC:
-        this._rows.sort((a, b) => sort(
+        this.filtered_rows.sort((a, b) => sort(
           col.getter(a).toLowerCase(), col.getter(b).toLowerCase()));
         break;
       case SortOrder.DEC:
-        this._rows.sort((a, b) => -1*sort(
+        this.filtered_rows.sort((a, b) => -1*sort(
           col.getter(a).toLowerCase(), col.getter(b).toLowerCase()));
         break;
     }

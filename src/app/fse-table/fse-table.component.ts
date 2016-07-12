@@ -25,6 +25,7 @@ export class FSETableComponent<T> implements OnInit{
 
   @Input() content: FSETableContent<T>;
   @ViewChild('navInput') navInput;
+  @ViewChild('searchInput') searchInput;
 
   // Observer that cells listen to for edit-mode requests.
   private editRequestSubject: Subject<[number, number]> = new Subject();
@@ -35,10 +36,12 @@ export class FSETableComponent<T> implements OnInit{
   private selRow: number;
   private selCol: number;
 
+  private searchTerm = "";
+
   ngOnInit(){
     this.sortColumn = null;
     this.sortOrder = SortOrder.NONE;
-    this.selRow = this.selCol = -1;
+    this.selRow = this.selCol = 0;
   }
 
   private isSortedAsc(): boolean {
@@ -80,6 +83,20 @@ export class FSETableComponent<T> implements OnInit{
     this.editRequestSubject.next([this.selRow, this.selCol]);
   }
 
+  private applySearch(){
+    if (this.searchTerm) this.content.applyFilterAll(this.searchTerm);
+    else this.content.removeFilter();
+    this.content.sort(this.sortColumn, this.sortOrder);
+    this.selRow = this.selCol = 0;
+    this.navInputFocus();
+  }
+
+  private removeSearch(){
+    this.searchTerm = '';
+    this.content.removeFilter();
+    this.content.sort(this.sortColumn, this.sortOrder);
+  }
+
   /////////////////////////////////////////////////////////////////////////////
   // The below are methods to navigate the selected cell.
   /////////////////////////////////////////////////////////////////////////////
@@ -99,6 +116,8 @@ export class FSETableComponent<T> implements OnInit{
       if (nav.shift) this.navLeftLoopover();
       else this.navRightLoopover();
     }
+    else if (nav.ctrl && event.key === 'f')
+      this.searchInput.nativeElement.focus();
   }
 
   private navInputFocus(){

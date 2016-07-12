@@ -1,3 +1,19 @@
+<div class="input-group">
+  <input #searchInput class="form-control" placeholder="Search" type="text"
+    [(ngModel)]="searchTerm"
+    (keyup.enter)="applySearch()">
+  <div class="input-group-btn">
+    <a class="btn btn-default"
+      (click)="removeSearch()">
+      <i class="fa fa-remove"></i>
+    </a>
+    <a class="btn btn-default"
+      (click)="applySearch()">
+      <i class="fa fa-search"></i>
+    </a>
+  </div>
+</div>
+
 <table #navInput class="table table-bordered" tabindex="-1"
   *ngIf="content"
   (keydown)=navInputHandler($event)>
