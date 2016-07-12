@@ -1,4 +1,4 @@
-<table #navInput class="table table-bordered" tabindex="0"
+<table #navInput class="table table-bordered" tabindex="-1"
   *ngIf="content"
   (keydown)=navInputHandler($event)>
   <!--
@@ -12,13 +12,14 @@
       <span>{{col.dispName}}</span>
       <span
         class="fa"
-        [class.fa-chevron-up]="isSortedAsc"
-        [class.fa-chevron-down]="!isSortedAsc"
+        [class.fa-chevron-up]="isSortedAsc()"
+        [class.fa-chevron-down]="!isSortedAsc()"
         [style.visibility]="sortColumn === col.dispName ? 'inherit' : 'hidden'">
       </span>
     </th>
   </tr></thead>
-  <tbody><tr *ngFor="let row of content.rows; let i=index">
+  <tbody><tr *ngFor="let row of content.rows; let i=index"
+    [class.selected]="i===selRow">
     <td *ngFor="let col of content.columns; let j=index">
       <div
         fse-cell

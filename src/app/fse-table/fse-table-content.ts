@@ -24,6 +24,14 @@ export class FSETableContent<T>{
     this._rows = rows;
   }
 
+  public add(row: T, index:number = 0){
+    this._rows.splice(index, 0, row);
+  }
+
+  public remove(index:number = -1){
+    return this._rows.splice(index, 1);
+  }
+
   /*
   * For each column that is shown, do the specified func.
   */

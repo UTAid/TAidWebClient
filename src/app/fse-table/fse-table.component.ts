@@ -38,9 +38,10 @@ export class FSETableComponent<T> implements OnInit{
   ngOnInit(){
     this.sortColumn = null;
     this.sortOrder = SortOrder.NONE;
+    this.selRow = this.selCol = -1;
   }
 
-  get isSortedAsc(): boolean {
+  private isSortedAsc(): boolean {
     return this.sortOrder === SortOrder.ASC;
   }
 

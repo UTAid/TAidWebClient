@@ -19,3 +19,9 @@ table:focus > tbody > tr > td{
     }
   }
 }
+
+table > tbody > tr {
+  &.selected {
+    background-color: $select-bg;
+  }
+}
