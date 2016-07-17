@@ -1,17 +1,27 @@
-<div class="input-group">
-  <input #searchInput class="form-control" placeholder="Search" type="text"
-    [(ngModel)]="searchTerm"
-    (keyup.enter)="applySearch()">
-  <div class="input-group-btn">
-    <a class="btn btn-default"
-      (click)="removeSearch()">
-      <i class="fa fa-remove"></i>
+<div id="fset-search-bar" class="row" *ngIf="content">
+  <div class="col-md-4"><div class="input-group">
+    <input #searchInput class="form-control" placeholder="Search" type="text"
+      [(ngModel)]="searchTerm"
+      (keyup.enter)="applySearch()">
+    <div class="input-group-btn">
+      <a class="btn btn-default"
+        (click)="removeSearch()">
+        <i class="fa fa-remove"></i>
+      </a>
+      <a class="btn btn-default"
+        (click)="applySearch()">
+        <i class="fa fa-search"></i>
+      </a>
+    </div>
+  </div></div>
+  <div class="col-md-2"><div class="btn-group">
+    <a class="btn btn-default">
+      <i class="fa fa-plus"></i>
     </a>
-    <a class="btn btn-default"
-      (click)="applySearch()">
-      <i class="fa fa-search"></i>
+    <a class="btn btn-default">
+      <i class="fa fa-minus"></i>
     </a>
-  </div>
+  </div></div>
 </div>
 
 <table #navInput class="table table-bordered" tabindex="-1"
