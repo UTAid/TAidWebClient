@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 
-import {FSETableComponent, FSETableContent} from './fse-table/';
+import {FSETComponent, FSETContent, FSETPropertyMap} from './fse-table/';
 import {Student} from './student';
 
 @Component({
   moduleId: module.id,
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  directives: [FSETableComponent],
+  directives: [FSETComponent],
 })
 export class AppComponent implements OnInit{
-  studentList: FSETableContent<Student>;
+  studentList: FSETContent<Student>;
 
   ngOnInit() {
     this.getStudents();
@@ -47,7 +47,26 @@ export class AppComponent implements OnInit{
         email: ""
       }
     ];
-    this.studentList = new FSETableContent<Student>(Student.fsetColumnMap, list);
+    this.studentList = new FSETContent<Student>(studentPropertyMap, list);
   }
 
+}
+
+let studentPropertyMap: FSETPropertyMap<Student> = {
+  "ID": {
+    setter: (v, o) => o.university_id = v,
+    getter: (o) => o.university_id,
+  },
+  "First Name": {
+    setter: (v, o) => o.first_name = v,
+    getter: (o) => o.first_name,
+  },
+  "Last Name": {
+    setter: (v, o) => o.last_name = v,
+    getter: (o) => o.last_name,
+  },
+  "Email": {
+    setter: (v, o) => o.email = v,
+    getter: (o) => o.email,
+  }
 }

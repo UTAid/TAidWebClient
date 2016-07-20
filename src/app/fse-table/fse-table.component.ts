@@ -3,14 +3,14 @@ import {
 } from "@angular/core";
 import {Subject} from 'rxjs/Subject';
 
-import {FSETableContent} from './fse-table-content';
+import {FSETContent} from './fse-table-content';
 import {FSECellComponent} from './fse-cell';
 import {SortOrder} from './shared/column'
 import {KeyMap, getKeyMap} from './shared/keymap'
 
 /*
 * Filterable, Sortable, Editable table component.
-* Must be initialized with a FSETableContent object, which provides the Data
+* Must be initialized with a FSETContent object, which provides the Data
 * to display within this table.
 */
 @Component({
@@ -21,9 +21,9 @@ import {KeyMap, getKeyMap} from './shared/keymap'
   styleUrls: ['fse-table.component.css'],
 })
 
-export class FSETableComponent<T> implements OnInit{
+export class FSETComponent<T> implements OnInit{
 
-  @Input() content: FSETableContent<T>;
+  @Input() content: FSETContent<T>;
   @ViewChild('navInput') navInput;
   @ViewChild('searchInput') searchInput;
 

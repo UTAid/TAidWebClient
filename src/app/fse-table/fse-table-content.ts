@@ -1,19 +1,24 @@
 import {Column, SortOrder} from "./shared/column";
+
+export interface FSETPropertyMap<T> {
+  [dispName: string]: {
+    setter: (v: string, o: T) => void,
+    getter: (o: T) => string
+  };
+}
 /*
 * Model for the contents of the FSE table.
 * Rows contain the list of T's to display, and cols specifies the displayed
 * property.
 */
-export class FSETableContent<T>{
+export class FSETContent<T>{
   private _cols: { [dispName: string]: Column<T> };
   private _rows: T[];
   private filtered_rows: T[];
 
   constructor(
     // Maps a display name of a column to a property within T.
-    propertyMap: { [dispName: string]: {
-        setter: (v: string, o: T) => void,
-        getter: (o: T) => string } },
+    propertyMap: FSETPropertyMap<T>,
     // List of T's being displayed.
     rows: T[]
   ){
@@ -62,15 +67,12 @@ export class FSETableContent<T>{
   }
 
   // Initialize the column hashmap according to the specified mapping.
-  private initColumns(
-    map: { [dispName: string]: {
-        setter: (v: string, o: T) => void,
-        getter: (o: T) => string } })
+  private initColumns(pMap: FSETPropertyMap<T>)
   {
     this._cols = {};
-    for (let dispName in map){
+    for (let dispName in pMap){
       this._cols[dispName] =
-        new Column<T>(dispName, map[dispName].setter, map[dispName].getter);
+        new Column<T>(dispName, pMap[dispName].setter, pMap[dispName].getter);
     }
   }
 

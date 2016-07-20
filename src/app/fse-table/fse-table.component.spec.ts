@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {FSETableContent} from "./fse-table-content";
+import {FSETContent, FSETPropertyMap} from "./fse-table-content";
 
 import { By }           from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
@@ -12,11 +12,11 @@ import {
   ComponentFixture
 } from '@angular/core/testing';
 
-import { FSETableComponent } from './fse-table.component';
+import { FSETComponent } from './fse-table.component';
 
 describe('Component sanity test: FseTable', () => {
   it('should create an instance', () => {
-    let component = new FSETableComponent();
+    let component = new FSETComponent();
     expect(component).toBeTruthy();
   });
 });
@@ -24,8 +24,8 @@ describe('Component sanity test: FseTable', () => {
 
 describe('Component: FSETable', () => {
 
-  let fixture: ComponentFixture<FSETableComponent<any>>;
-  let comp: FSETableComponent<any>;
+  let fixture: ComponentFixture<FSETComponent<any>>;
+  let comp: FSETComponent<any>;
   let elem: any;
 
   beforeEachProviders(() => [TestComponentBuilder]);
@@ -34,7 +34,7 @@ describe('Component: FSETable', () => {
   // native element.
   beforeEach((done) => {
     inject([TestComponentBuilder], (t) => {
-      t.createAsync(FSETableComponent).then(f => {
+      t.createAsync(FSETComponent).then(f => {
         fixture = f;
         comp = fixture.debugElement.componentInstance;
         elem = fixture.debugElement.nativeElement;
@@ -88,13 +88,9 @@ describe('Component: FSETable', () => {
 });
 
 
-class MockContent extends FSETableContent<any> {
+class MockContent extends FSETContent<any> {
 
-  static propertyMap: {
-    [dispName: string]: {
-      setter: (v: string, o: any) => void,
-      getter: (o: any) => string
-  } } =
+  static propertyMap: FSETPropertyMap<any> =
   {
     id: {
       getter: (o: any):string => o.id,
