@@ -1,30 +1,31 @@
-<div id="fset-search-bar" class="row" *ngIf="content">
+<div id="fset-tool-bar" class="row" *ngIf="content">
   <div class="col-md-4"><div class="input-group">
-    <input #searchInput class="form-control" placeholder="Search" type="text"
+    <input #searchInput id="fset-input-search" class="form-control"
+      placeholder="Search" type="text"
       [(ngModel)]="searchTerm"
       (keyup.enter)="applySearch()">
     <div class="input-group-btn">
-      <a class="btn btn-default"
+      <a id="fset-btn-search" class="btn btn-default"
         (click)="removeSearch()">
         <i class="fa fa-remove"></i>
       </a>
-      <a class="btn btn-default"
+      <a id="fset-btn-clear" class="btn btn-default"
         (click)="applySearch()">
         <i class="fa fa-search"></i>
       </a>
     </div>
   </div></div>
   <div class="col-md-2"><div class="btn-group">
-    <a class="btn btn-default">
+    <a id="fset-btn-add" class="btn btn-default">
       <i class="fa fa-plus"></i>
     </a>
-    <a class="btn btn-default">
+    <a id="fset-btn-remove" class="btn btn-default">
       <i class="fa fa-minus"></i>
     </a>
   </div></div>
 </div>
 
-<table #navInput class="table table-bordered" tabindex="-1"
+<table #navInput id="fset" class="table table-bordered" tabindex="-1"
   *ngIf="content"
   (keydown)=navInputHandler($event)>
   <!--
@@ -33,7 +34,8 @@
   -->
   <thead><tr>
     <th
-      *ngFor="let col of content.columns"
+      *ngFor="let col of content.columns; let i=index"
+      id="{{'fset-col-' + i}}"
       (click)="sortOn(col.dispName)">
       <span>{{col.dispName}}</span>
       <span
@@ -45,8 +47,10 @@
     </th>
   </tr></thead>
   <tbody><tr *ngFor="let row of content.rows; let i=index"
+    id="{{'fset-row-' + i}}"
     [class.selected]="i===selRow">
-    <td *ngFor="let col of content.columns; let j=index">
+    <td *ngFor="let col of content.columns; let j=index"
+      id="{{'fset-cell-' + i + '-' + j}}">
       <div
         fse-cell
         [class.selected]="isCellSelected(i, j)"

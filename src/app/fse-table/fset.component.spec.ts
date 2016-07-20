@@ -13,6 +13,30 @@ import {FSETContent, FSETPropertyMap} from "./fset-content";
 import {FSETComponent} from './fset.component';
 
 
+// Mock FSETContent for testing.
+class MockContent extends FSETContent<any> {
+
+  static propertyMap: FSETPropertyMap<any> =
+  {
+    id: {
+      getter: (o: any):string => o.id,
+      setter: (v: string, o: any) => o.id = v
+    },
+    name: {
+      getter: (o: any):string => o.name,
+      setter: (v: string, o: any) => o.name = v
+    }
+  };
+
+  constructor (){
+    super(MockContent.propertyMap, []);
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Tests start here
+///////////////////////////////////////////////////////////////////////////////
+
 describe('Component sanity test: FseTable', () => {
   it('should create an instance', () => {
     let component = new FSETComponent();
@@ -50,11 +74,11 @@ describe('Component: FSETable', () => {
     });
 
     it('should not display the table.', () => {
-      expect(elem.querySelector('table')).toBeNull();
+      expect(elem.querySelector('#fset')).toBeNull();
     });
 
     it('should not display the search bar.', () => {
-      expect(elem.querySelector('#fset-search-bar')).toBeNull();
+      expect(elem.querySelector('#fset-tool-bar')).toBeNull();
     });
 
   });
@@ -71,37 +95,76 @@ describe('Component: FSETable', () => {
       expect(elem.querySelector('tbody > tr')).toBeNull();
     });
 
-    it('should display the search bar', () => {
-      expect(elem.querySelector('#fset-search-bar')).not.toBeNull();
+    it('should have the right headers', () => {
+      expect(elem.querySelector('#fset-col-0').innerText).toEqual('id');
+      expect(elem.querySelector('#fset-col-1').innerText).toEqual('name');
     });
 
-    it('should have the right headers', () => {
-      let header: string = elem.querySelector('thead > tr').innerText;
-      expect(header).toContain('id');
-      expect(header).toContain('name');
+    describe('search bar', () => {
+      it('should have a search input', () => {
+        expect(elem.querySelector('#fset-input-search')).not.toBeNull();
+      });
+
+      it('should have a search button', () => {
+        expect(elem.querySelector('#fset-btn-search')).not.toBeNull();
+      });
+
+      it('should have a clear search button', () => {
+        expect(elem.querySelector('#fset-btn-clear')).not.toBeNull();
+      });
+
+      it('should have an add row button', () => {
+        expect(elem.querySelector('#fset-btn-add')).not.toBeNull();
+      });
+
+      it('should have a remove row button', () => {
+        expect(elem.querySelector('#fset-btn-remove')).not.toBeNull();
+      });
+    });
+
+    describe("header cell sorting", () => {
+      let sortArrow: any;
+
+      beforeEach(() => {
+        sortArrow = elem.querySelector('#fset-col-0 > .fa');
+      });
+
+      it('should not display arrow when not clicked', () => {
+        expect(sortArrow.style.visibility).toEqual('hidden');
+      });
+
+      it('should display up arrow when clicked once', () => {
+        sortArrow.click();
+        fixture.detectChanges();
+        expect(sortArrow.style.visibility).toEqual('inherit');
+        expect(sortArrow.className).toContain('fa-chevron-up');
+      });
+
+      it('should display down arrow when clicked twice', () => {
+        sortArrow.click(); sortArrow.click();
+        fixture.detectChanges();
+        expect(sortArrow.style.visibility).toEqual('inherit');
+        expect(sortArrow.className).toContain('fa-chevron-down');
+      });
+
+      it('should display up arrow when clicked thrice', () => {
+        sortArrow.click(); sortArrow.click(); sortArrow.click();
+        fixture.detectChanges();
+        expect(sortArrow.style.visibility).toEqual('inherit');
+        expect(sortArrow.className).toContain('fa-chevron-up');
+      });
+
+      it('should remove arrow when other header cell is clicked', () => {
+        sortArrow.click();
+        fixture.detectChanges();
+        let otherCell = elem.querySelector('#fset-col-1');
+        otherCell.click();
+        fixture.detectChanges();
+        expect(sortArrow.style.visibility).toEqual('hidden');
+      });
     });
 
   });
 
 
 });
-
-
-class MockContent extends FSETContent<any> {
-
-  static propertyMap: FSETPropertyMap<any> =
-  {
-    id: {
-      getter: (o: any):string => o.id,
-      setter: (v: string, o: any) => o.id = v
-    },
-    name: {
-      getter: (o: any):string => o.name,
-      setter: (v: string, o: any) => o.name = v
-    }
-  };
-
-  constructor (){
-    super(MockContent.propertyMap, []);
-  }
-}
