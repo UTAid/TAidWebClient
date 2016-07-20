@@ -1,2 +1,2 @@
-export * from './fse-table.component';
-export * from './fse-table-content';
+export * from './fset.component';
+export * from './fset-content';

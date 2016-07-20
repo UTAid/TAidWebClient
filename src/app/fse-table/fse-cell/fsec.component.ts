@@ -18,7 +18,7 @@ import {KeyMap, getKeyMap} from '../shared/keymap';
     "(dblclick)": "$event.stopPropagation()"
   }
 })
-class FSETableInputDirective {
+class FSETInputDirective {
   private _el: HTMLElement;
   private prevValue: string;
 
@@ -56,11 +56,11 @@ class FSETableInputDirective {
   moduleId: module.id,
   selector: '[fse-cell]',
   changeDetection: ChangeDetectionStrategy.OnPush, // All inputs immutable.
-  directives: [FSETableInputDirective],
-  templateUrl: './fse-cell.component.html',
-  styleUrls: ['./fse-cell.component.css']
+  directives: [FSETInputDirective],
+  templateUrl: './fsec.component.html',
+  styleUrls: ['./fsec.component.css']
 })
-export class FSECellComponent<T> implements OnInit{
+export class FSECComponent<T> implements OnInit{
   // Contents of this cell.
   @Input() value: string;
   // row and column index within table.

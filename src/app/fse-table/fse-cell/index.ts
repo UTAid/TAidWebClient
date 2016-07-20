@@ -1,1 +1,1 @@
-export * from './fse-cell.component';
+export * from './fsec.component';

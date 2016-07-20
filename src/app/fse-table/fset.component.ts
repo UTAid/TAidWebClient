@@ -3,8 +3,8 @@ import {
 } from "@angular/core";
 import {Subject} from 'rxjs/Subject';
 
-import {FSETContent} from './fse-table-content';
-import {FSECellComponent} from './fse-cell';
+import {FSETContent} from './fset-content';
+import {FSECComponent} from './fse-cell';
 import {SortOrder} from './shared/column'
 import {KeyMap, getKeyMap} from './shared/keymap'
 
@@ -15,10 +15,10 @@ import {KeyMap, getKeyMap} from './shared/keymap'
 */
 @Component({
   moduleId: module.id,
-  directives: [FSECellComponent],
+  directives: [FSECComponent],
   selector: '[fse-table]',
-  templateUrl: 'fse-table.component.html',
-  styleUrls: ['fse-table.component.css'],
+  templateUrl: 'fset.component.html',
+  styleUrls: ['fset.component.css'],
 })
 
 export class FSETComponent<T> implements OnInit{

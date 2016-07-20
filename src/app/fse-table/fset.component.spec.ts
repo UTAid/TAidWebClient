@@ -1,9 +1,6 @@
 /* tslint:disable:no-unused-variable */
-import {FSETContent, FSETPropertyMap} from "./fse-table-content";
-
 import { By }           from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-
 import {
   beforeEach, beforeEachProviders,
   describe, xdescribe,
@@ -12,7 +9,9 @@ import {
   ComponentFixture
 } from '@angular/core/testing';
 
-import { FSETComponent } from './fse-table.component';
+import {FSETContent, FSETPropertyMap} from "./fset-content";
+import {FSETComponent} from './fset.component';
+
 
 describe('Component sanity test: FseTable', () => {
   it('should create an instance', () => {
