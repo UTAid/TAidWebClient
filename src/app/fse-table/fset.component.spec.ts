@@ -167,4 +167,58 @@ describe('Component: FSETable', () => {
   });
 
 
+  describe('with single row', () => {
+
+    beforeEach(() => {
+      comp.content = new MockContent();
+      comp.content.push({id: 'testing', name: 'is fun!'});
+      fixture.detectChanges();
+    });
+
+    it('should display the right row', () => {
+      let cell = elem.querySelector('#fset-cell-0-0').innerText.trim();
+      expect(cell).toEqual('testing');
+      cell = elem.querySelector('#fset-cell-0-1').innerText.trim();
+      expect(cell).toEqual('is fun!');
+    });
+
+    it('should only display one row', () => {
+      expect(elem.querySelectorAll('tbody > tr').length).toEqual(1);
+    });
+  });
+
+
+  describe('with multiple rows', () => {
+
+    beforeEach(() => {
+      comp.content = new MockContent();
+      comp.content.push({id: 'testing', name: 'is fun!'});
+      comp.content.push({id: 'joke', name: 'Why couldnt the bicycle stand up?'});
+      comp.content.push({id: 'jokeAns', name: 'Becuse it was two tired.'});
+      fixture.detectChanges();
+    });
+
+    it('should display the right rows', () => {
+      let cell = elem.querySelector('#fset-cell-0-0').innerText.trim();
+      expect(cell).toEqual('testing');
+      cell = elem.querySelector('#fset-cell-0-1').innerText.trim();
+      expect(cell).toEqual('is fun!');
+
+      cell = elem.querySelector('#fset-cell-1-0').innerText.trim();
+      expect(cell).toEqual('joke');
+      cell = elem.querySelector('#fset-cell-1-1').innerText.trim();
+      expect(cell).toEqual('Why couldnt the bicycle stand up?');
+
+      cell = elem.querySelector('#fset-cell-2-0').innerText.trim();
+      expect(cell).toEqual('jokeAns');
+      cell = elem.querySelector('#fset-cell-2-1').innerText.trim();
+      expect(cell).toEqual('Becuse it was two tired.');
+    });
+
+    it('should only display three rows', () => {
+      expect(elem.querySelectorAll('tbody > tr').length).toEqual(3);
+    });
+  });
+
+
 });

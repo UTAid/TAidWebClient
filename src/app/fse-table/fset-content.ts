@@ -31,12 +31,9 @@ export class FSETContent<T>{
     this.filtered_rows = this._rows.slice(0);
   }
 
-  public add(row: T, index:number = 0){
-    this._rows.splice(index, 0, row);
-  }
-
-  public remove(index:number = -1){
-    return this._rows.splice(index, 1);
+  public push(row: T){
+    this._rows.push(row);
+    this.filtered_rows.push(row);
   }
 
   public applyFilter(filter: (o: T) => boolean){
