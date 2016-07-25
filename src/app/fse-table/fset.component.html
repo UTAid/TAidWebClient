@@ -1,5 +1,5 @@
 <div id="fset-tool-bar" class="row" *ngIf="content">
-  <div class="col-md-4"><div class="input-group">
+  <div class="col-md-3"><div class="input-group">
     <input #searchInput id="fset-input-search" class="form-control"
       placeholder="Search" type="text"
       [(ngModel)]="searchTerm"
@@ -15,14 +15,28 @@
       </a>
     </div>
   </div></div>
-  <div class="col-md-2"><div class="btn-group">
-    <a id="fset-btn-add" class="btn btn-default">
-      <i class="fa fa-plus"></i>
-    </a>
-    <a id="fset-btn-remove" class="btn btn-default">
-      <i class="fa fa-minus"></i>
-    </a>
-  </div></div>
+  <div class="col-md-4">
+    <div class="btn-group">
+      <a id="fset-btn-add" class="btn btn-default">
+        <i class="fa fa-plus"></i>
+      </a>
+      <a id="fset-btn-remove" class="btn btn-default">
+        <i class="fa fa-minus"></i>
+      </a>
+    </div>
+    <div class="btn-group" dropdown>
+      <button type="button" class="btn btn-default" dropdownToggle>
+        Columns <span class="caret"></span>
+      </button>
+      <ul dropdownMenu role="menu" aria-labelledby="single-button">
+        <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
+        <li role="menuitem"><a class="dropdown-item" href="#">Another action</a></li>
+        <li role="menuitem"><a class="dropdown-item" href="#">Something else here</a></li>
+        <li class="divider dropdown-divider"></li>
+        <li role="menuitem"><a class="dropdown-item" href="#">Separated link</a></li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 <table #navInput id="fset" class="table table-bordered" tabindex="-1"

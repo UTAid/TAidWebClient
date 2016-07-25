@@ -7,13 +7,18 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 const map: any = {
-  'moment': 'vendor/moment/moment.js'
+  'moment': 'vendor/moment/moment.js',
+  'ng2-bootstrap': 'vendor/ng2-bootstrap'
 };
 
 /** User packages configuration. */
 const packages: any = {
   'moment':{
     format: 'cjs'
+  },
+  'ng2-bootstrap':{
+    main: 'ng2-bootstrap.js',
+    defaultExtension: 'js'
   }
 };
 

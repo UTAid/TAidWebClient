@@ -19,7 +19,8 @@ module.exports = function(defaults) {
       'font-awesome/css/*.+(css|css.map)',
       'font-awesome/fonts/*',
       'bootstrap/dist/css/bootstrap.min.css',
-      'ng2-bootstrap/bundles/ng2-bootstrap.min.js',
+      'ng2-bootstrap/ng2-bootstrap.js',
+      'ng2-bootstrap/components/**/*.+(js|js.map)',
       'moment/moment.js',
     ]
   });

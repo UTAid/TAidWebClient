@@ -1,11 +1,25 @@
-import {Column, SortOrder} from "./shared/column";
+import {Column, SortOrder} from './shared/column';
 
+/*
+* Template for a property map used to display models within the FSETable.
+*
+* dispName: The name of a column as displayed to the user; the column's unique
+*   identifier.
+* setter: Function used to set the property that this column is displaying.
+* getter: Function used to get the property that this column is displaying.
+*/
 export interface FSETPropertyMap<T> {
   [dispName: string]: {
     setter: (v: string, o: T) => void,
     getter: (o: T) => string
   };
 }
+
+// Used by array of filtered rows to keep track of original indicies.
+class BackRef<T> {
+  constructor(public content: T, public index: number) { }
+}
+
 /*
 * Model for the contents of the FSE table.
 * Rows contain the list of T's to display, and cols specifies the displayed
@@ -13,8 +27,8 @@ export interface FSETPropertyMap<T> {
 */
 export class FSETContent<T>{
   private _cols: { [dispName: string]: Column<T> };
-  private _rows: T[];
-  private filtered_rows: T[];
+  private _rows: BackRef<T>[];
+  private filtered_rows: BackRef<T>[];
 
   constructor(
     // Maps a display name of a column to a property within T.
@@ -27,17 +41,23 @@ export class FSETContent<T>{
       throw new Error(
         "Can not create FSETable content with no displayed properties.");
     }
-    this._rows = rows;
+    this._rows = new Array<BackRef<T>>(rows.length);
+    rows.forEach((r, i) => this._rows[i] = new BackRef(r, i));
     this.filtered_rows = this._rows.slice(0);
   }
 
   public push(row: T){
-    this._rows.push(row);
-    this.filtered_rows.push(row);
+    this._rows.push(new BackRef(row, this._rows.length));
+    this.filtered_rows.push(this._rows[this._rows.length-1]);
+  }
+
+  public remove(index: number){
+    let backRef = this.filtered_rows.splice(index, 1)[0].index;
+    this._rows.splice(backRef, 1);
   }
 
   public applyFilter(filter: (o: T) => boolean){
-    this.filtered_rows = this._rows.filter(filter);
+    this.filtered_rows = this._rows.filter((r) => filter(r.content));
   }
 
   public removeFilter(){
@@ -45,9 +65,9 @@ export class FSETContent<T>{
   }
 
   public applyFilterAll(val: string){
-    this.applyFilter((o: T) => {
+    this.filtered_rows = this._rows.filter((r) => {
       for (let col of this.columns)
-        if (col.getter(o).toLowerCase().indexOf(val.toLowerCase()) >= 0)
+        if (col.getter(r.content).toLowerCase().indexOf(val.toLowerCase()) >= 0)
           return true;
       return false;
     });
@@ -89,7 +109,7 @@ export class FSETContent<T>{
   }
 
   get rows(): T[]{
-    return this.filtered_rows;
+    return this.filtered_rows.map((r) => r.content);
   }
 
   get height(){
@@ -104,11 +124,13 @@ export class FSETContent<T>{
     switch (order) {
       case SortOrder.ASC:
         this.filtered_rows.sort((a, b) => sort(
-          col.getter(a).toLowerCase(), col.getter(b).toLowerCase()));
+          col.getter(a.content).toLowerCase(),
+          col.getter(b.content).toLowerCase()));
         break;
       case SortOrder.DEC:
         this.filtered_rows.sort((a, b) => -1*sort(
-          col.getter(a).toLowerCase(), col.getter(b).toLowerCase()));
+          col.getter(a.content).toLowerCase(),
+          col.getter(b.content).toLowerCase()));
         break;
     }
   }

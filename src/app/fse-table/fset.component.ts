@@ -1,7 +1,8 @@
 import {
   Component, Input, OnInit, Directive, ElementRef, EventEmitter, ViewChild
-} from "@angular/core";
+} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
+import {DROPDOWN_DIRECTIVES} from 'ng2-bootstrap';
 
 import {FSETContent} from './fset-content';
 import {FSECComponent} from './fse-cell';
@@ -15,7 +16,7 @@ import {KeyMap, getKeyMap} from './shared/keymap'
 */
 @Component({
   moduleId: module.id,
-  directives: [FSECComponent],
+  directives: [FSECComponent, DROPDOWN_DIRECTIVES],
   selector: '[fse-table]',
   templateUrl: 'fset.component.html',
   styleUrls: ['fset.component.css'],
