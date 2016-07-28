@@ -6,6 +6,7 @@ import {Subject} from 'rxjs/Subject';
 import {FSETContent} from './fset-content';
 import {FSECComponent} from './fse-cell';
 import {ColumnSelectorComponent} from './column-selector';
+import {SearchBarComponent} from "./search-bar";
 import {SortOrder} from './shared/column'
 import {KeyMap, getKeyMap} from './shared/keymap'
 
@@ -16,7 +17,7 @@ import {KeyMap, getKeyMap} from './shared/keymap'
 */
 @Component({
   moduleId: module.id,
-  directives: [FSECComponent, ColumnSelectorComponent],
+  directives: [FSECComponent, ColumnSelectorComponent, SearchBarComponent],
   selector: '[fse-table]',
   templateUrl: 'fset.component.html',
   styleUrls: ['fset.component.css'],
@@ -26,10 +27,10 @@ export class FSETComponent<T> implements OnInit{
 
   @Input() content: FSETContent<T>;
   @ViewChild('navInput') navInput;
-  @ViewChild('searchInput') searchInput;
 
   // Observer that cells listen to for edit-mode requests.
   private editRequestSubject: Subject<[number, number]> = new Subject();
+  private searchFocusSubject: Subject<any> = new Subject();
 
   private sortColumn: string;
   private sortOrder: SortOrder;
@@ -37,7 +38,6 @@ export class FSETComponent<T> implements OnInit{
   private selRow: number;
   private selCol: number;
 
-  private searchTerm = "";
 
   ngOnInit(){
     this.sortColumn = null;
@@ -84,8 +84,8 @@ export class FSETComponent<T> implements OnInit{
     this.editRequestSubject.next([this.selRow, this.selCol]);
   }
 
-  private applySearch(){
-    if (this.searchTerm) this.content.applyFilterAll(this.searchTerm);
+  private applySearch(term: string){
+    if (term) this.content.applyFilterAll(term);
     else this.content.removeFilter();
     this.content.sort(this.sortColumn, this.sortOrder);
     this.selRow = this.selCol = 0;
@@ -93,7 +93,6 @@ export class FSETComponent<T> implements OnInit{
   }
 
   private removeSearch(){
-    this.searchTerm = '';
     this.content.removeFilter();
     this.content.sort(this.sortColumn, this.sortOrder);
   }
@@ -118,7 +117,7 @@ export class FSETComponent<T> implements OnInit{
       else this.navRightLoopover();
     }
     else if (nav.ctrl && event.key === 'f')
-      this.searchInput.nativeElement.focus();
+      this.searchFocusSubject.next(null);
   }
 
   private navInputFocus(){

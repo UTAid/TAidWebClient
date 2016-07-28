@@ -1,20 +1,10 @@
 <div id="fset-tool-bar" class="row" *ngIf="content">
-  <div class="col-md-3"><div class="input-group">
-    <input #searchInput id="fset-input-search" class="form-control"
-      placeholder="Search" type="text"
-      [(ngModel)]="searchTerm"
-      (keyup.enter)="applySearch()">
-    <div class="input-group-btn">
-      <a id="fset-btn-search" class="btn btn-default"
-        (click)="removeSearch()">
-        <i class="fa fa-remove"></i>
-      </a>
-      <a id="fset-btn-clear" class="btn btn-default"
-        (click)="applySearch()">
-        <i class="fa fa-search"></i>
-      </a>
-    </div>
-  </div></div>
+
+  <search-bar
+    [focus]="searchFocusSubject"
+    (search)="applySearch($event)"
+    (clear)="removeSearch()"></search-bar>
+
   <div class="col-md-4">
     <div class="btn-group">
       <a id="fset-btn-add" class="btn btn-default">
@@ -24,8 +14,9 @@
         <i class="fa fa-minus"></i>
       </a>
     </div>
-    <colselector [columns]="content.allColumns"></colselector>
+    <col-selector [columns]="content.allColumns"></col-selector>
   </div>
+
 </div>
 
 <table #navInput id="fset" class="table table-bordered" tabindex="-1"

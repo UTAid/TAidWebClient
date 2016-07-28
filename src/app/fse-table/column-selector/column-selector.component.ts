@@ -6,7 +6,7 @@ import {Column} from '../shared/column';
 @Component({
   moduleId: module.id,
   directives: [DROPDOWN_DIRECTIVES],
-  selector: 'colselector',
+  selector: 'col-selector',
   templateUrl: 'column-selector.component.html',
   styleUrls: ['column-selector.component.css']
 })
