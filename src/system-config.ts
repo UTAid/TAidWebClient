@@ -45,6 +45,7 @@ const barrels: string[] = [
   'app/shared',
   'app/fse-table',
   'app/fse-table/fse-cell',
+  'app/fse-table/column-selector',
   /** @cli-barrel */
 ];
 

@@ -2,10 +2,10 @@ import {
   Component, Input, OnInit, Directive, ElementRef, EventEmitter, ViewChild
 } from '@angular/core';
 import {Subject} from 'rxjs/Subject';
-import {DROPDOWN_DIRECTIVES} from 'ng2-bootstrap';
 
 import {FSETContent} from './fset-content';
 import {FSECComponent} from './fse-cell';
+import {ColumnSelectorComponent} from './column-selector';
 import {SortOrder} from './shared/column'
 import {KeyMap, getKeyMap} from './shared/keymap'
 
@@ -16,7 +16,7 @@ import {KeyMap, getKeyMap} from './shared/keymap'
 */
 @Component({
   moduleId: module.id,
-  directives: [FSECComponent, DROPDOWN_DIRECTIVES],
+  directives: [FSECComponent, ColumnSelectorComponent],
   selector: '[fse-table]',
   templateUrl: 'fset.component.html',
   styleUrls: ['fset.component.css'],

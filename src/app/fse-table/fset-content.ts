@@ -102,6 +102,13 @@ export class FSETContent<T>{
     return ret;
   }
 
+  get allColumns(): Column<T>[] {
+    let ret: Column<T>[] = [];
+    for (let dispName in this._cols)
+      ret.push(this._cols[dispName]);
+    return ret;
+  }
+
   get width(): number {
     let ret = 0;
     this.forShownColumns(() => ret += 1);
