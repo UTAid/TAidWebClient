@@ -57,5 +57,8 @@
         (valueChange)="col.setter($event, row); resetSort();"
         (editExit)="navInputFocus()"></div>
     </td>
-  </tr></tbody>
+  </tr>
+  <tr *ngIf="content.height === 0"><td [colSpan]="content.width">
+    <div id="fset-empty-text">Nothing here!</div>
+  </td></tr></tbody>
 </table>

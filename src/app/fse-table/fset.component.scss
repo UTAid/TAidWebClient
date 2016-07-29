@@ -30,14 +30,9 @@ table {
   margin: 1em 0;
 }
 
-#fset-dd-col {
-  .chkbox-wrapper {
-    margin-left: 0.5em;
-  }
-  a {
-    margin: 0 0.2em;
-  }
-  a:hover{
-    cursor: pointer;
-  }
+#fset-empty-text {
+  padding: 0.5em;
+  text-align: center;
+  font-size: 1.5em;
+  color: $hover;
 }
