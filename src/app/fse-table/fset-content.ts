@@ -11,7 +11,8 @@ import {Column, SortOrder} from './shared/column';
 export interface FSETPropertyMap<T> {
   [dispName: string]: {
     setter: (v: string, o: T) => void,
-    getter: (o: T) => string
+    getter: (o: T) => string,
+    validator?: (o: T) => [boolean, string]
   };
 }
 
@@ -34,7 +35,9 @@ export class FSETContent<T>{
     // Maps a display name of a column to a property within T.
     propertyMap: FSETPropertyMap<T>,
     // List of T's being displayed.
-    rows: T[]
+    rows: T[],
+    // Factory function used to get a new instance of T
+    factory: () => T
   ){
     this.initColumns(propertyMap);
     if (Object.keys(this._cols).length === 0){
@@ -89,7 +92,10 @@ export class FSETContent<T>{
     this._cols = {};
     for (let dispName in pMap){
       this._cols[dispName] =
-        new Column<T>(dispName, pMap[dispName].setter, pMap[dispName].getter);
+        new Column<T>(dispName,
+          pMap[dispName].setter,
+          pMap[dispName].getter,
+          pMap[dispName].validator);
     }
   }
 

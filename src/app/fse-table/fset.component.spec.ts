@@ -29,7 +29,7 @@ class MockContent extends FSETContent<any> {
   };
 
   constructor (){
-    super(MockContent.propertyMap, []);
+    super(MockContent.propertyMap, [], () => {return {id: null, name: null}});
   }
 }
 

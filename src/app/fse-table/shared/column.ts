@@ -9,7 +9,8 @@ export class Column<T> {
     public dispName: string,
     // Getter and setter functions for properties under this column
     public setter: (val: string, obj: T) => void,
-    public getter: (obj: T) => string
+    public getter: (obj: T) => string,
+    public validator: (obj: T) => [boolean, string]
   ) { }
 }
 

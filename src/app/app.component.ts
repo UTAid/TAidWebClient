@@ -47,7 +47,8 @@ export class AppComponent implements OnInit{
         email: ""
       }
     ];
-    this.studentList = new FSETContent<Student>(studentPropertyMap, list);
+    this.studentList = new FSETContent<Student>(studentPropertyMap, list,
+      () => new Student());
   }
 
 }
