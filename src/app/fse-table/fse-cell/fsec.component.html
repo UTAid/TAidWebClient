@@ -1,7 +1,9 @@
 <div fse-table-input contenteditable
   *ngIf="edit"
   [textContent]="value"
-  (blur)="requestEditReset($event)"></div>
+  (editConfirm)="requestEditConfirm($event)"
+  (editCancel)="requestEditCancel()"
+  (blur)="requestEditCancel()"></div>
 <div *ngIf="!edit"
   [class.novalue]="!value">
   {{value ? value : "None"}}

@@ -92,12 +92,12 @@ describe('Component: FSETable', () => {
     });
 
     it('should display empty table with empty content.', () => {
-      expect(elem.querySelector('tbody > tr')).toBeNull();
+      expect(elem.querySelector('#fset-empty-text')).not.toBeNull();
     });
 
     it('should have the right headers', () => {
-      expect(elem.querySelector('#fset-col-0').innerText).toEqual('id');
-      expect(elem.querySelector('#fset-col-1').innerText).toEqual('name');
+      expect(elem.querySelector('#fset-col-0').innerText.trim()).toEqual('id');
+      expect(elem.querySelector('#fset-col-1').innerText.trim()).toEqual('name');
     });
 
     describe('search bar', () => {

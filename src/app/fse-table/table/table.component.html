@@ -1,0 +1,44 @@
+<table #navInput id="fset" class="table table-bordered" tabindex="-1"
+  *ngIf="cols"
+  (keydown)=navInputHandler($event)>
+  <!--
+  tabindex attr makes the table focus-able, and therefore generate
+  key-press events.
+  -->
+  <thead><tr>
+    <th
+      *ngFor="let col of cols; let i=index"
+      id="{{'fset-col-' + i}}"
+      (click)="sortOn(col)">
+      <span>{{col.dispName}}</span>
+      <span
+        class="fa"
+        [class.fa-chevron-up]="isSortedAsc()"
+        [class.fa-chevron-down]="!isSortedAsc()"
+        [style.visibility]="sortCol === col.dispName ? 'inherit' : 'hidden'">
+      </span>
+    </th>
+  </tr></thead>
+  <tbody><tr *ngFor="let row of rows; let i=index"
+    id="{{'fset-row-' + i}}"
+    [class.selected]="i===selRow">
+    <td *ngFor="let col of cols; let j=index"
+      id="{{'fset-cell-' + i + '-' + j}}">
+      <div
+        fse-cell
+        [class.selected]="isCellSelected(i, j)"
+        [row]="i"
+        [col]="j"
+        [value]="col.getter(row)"
+        [editRequestSubject]="editRequestSubject"
+        (click)="selectCell(i, j)"
+        (dblclick)="triggerEdit()"
+        (valueChange)="col.setter($event, row); resetSort();"
+        (editExit)="navInputFocus()">
+      </div>
+    </td>
+  </tr>
+  <tr *ngIf="height === 0"><td [colSpan]="width">
+    <div id="fset-empty-text">Nothing here!</div>
+  </td></tr></tbody>
+</table>

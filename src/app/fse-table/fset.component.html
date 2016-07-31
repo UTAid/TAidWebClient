@@ -19,46 +19,9 @@
 
 </div>
 
-<table #navInput id="fset" class="table table-bordered" tabindex="-1"
-  *ngIf="content"
-  (keydown)=navInputHandler($event)>
-  <!--
-  tabindex attr makes the table focus-able, and therefore generate
-  key-press events.
-  -->
-  <thead><tr>
-    <th
-      *ngFor="let col of content.columns; let i=index"
-      id="{{'fset-col-' + i}}"
-      (click)="sortOn(col.dispName)">
-      <span>{{col.dispName}}</span>
-      <span
-        class="fa"
-        [class.fa-chevron-up]="isSortedAsc()"
-        [class.fa-chevron-down]="!isSortedAsc()"
-        [style.visibility]="sortColumn === col.dispName ? 'inherit' : 'hidden'">
-      </span>
-    </th>
-  </tr></thead>
-  <tbody><tr *ngFor="let row of content.rows; let i=index"
-    id="{{'fset-row-' + i}}"
-    [class.selected]="i===selRow">
-    <td *ngFor="let col of content.columns; let j=index"
-      id="{{'fset-cell-' + i + '-' + j}}">
-      <div
-        fse-cell
-        [class.selected]="isCellSelected(i, j)"
-        [row]="i"
-        [col]="j"
-        [value]="col.getter(row)"
-        [editRequestSubject]="editRequestSubject"
-        (click)="selectCell(i, j)"
-        (dblclick)="triggerEdit()"
-        (valueChange)="col.setter($event, row); resetSort();"
-        (editExit)="navInputFocus()"></div>
-    </td>
-  </tr>
-  <tr *ngIf="content.height === 0"><td [colSpan]="content.width">
-    <div id="fset-empty-text">Nothing here!</div>
-  </td></tr></tbody>
-</table>
+<fse-table *ngIf="content"
+  [rows]="content.rows"
+  [cols]="content.columns"
+  (search)="focusSearch()"
+  (sort)="sortContent($event)">
+</fse-table>

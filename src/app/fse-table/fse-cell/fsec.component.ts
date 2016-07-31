@@ -2,7 +2,6 @@ import {Component, Directive, Input, Output, ElementRef, EventEmitter, OnInit,
   ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 
-import {Column} from '../shared/column';
 import {KeyMap, getKeyMap} from '../shared/keymap';
 
 /*
@@ -20,25 +19,25 @@ import {KeyMap, getKeyMap} from '../shared/keymap';
 })
 class FSETInputDirective {
   private _el: HTMLElement;
-  private prevValue: string;
+
+  @Output() editCancel: EventEmitter<any>;
+  @Output() editConfirm: EventEmitter<string>;
 
   constructor(private el: ElementRef) {
     this._el = el.nativeElement;
+    this.editCancel = new EventEmitter();
+    this.editConfirm = new EventEmitter();
   }
 
   private processKeydown(event: KeyboardEvent){
     event.stopPropagation();
     let map = getKeyMap(event);
-    if (map.enter) this._el.blur();
-    if (map.escape) {
-      this._el.textContent = this.prevValue;
-      this._el.blur();
-    }
+    if (map.enter) this.editConfirm.emit(this._el.textContent);
+    if (map.escape) this.editCancel.emit(null);
   }
 
   // When view is initialized, focus and select all contents.
   ngAfterViewInit() {
-    this.prevValue = this._el.textContent;
     this._el.focus();
     // Select the contents.
     let range = document.createRange();
@@ -91,17 +90,16 @@ export class FSECComponent<T> implements OnInit{
   private requestEdit(){
     this.edit = true;
     this.editEnter.emit([this.row, this.col]);
-    console.log('emit editEnter');
   }
 
-  private requestEditReset(event: any){
+  private requestEditConfirm(val: string) {
     this.edit = false;
-    if (event.target.textContent !== this.value){
-      this.value = event.target.textContent;
-      this.valueChange.emit(this.value);
-      console.log('emit valueChange');
-    }
+    this.valueChange.emit(val);
     this.editExit.emit([this.row, this.col]);
-    console.log('emit editExit');
+  }
+
+  private requestEditCancel(){
+    this.edit = false;
+    this.editExit.emit([this.row, this.col]);
   }
 }
