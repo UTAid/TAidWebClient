@@ -44,6 +44,7 @@ export class TableComponent<T> implements OnInit{
     this.sortCol = null;
     this.sortOrder = SortOrder.NONE;
     this.selRow = this.selCol = 0;
+    if (this.rows == null) this.rows = new Array<T>();
   }
 
   private isSortedAsc(): boolean {

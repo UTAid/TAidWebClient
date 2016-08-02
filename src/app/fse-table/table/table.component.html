@@ -38,7 +38,7 @@
       </div>
     </td>
   </tr>
-  <tr *ngIf="height === 0"><td [colSpan]="width">
+  <tr *ngIf="height === 0 || width === 0"><td [colSpan]="width">
     <div id="fset-empty-text">Nothing here!</div>
   </td></tr></tbody>
 </table>
