@@ -1,16 +1,19 @@
 /* tslint:disable:no-unused-variable */
 import { By }           from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { DebugElement, ApplicationRef, provide } from '@angular/core';
 import {
-  beforeEach, beforeEachProviders,
+  beforeEach, addProviders,
   describe, xdescribe,
   expect, it, xit,
   async, inject, TestComponentBuilder,
   ComponentFixture
 } from '@angular/core/testing';
 
+import {MockApplicationRef} from '../shared/testing/mock-application-ref';
+
 import {FSETContent, FSETPropertyMap} from "./fset-content";
 import {FSETComponent} from './fset.component';
+import {BS_VIEW_PROVIDERS} from 'ng2-bootstrap';
 
 
 // Mock FSETContent for testing.
@@ -51,11 +54,13 @@ describe('Component: FSETable', () => {
   let comp: FSETComponent<any>;
   let elem: any;
 
-  beforeEachProviders(() => [TestComponentBuilder]);
-
   // Setup the fixture, and provide shortcuts to the component and
   // native element.
   beforeEach((done) => {
+    addProviders([
+      TestComponentBuilder,
+      provide(ApplicationRef, {useClass: MockApplicationRef})
+    ]);
     inject([TestComponentBuilder], (t) => {
       t.createAsync(FSETComponent).then(f => {
         fixture = f;

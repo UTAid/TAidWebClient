@@ -29,6 +29,7 @@ export class TableComponent<T> implements OnInit{
 
   @Output() search: EventEmitter<any> = new EventEmitter();
   @Output() sort: EventEmitter<[Column<T>, SortOrder]> = new EventEmitter();
+  @Output() selection: EventEmitter<[number, number]> = new EventEmitter();
 
   // Observer that cells listen to for edit-mode requests.
   private editRequestSubject: Subject<[number, number]> = new Subject();
@@ -73,6 +74,7 @@ export class TableComponent<T> implements OnInit{
   private selectCell(row: number, col: number){
     this.selRow = row;
     this.selCol = col;
+    this.selection.emit([row, col]);
   }
 
   private isCellSelected(row: number, col: number){

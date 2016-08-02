@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 
 import {FSETComponent, FSETContent, FSETPropertyMap} from './fse-table/';
 import {Student} from './student';
@@ -11,6 +11,8 @@ import {Student} from './student';
 })
 export class AppComponent implements OnInit{
   studentList: FSETContent<Student>;
+
+  constructor(public viewContainerRef: ViewContainerRef){ }
 
   ngOnInit() {
     this.getStudents();

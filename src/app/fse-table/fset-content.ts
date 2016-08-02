@@ -37,7 +37,7 @@ export class FSETContent<T>{
     // List of T's being displayed.
     rows: T[],
     // Factory function used to get a new instance of T
-    factory: () => T
+    public factory: () => T
   ){
     this.initColumns(propertyMap);
     if (Object.keys(this._cols).length === 0){
@@ -70,7 +70,8 @@ export class FSETContent<T>{
   public applyFilterAll(val: string){
     this.filtered_rows = this._rows.filter((r) => {
       for (let col of this.columns)
-        if (col.getter(r.content).toLowerCase().indexOf(val.toLowerCase()) >= 0)
+        if (nullToEmpty(col.getter(r.content)).toLowerCase()
+            .indexOf(val.toLowerCase()) >= 0)
           return true;
       return false;
     });
@@ -137,13 +138,13 @@ export class FSETContent<T>{
     switch (order) {
       case SortOrder.ASC:
         this.filtered_rows.sort((a, b) => sort(
-          col.getter(a.content).toLowerCase(),
-          col.getter(b.content).toLowerCase()));
+          nullToEmpty(col.getter((a.content))).toLowerCase(),
+          nullToEmpty(col.getter((b.content))).toLowerCase()));
         break;
       case SortOrder.DEC:
         this.filtered_rows.sort((a, b) => -1*sort(
-          col.getter(a.content).toLowerCase(),
-          col.getter(b.content).toLowerCase()));
+          nullToEmpty(col.getter((a.content))).toLowerCase(),
+          nullToEmpty(col.getter((b.content))).toLowerCase()));
         break;
     }
   }
@@ -153,4 +154,9 @@ function sort(a: string, b: string){
   if (a > b) return 1;
   if (a < b) return -1;
   return 0;
+}
+
+function nullToEmpty(str: string){
+  if (str == null) return '';
+  return str;
 }

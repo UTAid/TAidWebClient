@@ -48,6 +48,7 @@ const barrels: string[] = [
   'app/fse-table/column-selector',
   'app/fse-table/search-bar',
   'app/fse-table/table',
+  'app/fse-table/row-adder',
   /** @cli-barrel */
 ];
 
