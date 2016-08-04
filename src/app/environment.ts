@@ -5,3 +5,6 @@
 export const environment = {
   production: false
 };
+
+// Base url of the application backend.
+export const app_base_url = '';
