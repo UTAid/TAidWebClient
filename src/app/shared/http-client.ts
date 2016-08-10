@@ -9,6 +9,11 @@ import { Observable } from 'rxjs/Observable';
 
 import { APP_BASE_URL } from './config-injectables';
 
+
+/**
+* Wrapper around the HTTP service to automatically prepend the base URL of the
+* backend.
+*/
 @Injectable()
 export class HttpClient{
 

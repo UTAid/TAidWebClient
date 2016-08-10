@@ -1,22 +1,26 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { Headers, Response } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
+import { HttpClient } from './shared';
 import { Student } from './student';
 
 @Injectable()
 export class StudentService {
 
-  private studentsUrl = 'http://localhost:8000/api/v0/students/';
+  private studentsUrl = '/api/v0/students/';
 
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
-  getStudents(): Promise<Student[]> {
+  getStudents(callback: (r: Array<Student>) => void) {
     return this.http.get(this.studentsUrl)
-               .toPromise()
-               .then(response => response.json())
-               .catch(this.handleError);
+      .map((r) => r.json().results.map(
+        (s) => new Student(
+          s.university_id, s.student_number,
+          s.first_name, s.last_name, s.email
+        )))
+        .subscribe(callback, this.handleError);
   }
 
   private handleError(error: any) {

@@ -1,4 +1,4 @@
-<div id="fset-tool-bar" class="row" *ngIf="content">
+<div id="fset-tool-bar" class="row">
 
   <search-bar
     [focus]="searchFocusSubject"
@@ -29,7 +29,7 @@
   (addRows)="addRows($event)">
 </row-adder>
 
-<fse-table *ngIf="content"
+<fse-table
   [rows]="content.rows"
   [cols]="content.columns"
   (selection)="selectRow($event)"

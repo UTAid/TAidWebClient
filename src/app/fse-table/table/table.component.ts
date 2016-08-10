@@ -3,15 +3,12 @@ import {
 } from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 
-import {FSETContent} from '../fset-content';
 import {FSECComponent} from '../fse-cell';
 import {Column, SortOrder} from '../shared/column'
 import {KeyMap, getKeyMap} from '../shared/keymap'
 
 /*
 * Filterable, Sortable, Editable table component.
-* Must be initialized with a FSETContent object, which provides the Data
-* to display within this table.
 */
 @Component({
   moduleId: module.id,

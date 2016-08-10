@@ -1,7 +1,11 @@
 export class Student{
-  university_id: string;
-  student_number: string;
-  first_name: string;
-  last_name: string;
-  email: string;
+
+  constructor(
+    public university_id: string,
+    public student_number: string,
+    public first_name: string,
+    public last_name: string,
+    public email: string
+  ) {}
+
 }
