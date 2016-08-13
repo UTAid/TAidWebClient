@@ -27,11 +27,12 @@ export class TableComponent<T> implements OnInit{
   @Output() search: EventEmitter<any> = new EventEmitter();
   @Output() sort: EventEmitter<[Column<T>, SortOrder]> = new EventEmitter();
   @Output() selection: EventEmitter<[number, number]> = new EventEmitter();
+  @Output() rowChange: EventEmitter<[number, string, Column<T>]> = new EventEmitter();
 
   // Observer that cells listen to for edit-mode requests.
   private editRequestSubject: Subject<[number, number]> = new Subject();
 
-  private sortCol: string;
+  private sortCol: Column<T>;
   private sortOrder: SortOrder;
   // The selected cell index.
   private selRow: number;
@@ -49,7 +50,7 @@ export class TableComponent<T> implements OnInit{
   }
 
   private sortOn(col: Column<T>){
-    if (this.sortCol === col.dispName){
+    if (this.sortCol === col){ // No new cols are created, so this should be ok.
       switch (this.sortOrder){
         case SortOrder.ASC: this.sortOrder = SortOrder.DEC; break;
         case SortOrder.DEC: this.sortOrder = SortOrder.ASC; break;
@@ -57,7 +58,7 @@ export class TableComponent<T> implements OnInit{
       }
     }
     else {
-      this.sortCol = col.dispName;
+      this.sortCol = col;
       this.sortOrder = SortOrder.ASC;
     }
     this.sort.emit([col, this.sortOrder]);
@@ -82,6 +83,11 @@ export class TableComponent<T> implements OnInit{
   // Trigger edit-mode on currently selected cell.
   private triggerEdit(){
     this.editRequestSubject.next([this.selRow, this.selCol]);
+  }
+
+  private rowValueChange(i: number, newVal: string, col: Column<T>){
+    this.rowChange.emit([i, newVal, col]);
+    this.resetSort();
   }
 
   get height() {

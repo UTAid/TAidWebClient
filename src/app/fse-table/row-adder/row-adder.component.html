@@ -13,7 +13,8 @@
     <fse-table
       [rows]="rows"
       [cols]="columns"
-      (selection)="selectRow($event)">
+      (selection)="selectRow($event)"
+      (rowChange)="rowValueChange($event)">
     </fse-table>
     <button type="button" class="btn btn-secondary" (click)="newRow()">
       <i class="fa fa-plus"></i>

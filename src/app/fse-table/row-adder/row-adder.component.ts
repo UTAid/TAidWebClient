@@ -1,6 +1,7 @@
 import {
   Component, OnInit, ViewChild,
-  Input, Output, EventEmitter
+  Input, Output, EventEmitter,
+  ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
 import {Subject} from "rxjs/Subject";
 import {MODAL_DIRECTIVES, BS_VIEW_PROVIDERS} from 'ng2-bootstrap';
@@ -12,6 +13,8 @@ import {Column} from '../shared/column';
 @Component({
   moduleId: module.id,
   selector: 'row-adder',
+  // No deep changes should occur on any input.
+  changeDetection: ChangeDetectionStrategy.OnPush,
   directives: [MODAL_DIRECTIVES, TableComponent],
   viewProviders: [BS_VIEW_PROVIDERS],
   templateUrl: 'row-adder.component.html',
@@ -30,11 +33,13 @@ export class RowAdderComponent<T> implements OnInit {
   private rows: T[];
   private selRow: number;
 
-  constructor() {}
+  constructor(private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.clearRows();
-    this.show.subscribe(() => this.showAdder());
+    this.show.subscribe(() => {
+      this.showAdder();
+    });
   }
 
   private hideAdder(){
@@ -60,6 +65,11 @@ export class RowAdderComponent<T> implements OnInit {
 
   private removeRow(){
     this.rows.splice(this.selRow, 1);
+  }
+
+  private rowValueChange(editInfo: [number, string, Column<T>]){
+    let row = this.rows[editInfo[0]];
+    editInfo[2].setter(editInfo[1], row);
   }
 
   private addAll(){

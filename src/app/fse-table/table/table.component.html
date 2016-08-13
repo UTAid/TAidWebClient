@@ -15,7 +15,7 @@
         class="fa"
         [class.fa-chevron-up]="isSortedAsc()"
         [class.fa-chevron-down]="!isSortedAsc()"
-        [style.visibility]="sortCol === col.dispName ? 'inherit' : 'hidden'">
+        [style.visibility]="sortCol === col ? 'inherit' : 'hidden'">
       </span>
     </th>
   </tr></thead>
@@ -33,7 +33,7 @@
         [editRequestSubject]="editRequestSubject"
         (click)="selectCell(i, j)"
         (dblclick)="triggerEdit()"
-        (valueChange)="col.setter($event, row); resetSort();"
+        (valueChange)="rowValueChange(i, $event, col)"
         (editExit)="navInputFocus()">
       </div>
     </td>
