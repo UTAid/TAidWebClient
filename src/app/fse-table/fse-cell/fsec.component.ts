@@ -4,7 +4,7 @@ import {Subject} from 'rxjs/Subject';
 
 import {KeyMap, getKeyMap} from '../shared/keymap';
 
-/*
+/**
 * Directive for an editable input field within a fse-cell.
 * Binds to enter: confirm edit, and escape: cancel edit. Clicking anywhere
 * outside the input box (blur event) will also confirm the edit.
@@ -48,7 +48,7 @@ class FSETInputDirective {
   }
 }
 
-/*
+/**
 * An editable cell within a FSETable.
 */
 @Component({

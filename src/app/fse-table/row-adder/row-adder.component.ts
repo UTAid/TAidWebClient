@@ -20,12 +20,16 @@ import {Column} from '../shared/column';
   templateUrl: 'row-adder.component.html',
   styleUrls: ['row-adder.component.css']
 })
+/**
+* Component that allows for bulk addition of rows to the FSET
+*/
 export class RowAdderComponent<T> implements OnInit {
 
-  @Input() factory: () => T;
+  @Input() factory: () => T; // Factory function to init a new row.
   @Input() columns: Column<T>[];
-  @Input() show: Subject<any>
+  @Input() show: Subject<any> // Parent component trigger to show the modal.
 
+  // Emits the list of new rows.
   @Output() addRows: EventEmitter<T[]> = new EventEmitter();
 
   @ViewChild('adderModal') adderModal: ModalDirective;

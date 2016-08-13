@@ -10,6 +10,9 @@ import {Column} from '../shared/column';
   templateUrl: 'column-selector.component.html',
   styleUrls: ['column-selector.component.css']
 })
+/**
+* Column display toggle dropdown for the FSET.
+*/
 export class ColumnSelectorComponent {
   @Input() columns: Column<any>[];
 }

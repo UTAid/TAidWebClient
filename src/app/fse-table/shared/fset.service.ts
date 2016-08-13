@@ -2,7 +2,7 @@ import { Injectable, OpaqueToken } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 
 
-/*
+/**
 * Interface for services used by FSETComponent to execute CRUD operations on a
 * backing database.
 */
@@ -15,10 +15,14 @@ export interface IFSETService<T> {
   update (o: T): Observable<any>;
   delete (o: T): Observable<string>;
 }
+/**
+* Service used by FSET to execute CRUD operations on a backing database.
+* Must be injected to FSETComponent.
+*/
 export const FSETService = new OpaqueToken("app.fse-table.IFSETService");
 
 
-/*
+/**
 * Abstract service that uses a local storage to represent a backing database.
 * Data is stored as JSON strings.
 */

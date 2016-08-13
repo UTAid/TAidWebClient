@@ -1,4 +1,4 @@
-/*
+/**
 * Represents a column within the table, for each specified property within T.
 * Note that two columns are equal if their display names are equal.
 */
@@ -14,7 +14,9 @@ export class Column<T> {
   ) { }
 }
 
-// Define the possible sort orders.
+/**
+* Enumeration of possible sort orders.
+*/
 export enum SortOrder {
   ASC,
   DEC,

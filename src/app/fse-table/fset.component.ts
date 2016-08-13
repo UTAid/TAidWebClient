@@ -24,7 +24,12 @@ import { IFSETService, FSETService } from './shared/fset.service';
   templateUrl: 'fset.component.html',
   styleUrls: ['fset.component.css'],
 })
-
+/**
+* A Filterable, Searchable, and Editable Table (FSET) component, backed by a
+* database containing rows of type `<T>`. Users can add, remove, and edit rows.
+* Depends on `FSETConfig` to specify configuration, and `FSETService` to provide
+* CRUD operations on the backing database.
+*/
 export class FSETComponent<T> implements OnInit{
 
   private factory: () => T;
@@ -62,18 +67,22 @@ export class FSETComponent<T> implements OnInit{
     );
   }
 
+  /** Get the rows currently displayed */
   get shownRows() {
     return this.filteredRows;
   }
 
+  /** Get the columns currently displayed */
   get shownCols() {
     return this._cols.filter((c) => c.show);
   }
 
+  /** Get the row height */
   get height() {
     return this.filteredRows.length;
   }
 
+  /** Get the column width */
   get width() {
     return this._cols.filter((c) => c.show);
   }

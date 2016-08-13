@@ -9,12 +9,17 @@ import { Subject } from 'rxjs/Subject';
   templateUrl: 'search-bar.component.html',
   styleUrls: ['search-bar.component.css']
 })
+/**
+* Search bar for FSET
+*/
 export class SearchBarComponent implements OnInit {
 
-  @Input() focus: Subject<any>;
+  @Input() focus: Subject<any>; // Trigger a focus on the search box.
   @ViewChild('searchInput') searchInput;
 
+  // Triggered when user requests a search. Emits with search term.
   @Output() search: EventEmitter<string> = new EventEmitter();
+  // Triggered when user clears the search.
   @Output() clear: EventEmitter<any> = new EventEmitter();
 
   private searchTerm = '';

@@ -7,9 +7,6 @@ import {FSECComponent} from '../fse-cell';
 import {Column, SortOrder} from '../shared/column'
 import {KeyMap, getKeyMap} from '../shared/keymap'
 
-/*
-* Filterable, Sortable, Editable table component.
-*/
 @Component({
   moduleId: module.id,
   directives: [FSECComponent],
@@ -18,6 +15,23 @@ import {KeyMap, getKeyMap} from '../shared/keymap'
   styleUrls: ['table.component.css'],
 })
 
+/**
+* Filterable, Sortable, Editable table component.
+*
+* ## Inputs
+*
+* `rows: T` - List of rows to display.
+* `cols: Column<T>`` - List of columns.
+*
+* ## Outputs
+*
+* `search: none` - A search is requested.
+* `sort: [column, sortOrder]` - Sort requested on specified column and order.
+* `selection: [rowIndex, colIndex]` - A cell with given index is selected.
+* `rowChange: [index, newValue, column]` - User has changed the value of row
+*   at `index` to `newValue` at property `column`.
+*
+*/
 export class TableComponent<T> implements OnInit{
 
   @Input() rows: T[];
@@ -39,7 +53,7 @@ export class TableComponent<T> implements OnInit{
   private selCol: number;
 
   ngOnInit(){
-    this.sortCol = null;
+    this.sortCol = undefined;
     this.sortOrder = SortOrder.NONE;
     this.selRow = this.selCol = 0;
     if (this.rows == null) this.rows = new Array<T>();
@@ -66,7 +80,7 @@ export class TableComponent<T> implements OnInit{
 
   // Reset sort column, and sort direction.
   private resetSort(){
-    this.sortCol = null;
+    this.sortCol = undefined;
     this.sortOrder = SortOrder.NONE;
   }
 
@@ -118,7 +132,7 @@ export class TableComponent<T> implements OnInit{
       else this.navRightLoopover();
     }
     else if (nav.ctrl && event.key === 'f')
-      this.search.emit(null);
+      this.search.emit(undefined);
   }
 
   private navInputFocus(){

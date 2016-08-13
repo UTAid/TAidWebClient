@@ -1,3 +1,7 @@
+/*
+* Helper functions for mapping keystrokes to table navigation commands.
+*/
+
 export class KeyMap{
   up = false;
   left = false;
