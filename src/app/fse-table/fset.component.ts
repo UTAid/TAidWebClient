@@ -151,10 +151,16 @@ export class FsetComponent<T> implements OnInit {
   */
   protected editRow(editInfo: [number, string, Column<T>]) {
     let row = this.filteredRows[editInfo[0]];
-    this.service.update(row).subscribe(() => {
-      // rows in filteredRows reference ones in _rows.
-      editInfo[2].setter(editInfo[1], row);
-    }, (err) => console.log('error editing row ' + err),
+    let oldVal = editInfo[2].getter(row);
+    let oldKey = this.service.key(row);
+    // Edit the column to have the new value.
+    editInfo[2].setter(editInfo[1], row);
+    this.service.update(oldKey, row).subscribe(
+      null, // Nothing needs to be done on success.
+      (err) => { // Need to change back to old value on error.
+        console.log('error editing row ' + err);
+        editInfo[2].setter(oldVal, row);
+      },
     () => console.log('edit completed'));
   }
 

@@ -12,7 +12,7 @@ export interface IFsetService<T> {
 
   create (o: T): Observable<any>;
   read (key: string): Observable<T>;
-  update (o: T): Observable<any>;
+  update (oldKey: string, o: T): Observable<any>;
   delete (o: T): Observable<string>;
 }
 /**
@@ -77,16 +77,24 @@ export abstract class FsetLocalService<T> implements IFsetService<T> {
     });
   }
 
-  update(o: T) {
+  update(oldKey: string, o: T) {
     return new Observable((ob) => {
-      let key = this.key(o);
-      if (this.localStore[key]) {
-        this.localStore[key] = JSON.stringify(o);
-        ob.next(o);
-        ob.complete();
-      } else {ob
-        .error('Key "' + key + '" does not exist.');
+      let newKey = this.key(o);
+      // Check if oldKey exists
+      if (!this.localStore[oldKey]) {
+        ob.error('Key "' + oldKey + '" does not exist.');
+        return;
       }
+      // If newKey is different, check to see if newKey exists.
+      if (oldKey !== newKey) {
+        if (this.localStore[newKey]) {
+          ob.error('Cannot update old key "' + oldKey + '" to new key "'
+            + newKey + '". New key already exists.');
+        } else { // Delete old key.
+          delete this.localStore[oldKey];
+        }
+      }
+      this.localStore[newKey] = JSON.stringify(o);
     });
   }
 

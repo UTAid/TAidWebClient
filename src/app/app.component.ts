@@ -9,7 +9,11 @@ import {Student} from './student';
 let studentFsetConfig = fsetConfig([
   { display: 'ID',
     setter: (v, o) => o.university_id = v,
-    getter: (o) => o.university_id
+    getter: (o) => o.university_id,
+    validator: (o) => {
+      if (!o.university_id) { return [false, 'ID cannot be empty!']; }
+      return [true, 'OK'];
+    }
   },
   { display: 'First Name',
     setter: (v, o) => o.first_name = v,
