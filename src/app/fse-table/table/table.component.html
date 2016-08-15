@@ -1,6 +1,7 @@
 <table #navInput id="fset" class="table table-bordered" tabindex="-1"
   *ngIf="cols"
-  (keydown)=navInputHandler($event)>
+  (keydown)=navInputHandler($event)
+  (blur)="exitFocus()">
   <!--
   tabindex attr makes the table focus-able, and therefore generate
   key-press events.
@@ -24,18 +25,17 @@
     [class.selected]="i===selRow">
     <td *ngFor="let col of cols; let j=index"
       id="{{'fset-cell-' + i + '-' + j}}">
-      <div
-        fse-cell
-        [class.selected]="isCellSelected(i, j)"
+      <fse-cell
         [row]="i"
         [col]="j"
         [value]="col.getter(row)"
+        [selection]="selectionSubject"
         [editRequestSubject]="editRequestSubject"
         (click)="selectCell(i, j)"
         (dblclick)="triggerEdit()"
         (valueChange)="rowValueChange(i, $event, col)"
         (editExit)="navInputFocus()">
-      </div>
+      </fse-cell>
     </td>
   </tr>
   <tr *ngIf="height === 0 || width === 0"><td [colSpan]="width">

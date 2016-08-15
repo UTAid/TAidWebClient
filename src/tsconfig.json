@@ -20,7 +20,6 @@
   ],
   "files": [
     "./app/app.component.ts",
-    "./app/authentication.service.ts",
     "./app/environment.ts",
     "./app/fse-table/column-selector/column-selector.component.spec.ts",
     "./app/fse-table/column-selector/column-selector.component.ts",

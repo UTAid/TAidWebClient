@@ -1,5 +1,6 @@
 import { OpaqueToken } from '@angular/core';
 
+
 /**
 * Template for a property map used to display models within the FSETable.
 *
@@ -8,22 +9,22 @@ import { OpaqueToken } from '@angular/core';
 * setter: Function used to set the property that this column is displaying.
 * getter: Function used to get the property that this column is displaying.
 */
-export interface IFSETPropertyMap<T> {
+export interface IFsetPropertyMap<T> {
   display: string;
+  hide?: boolean;
   setter(v: string, o: T): void;
   getter(o: T): string;
   validator?(o: T): [boolean, string];
-  hide?: boolean;
 }
 
-export interface IFSETConfig<T> {
-  propertyMap: Array<IFSETPropertyMap<T>>;
+export interface IFsetConfig<T> {
+  propertyMap: Array<IFsetPropertyMap<T>>;
   factory: () => T;
 }
 /**
 * Configuration for FSET. An instance must be injected to FSETComponent.
 */
-export const FSETConfig = new OpaqueToken('app.fse-table.IFSETConfig');
+export const FsetConfig = new OpaqueToken('app.fse-table.IFSETConfig');
 
 /**
 * Generate configuration for FSETComponent.
@@ -53,8 +54,8 @@ export const FSETConfig = new OpaqueToken('app.fse-table.IFSETConfig');
 * optional, and are used to validate rows when adding them.
 */
 export function fsetConfig<T>(
-  pMap: Array<IFSETPropertyMap<T>>,
-  factoryFunc: () => T): IFSETConfig<T>
-{
-  return {propertyMap: pMap, factory: factoryFunc};
+  pMap: Array<IFsetPropertyMap<T>>,
+  factoryFunc: () => T): IFsetConfig<T> {
+
+    return { propertyMap: pMap, factory: factoryFunc };
 }

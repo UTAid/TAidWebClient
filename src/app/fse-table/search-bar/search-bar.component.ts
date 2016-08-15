@@ -32,11 +32,11 @@ export class SearchBarComponent implements OnInit {
     });
   }
 
-  private searchRequest(){
+  protected searchRequest() {
     this.search.emit(this.searchTerm);
   }
 
-  private searchClear(){
+  protected searchClear() {
     this.searchTerm = '';
     this.clear.emit(null);
   }

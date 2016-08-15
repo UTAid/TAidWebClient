@@ -8,18 +8,6 @@ table > tbody > tr > td {
   padding: 0;
 }
 
-table:focus > tbody > tr > td{
-  padding: 0;
-  > div {
-    &:hover {
-      box-shadow: inset 0 0 0 0.1em $hover;
-    }
-    &.selected {
-      box-shadow: inset 0 0 0 0.1em $select;
-    }
-  }
-}
-
 table > tbody > tr {
   &.selected {
     background-color: $select-bg;

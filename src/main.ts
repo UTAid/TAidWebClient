@@ -1,6 +1,6 @@
 import { bootstrap } from '@angular/platform-browser-dynamic';
-import { OpaqueToken, enableProdMode, provide } from '@angular/core';
-import { HTTP_PROVIDERS, Http, RequestOptions } from '@angular/http';
+import { enableProdMode } from '@angular/core';
+import { HTTP_PROVIDERS, RequestOptions } from '@angular/http';
 
 import { AppComponent, environment, app_base_url } from './app/';
 import {
@@ -11,7 +11,7 @@ if (environment.production) {
   enableProdMode();
 }
 
-function basicAuthFactory(crid: BasicAuthCridentials){
+function basicAuthFactory(crid: BasicAuthCridentials) {
   return new BasicAuthRequestOptions(crid);
 }
 

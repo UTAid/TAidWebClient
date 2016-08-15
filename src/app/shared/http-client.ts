@@ -1,9 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import {
-  Http, Request, RequestOptions, RequestOptionsArgs, ConnectionBackend,
-  Response
-} from '@angular/http';
-import { isString } from '@angular/http/src/facade/lang';
+import { Http, RequestOptionsArgs, Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -15,16 +11,16 @@ import { APP_BASE_URL } from './config-injectables';
 * backend.
 */
 @Injectable()
-export class HttpClient{
+export class HttpClient {
 
   constructor(
     private http: Http,
-    @Inject(APP_BASE_URL) protected _baseUrl: string)
-  {
+    @Inject(APP_BASE_URL) protected _baseUrl: string) {
+
     console.log(this.resolveUrl('/testing/loool'));
   }
 
-  resolveUrl(url: string): string{
+  resolveUrl(url: string): string {
     return this._baseUrl.replace(/\/$/, '') + '/' + url.replace(/^\//, '');
   }
 

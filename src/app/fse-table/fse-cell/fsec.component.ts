@@ -1,27 +1,29 @@
-import {Component, Directive, Input, Output, ElementRef, EventEmitter, OnInit,
-  ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
+import {
+  Component, Directive, Input, Output, ElementRef, EventEmitter, OnInit,
+  ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit,
+  HostBinding, HostListener
+} from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 
-import {KeyMap, getKeyMap} from '../shared/keymap';
+import { getKeyMap } from '../shared/keymap';
 
 /**
 * Directive for an editable input field within a fse-cell.
 * Binds to enter: confirm edit, and escape: cancel edit. Clicking anywhere
 * outside the input box (blur event) will also confirm the edit.
+*
+* TODO: Combine FsecInputDirective into FsecComponent.
 */
 @Directive({
-  selector: `[fse-table-input]`,
-  host: {
-    "(keydown)": "processKeydown($event)",
-    "(click)": "$event.stopPropagation()",
-    "(dblclick)": "$event.stopPropagation()"
-  }
+  selector: `[fsecInput]`
 })
-class FSETInputDirective {
+class FsecInputDirective implements AfterViewInit {
   private _el: HTMLElement;
 
   @Output() editCancel: EventEmitter<any>;
   @Output() editConfirm: EventEmitter<string>;
+
+  @HostBinding('attr.contenteditable') protected contentEditable = true;
 
   constructor(private el: ElementRef) {
     this._el = el.nativeElement;
@@ -29,11 +31,20 @@ class FSETInputDirective {
     this.editConfirm = new EventEmitter();
   }
 
-  private processKeydown(event: KeyboardEvent){
+  @HostListener('click', ['$event']) protected onClick(event) {
+    event.stopPropagation();
+  }
+
+  @HostListener('dblclick', ['$event']) protected onDblclick(event) {
+    event.stopPropagation();
+  }
+
+  @HostListener('keydown', ['$event'])
+  protected processKeydown(event: KeyboardEvent) {
     event.stopPropagation();
     let map = getKeyMap(event);
-    if (map.enter) this.editConfirm.emit(this._el.textContent);
-    if (map.escape) this.editCancel.emit(null);
+    if (map.enter) { this.editConfirm.emit(this._el.textContent); }
+    if (map.escape) { this.editCancel.emit(null); }
   }
 
   // When view is initialized, focus and select all contents.
@@ -53,18 +64,20 @@ class FSETInputDirective {
 */
 @Component({
   moduleId: module.id,
-  selector: '[fse-cell]',
+  selector: 'fse-cell',
   changeDetection: ChangeDetectionStrategy.OnPush, // All inputs immutable.
-  directives: [FSETInputDirective],
+  directives: [FsecInputDirective],
   templateUrl: './fsec.component.html',
   styleUrls: ['./fsec.component.css']
 })
-export class FSECComponent<T> implements OnInit{
+export class FsecComponent<T> implements OnInit {
   // Contents of this cell.
   @Input() value: string;
   // row and column index within table.
   @Input() row: number;
   @Input() col: number;
+  // Subscribe to change in user selection to determine if I am selected.
+  @Input() selection: Subject<[number, number]>;
   // To observe for external requests to enable editing.
   @Input() editRequestSubject: Subject<[number, number]>;
   // Emitted when value changes are confirmed.
@@ -75,30 +88,35 @@ export class FSECComponent<T> implements OnInit{
   @Output() editEnter = new EventEmitter<[number, number]>();
 
   private edit = false; // Whether editing mode is enabled.
+  private isSelected = false;
 
   constructor (private cd: ChangeDetectorRef) {};
 
-  ngOnInit(){
+  ngOnInit() {
     this.editRequestSubject.subscribe(event => {
-      if (event[0] === this.row && event[1] === this.col){
+      if (event[0] === this.row && event[1] === this.col) {
         this.requestEdit();
         this.cd.markForCheck();
       }
-    })
+    });
+    this.selection.subscribe(event => {
+      this.isSelected = event[0] === this.row && event[1] === this.col;
+      this.cd.markForCheck();
+    });
   }
 
-  private requestEdit(){
+  protected requestEdit() {
     this.edit = true;
     this.editEnter.emit([this.row, this.col]);
   }
 
-  private requestEditConfirm(val: string) {
+  protected requestEditConfirm(val: string) {
     this.edit = false;
     this.valueChange.emit(val);
     this.editExit.emit([this.row, this.col]);
   }
 
-  private requestEditCancel(){
+  protected requestEditCancel() {
     this.edit = false;
     this.editExit.emit([this.row, this.col]);
   }

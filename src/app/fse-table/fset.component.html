@@ -1,5 +1,6 @@
-<div id="fset-tool-bar" class="row">
+<div>
 
+<div id="fset-tool-bar" class="row">
   <search-bar
     [focus]="searchFocusSubject"
     (search)="applySearch($event)"
@@ -19,7 +20,6 @@
     </div>
     <col-selector [columns]="_cols"></col-selector>
   </div>
-
 </div>
 
 <row-adder
@@ -37,3 +37,5 @@
   (sort)="sortContent($event)"
   (rowChange)="editRow($event)">
 </fse-table>
+
+</div>

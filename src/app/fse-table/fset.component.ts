@@ -1,5 +1,5 @@
 import {
-  Component, Input, OnInit, Inject
+  Component, OnInit, Inject
 } from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 
@@ -8,19 +8,15 @@ import { SearchBarComponent } from './search-bar';
 import { TableComponent } from './table';
 import { RowAdderComponent } from './row-adder';
 import { Column, SortOrder } from './shared/column';
-import { IFSETConfig, FSETConfig } from './shared/fset-config';
-import { IFSETService, FSETService } from './shared/fset.service';
+import { IFsetConfig, FsetConfig } from './shared/fset-config';
+import { IFsetService, FsetService } from './shared/fset.service';
 
-/*
-* Filterable, Sortable, Editable table component.
-* Must be initialized with a FSETContent object, which provides the Data
-* to display within this table.
-*/
+
 @Component({
   moduleId: module.id,
   directives: [ColumnSelectorComponent, SearchBarComponent,
     TableComponent, RowAdderComponent],
-  selector: '[fse-table]',
+  selector: 'fset-component',
   templateUrl: 'fset.component.html',
   styleUrls: ['fset.component.css'],
 })
@@ -30,7 +26,7 @@ import { IFSETService, FSETService } from './shared/fset.service';
 * Depends on `FSETConfig` to specify configuration, and `FSETService` to provide
 * CRUD operations on the backing database.
 */
-export class FSETComponent<T> implements OnInit{
+export class FsetComponent<T> implements OnInit {
 
   private factory: () => T;
 
@@ -44,10 +40,10 @@ export class FSETComponent<T> implements OnInit{
   private selRow: number;
 
   constructor(
-    @Inject(FSETConfig) public config: IFSETConfig<T>,
-    @Inject(FSETService) private service: IFSETService<T>) {}
+    @Inject(FsetConfig) public config: IFsetConfig<T>,
+    @Inject(FsetService) private service: IFsetService<T>) {}
 
-  ngOnInit(){
+  ngOnInit() {
     this.factory = this.config.factory;
     this._cols = new Array();
     this._rows = new Array();
@@ -61,9 +57,9 @@ export class FSETComponent<T> implements OnInit{
     }
 
     this.service.readAll().subscribe(
-      (rows) => {this._rows = rows; this.filteredRows = rows.slice()},
-      (err) => console.error("Error initializing rows: " + err),
-      () => console.log("readall completed")
+      (rows) => { this._rows = rows; this.filteredRows = rows.slice(); },
+      (err) => console.error('Error initializing rows: ' + err),
+      () => console.log('readall completed')
     );
   }
 
@@ -87,30 +83,32 @@ export class FSETComponent<T> implements OnInit{
     return this._cols.filter((c) => c.show);
   }
 
-  private indexOfRow(row: T){
+  private indexOfRow(row: T) {
     let rowKey = this.service.key(row);
     return this._rows.findIndex((c) => this.service.key(c) === rowKey);
   }
 
-  private selectRow(index: [number, number]){
+  protected selectRow(index: [number, number]) {
     this.selRow = index[0];
   }
 
-  private showRowAdder(){
+  protected showRowAdder() {
     this.showRowAdderSubject.next(undefined);
   }
 
-  private focusSearch(){
+  protected focusSearch() {
     this.searchFocusSubject.next(undefined);
   }
 
-  private applySearch(term: string){
+  protected applySearch(term: string) {
     if (term) {
+      term = term.toLowerCase();
       this.filteredRows = this._rows.filter((r) => {
-        for (let col of this._cols)
-          if (nullToEmpty(col.getter(r)).toLowerCase()
-              .indexOf(term.toLowerCase()) >= 0)
+        for (let col of this._cols) {
+          if (nullToEmpty(col.getter(r)).toLowerCase().indexOf(term) >= 0) {
             return true;
+          }
+        }
         return false;
       });
     } else {
@@ -118,11 +116,11 @@ export class FSETComponent<T> implements OnInit{
     }
   }
 
-  private removeSearch(){
+  protected removeSearch() {
     this.filteredRows = this._rows.slice(0);
   }
 
-  private sortContent(s: [Column<T>, SortOrder]){
+  protected sortContent(s: [Column<T>, SortOrder]) {
     let col = s[0];
     switch (s[1]) {
       case SortOrder.ASC:
@@ -131,50 +129,51 @@ export class FSETComponent<T> implements OnInit{
           nullToEmpty(col.getter((b))).toLowerCase()));
         break;
       case SortOrder.DEC:
-        this.filteredRows.sort((a, b) => -1*sort(
+        this.filteredRows.sort((a, b) => -1 * sort(
           nullToEmpty(col.getter((a))).toLowerCase(),
           nullToEmpty(col.getter((b))).toLowerCase()));
         break;
     }
   }
 
-  private addRows(rows: T[]) {
-    for (let r of rows)
-    this.service.create(r).subscribe(() => {
-      this._rows.push(r);
-      this.filteredRows.push(this._rows[this._rows.length-1]);
-    }, (err) => console.log("error creating row " + err));
+  protected addRows(rows: T[]) {
+    for (let r of rows) {
+      this.service.create(r).subscribe(() => {
+        this._rows.push(r);
+        this.filteredRows.push(this._rows[this._rows.length - 1]);
+      }, (err) => console.log('error creating row ' + err));
+    }
   }
 
   /*
   * Edit the row's properties.
   * editInfo: [rowIndex, newValue, rowProperty]
   */
-  private editRow(editInfo: [number, string, Column<T>]){
+  protected editRow(editInfo: [number, string, Column<T>]) {
     let row = this.filteredRows[editInfo[0]];
     this.service.update(row).subscribe(() => {
       // rows in filteredRows reference ones in _rows.
       editInfo[2].setter(editInfo[1], row);
-    }, (err) => console.log("error editing row " + err),
+    }, (err) => console.log('error editing row ' + err),
     () => console.log('edit completed'));
   }
 
-  private removeRow() {
+  protected removeRow() {
     this.service.delete(this.filteredRows[this.selRow])
       .subscribe(() => {
         let row = this.filteredRows.splice(this.selRow, 1)[0];
         console.log(this._rows.splice(this.indexOfRow(row), 1));
-      }, (err) => console.log("error deleting row " + err));
+      }, (err) => console.log('error deleting row ' + err));
   }
 }
 
-function sort(a: string, b: string){
-  if (a > b) return 1;
-  if (a < b) return -1;
+function sort(a: string, b: string) {
+  if (a > b) { return 1; }
+  if (a < b) { return -1; }
   return 0;
 }
 
-function nullToEmpty(str: string){
-  if (str == null) return '';
+function nullToEmpty(str: string) {
+  if (str == null) { return ''; }
   return str;
 }

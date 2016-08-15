@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewContainerRef, Injectable } from '@angular/core';
 
 import {
-  FSETComponent, fsetConfig, FSETConfig,
-  FSETLocalService, FSETService
+  FsetComponent, fsetConfig, FsetConfig,
+  FsetLocalService, FsetService
 } from './fse-table/';
 import {Student} from './student';
-import {HttpClient} from './shared';
 
 let studentFsetConfig = fsetConfig([
   { display: 'ID',
@@ -27,37 +26,37 @@ let studentFsetConfig = fsetConfig([
 
 let studentList: Student[] = [
   {
-    university_id: "testing",
-    student_number: "888888888",
-    first_name: "Test",
-    last_name: "Ing",
-    email: "test.ing@mail.com"
+    university_id: 'testing',
+    student_number: '888888888',
+    first_name: 'Test',
+    last_name: 'Ing',
+    email: 'test.ing@mail.com'
   },
   {
-    university_id: "djangular",
-    student_number: "987654321",
-    first_name: "Angular",
-    last_name: "Django",
-    email: "dj.ango@mail.com"
+    university_id: 'djangular',
+    student_number: '987654321',
+    first_name: 'Angular',
+    last_name: 'Django',
+    email: 'dj.ango@mail.com'
   },
   {
-    university_id: "leet",
-    student_number: "1337",
-    first_name: "Sup0r",
-    last_name: "H4x0r5",
-    email: "redacted@anonymous.com"
+    university_id: 'leet',
+    student_number: '1337',
+    first_name: 'Sup0r',
+    last_name: 'H4x0r5',
+    email: 'redacted@anonymous.com'
   },
   {
-    university_id: "",
-    student_number: "",
-    first_name: "Oh no,",
-    last_name: "Empty cells :(",
-    email: ""
+    university_id: '',
+    student_number: '',
+    first_name: 'Oh no,',
+    last_name: 'Empty cells :(',
+    email: ''
   }
 ];
 
 @Injectable()
-class StudentLocalService extends FSETLocalService<Student> {
+class StudentLocalService extends FsetLocalService<Student> {
   key(s: Student) {
     return s.university_id;
   }
@@ -68,14 +67,14 @@ class StudentLocalService extends FSETLocalService<Student> {
   selector: 'app-root',
   templateUrl: 'app.component.html',
   providers: [
-    {provide: FSETConfig, useValue: studentFsetConfig},
-    {provide: FSETService, useValue: new StudentLocalService(studentList)}
+    {provide: FsetConfig, useValue: studentFsetConfig},
+    {provide: FsetService, useValue: new StudentLocalService(studentList)}
   ],
-  directives: [FSETComponent],
+  directives: [FsetComponent],
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
 
-  constructor(public viewContainerRef: ViewContainerRef){ }
+  constructor(public viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {}
 

@@ -3,7 +3,7 @@ import {
   Input, Output, EventEmitter,
   ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
-import {Subject} from "rxjs/Subject";
+import {Subject} from 'rxjs/Subject';
 import {MODAL_DIRECTIVES, BS_VIEW_PROVIDERS} from 'ng2-bootstrap';
 import {ModalDirective} from 'ng2-bootstrap/components/modal/modal.component';
 
@@ -27,7 +27,7 @@ export class RowAdderComponent<T> implements OnInit {
 
   @Input() factory: () => T; // Factory function to init a new row.
   @Input() columns: Column<T>[];
-  @Input() show: Subject<any> // Parent component trigger to show the modal.
+  @Input() show: Subject<any>; // Parent component trigger to show the modal.
 
   // Emits the list of new rows.
   @Output() addRows: EventEmitter<T[]> = new EventEmitter();
@@ -46,15 +46,15 @@ export class RowAdderComponent<T> implements OnInit {
     });
   }
 
-  private hideAdder(){
+  private hideAdder() {
     this.adderModal.hide();
   }
 
-  private showAdder(){
+  private showAdder() {
     this.adderModal.show();
   }
 
-  private selectRow(index: [number, number]){
+  protected selectRow(index: [number, number]) {
     this.selRow = index[0];
   }
 
@@ -63,24 +63,24 @@ export class RowAdderComponent<T> implements OnInit {
     this.rows[0] = this.factory();
   }
 
-  private newRow(){
+  protected newRow() {
     this.rows.push(this.factory());
   }
 
-  private removeRow(){
+  protected removeRow() {
     this.rows.splice(this.selRow, 1);
   }
 
-  private rowValueChange(editInfo: [number, string, Column<T>]){
+  protected rowValueChange(editInfo: [number, string, Column<T>]) {
     let row = this.rows[editInfo[0]];
     editInfo[2].setter(editInfo[1], row);
   }
 
-  private addAll(){
+  protected addAll() {
     let isValid = true;
     for (let r of this.rows){
       for (let c of this.columns){
-        if (c.validator == null) continue;
+        if (c.validator == null) { continue; }
         let result = c.validator(r);
         if (!result[0]) {
           console.log(result[1]);
@@ -88,14 +88,14 @@ export class RowAdderComponent<T> implements OnInit {
         }
       }
     }
-    if (isValid){
+    if (isValid) {
       this.addRows.emit(this.rows);
       this.hideAdder();
       this.clearRows();
     }
   }
 
-  private cancel(){
+  protected cancel() {
     this.hideAdder();
     this.clearRows();
   }

@@ -2,7 +2,7 @@
 * Helper functions for mapping keystrokes to table navigation commands.
 */
 
-export class KeyMap{
+export class KeyMap {
   up = false;
   left = false;
   right = false;
@@ -17,14 +17,14 @@ export class KeyMap{
   modifier = false;
 }
 
-export function getKeyMap(event: KeyboardEvent){
+export function getKeyMap(event: KeyboardEvent) {
   let ret = new KeyMap();
   ret.alt = event.altKey;
   ret.ctrl = event.ctrlKey;
   ret.shift = event.shiftKey;
   ret.modifier = ret.alt || ret.ctrl || ret.shift;
 
-  switch (event.keyCode){
+  switch (event.keyCode) {
     case 9: ret.tab = true; break;
     case 13: ret.enter = true; break;
     case 27: ret.escape = true; break;

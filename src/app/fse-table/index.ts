@@ -1,3 +1,3 @@
 export * from './fset.component';
-export {FSETConfig, fsetConfig} from './shared/fset-config';
-export {FSETService, FSETLocalService} from './shared/fset.service';
+export {FsetConfig, fsetConfig} from './shared/fset-config';
+export {FsetService, FsetLocalService} from './shared/fset.service';
