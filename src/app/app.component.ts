@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewContainerRef, Injectable } from '@angular/core';
+import { StudentService } from './student.service';
 
 import {
   FsetComponent, fsetConfig, FsetConfig,
@@ -72,7 +73,7 @@ class StudentLocalService extends FsetLocalService<Student> {
   templateUrl: 'app.component.html',
   providers: [
     {provide: FsetConfig, useValue: studentFsetConfig},
-    {provide: FsetService, useValue: new StudentLocalService(studentList)}
+    {provide: FsetService, useClass: StudentService}
   ],
   directives: [FsetComponent],
 })
