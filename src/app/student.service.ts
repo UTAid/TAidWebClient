@@ -40,11 +40,12 @@ export class StudentService implements IFsetService<Student> {
   }
 
   update(oldKey: string, o: Student) {
-    return undefined;
+    // TODO: Does not support key changes.
+    return this.http.put(URL + this.key(o) + '/', JSON.stringify(o));
   }
 
-  delete(o: Student) {
-    return undefined;
+  delete(s: Student) {
+    return this.http.delete(URL + this.key(s) + '/');
   }
 
 }

@@ -13,7 +13,7 @@ export interface IFsetService<T> {
   create (o: T): Observable<any>;
   read (key: string): Observable<T>;
   update (oldKey: string, o: T): Observable<any>;
-  delete (o: T): Observable<string>;
+  delete (o: T): Observable<any>;
 }
 /**
 * Service used by FSET to execute CRUD operations on a backing database.
