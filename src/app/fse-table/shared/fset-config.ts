@@ -8,10 +8,15 @@ import { OpaqueToken } from '@angular/core';
 *   identifier.
 * setter: Function used to set the property that this column is displaying.
 * getter: Function used to get the property that this column is displaying.
+* hide: Optional boolean that determines if column is initially hidden.
+*   Hide on true, and show otherwise.
+* disabled: Optional boolean that determins if value in column is read only.
+*   Read only on true, and allow editing otherwise.
 */
 export interface IFsetPropertyMap<T> {
   display: string;
   hide?: boolean;
+  disabled?: boolean;
   setter(v: string, o: T): void;
   getter(o: T): string;
   validator?(o: T): [boolean, string];
@@ -39,6 +44,7 @@ export const FsetConfig = new OpaqueToken('app.fse-table.IFSETConfig');
 *   { display: 'Name',
 *     setter: (value, person) => person.name = value,
 *     getter: (person) => person.name,
+      disabled: true
 *   },
 *   { display: 'Age',
 *     setter: (value, person) => person.age = parseInt(value, 10),
@@ -51,7 +57,8 @@ export const FsetConfig = new OpaqueToken('app.fse-table.IFSETConfig');
 * ```
 *
 * Getter and setters for property mapping operates on strings. Validators are
-* optional, and are used to validate rows when adding them.
+* optional, and are used to validate rows when adding them. If `disable` is
+* set to true, the column displayed will be read only.
 */
 export function fsetConfig<T>(
   pMap: Array<IFsetPropertyMap<T>>,

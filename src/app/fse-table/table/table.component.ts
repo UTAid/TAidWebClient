@@ -1,5 +1,6 @@
 import {
-  Component, OnInit, ViewChild, Input, Output, EventEmitter
+  Component, OnInit, ViewChild, Input, Output, EventEmitter,
+  Optional, Inject, OpaqueToken
 } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
@@ -7,6 +8,8 @@ import { FsecComponent } from '../fse-cell';
 import { Column, SortOrder } from '../shared/column';
 import { getKeyMap } from '../shared/keymap';
 
+export const DISABLE_OVERRIDE =
+  new OpaqueToken('app.fse-table.table.disableOverride');
 
 @Component({
   moduleId: module.id,
@@ -53,7 +56,15 @@ export class TableComponent<T> implements OnInit {
   private selRow: number;
   private selCol: number;
 
+  constructor(
+    // User of component can choose to override read-only columns.
+    // Override is false by default.
+    @Optional()
+    @Inject(DISABLE_OVERRIDE)
+    private disableOverride: boolean) {}
+
   ngOnInit() {
+    this.disableOverride = Boolean(this.disableOverride); // null => false
     this.sortCol = undefined;
     this.sortOrder = SortOrder.NONE;
     this.selRow = this.selCol = 0;
@@ -97,7 +108,10 @@ export class TableComponent<T> implements OnInit {
 
   // Trigger edit-mode on currently selected cell.
   private triggerEdit() {
-    this.editRequestSubject.next([this.selRow, this.selCol]);
+    // Only allow edit if column is not disabled, or user specified override.
+    if (this.disableOverride || !this.cols[this.selCol].disabled) {
+      this.editRequestSubject.next([this.selRow, this.selCol]);
+    }
   }
 
   protected rowValueChange(i: number, newVal: string, col: Column<T>) {

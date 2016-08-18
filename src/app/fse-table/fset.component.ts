@@ -53,7 +53,7 @@ export class FsetComponent<T> implements OnInit {
       this._cols.push(
         new Column(
           m.display, m.setter, m.getter,
-          m.validator, !Boolean(m.hide)));
+          m.validator, !Boolean(m.hide), Boolean(m.disabled)));
     }
     // Initialize rows by reading all from service.
     // TODO: make fancy loading loops.

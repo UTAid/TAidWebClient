@@ -9,6 +9,7 @@ import {ModalDirective} from 'ng2-bootstrap/components/modal/modal.component';
 
 import {TableComponent} from '../table';
 import {Column} from '../shared/column';
+import {DISABLE_OVERRIDE} from '../table';
 
 @Component({
   moduleId: module.id,
@@ -17,6 +18,7 @@ import {Column} from '../shared/column';
   changeDetection: ChangeDetectionStrategy.OnPush,
   directives: [MODAL_DIRECTIVES, TableComponent],
   viewProviders: [BS_VIEW_PROVIDERS],
+  providers: [{provide: DISABLE_OVERRIDE, useValue: true}],
   templateUrl: 'row-adder.component.html',
   styleUrls: ['row-adder.component.css']
 })

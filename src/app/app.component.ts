@@ -14,7 +14,8 @@ let studentFsetConfig = fsetConfig([
     validator: (o) => {
       if (!o.university_id) { return [false, 'ID cannot be empty!']; }
       return [true, 'OK'];
-    }
+    },
+    disabled: true
   },
   { display: 'First Name',
     setter: (v, o) => o.first_name = v,
@@ -26,7 +27,8 @@ let studentFsetConfig = fsetConfig([
   },
   { display: 'Email',
     setter: (v, o) => o.email = v,
-    getter: (o) => o.email
+    getter: (o) => o.email,
+    hide: true
   }], () => new Student('', '', '', '', ''));
 
 let studentList: Student[] = [

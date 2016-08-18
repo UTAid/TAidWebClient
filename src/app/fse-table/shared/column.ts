@@ -9,8 +9,12 @@ export class Column<T> {
     // Getter and setter functions for properties under this column
     public setter: (val: string, obj: T) => void,
     public getter: (obj: T) => string,
+    // Validator for values within this column.
     public validator: (obj: T) => [boolean, string],
-    public show = true
+    // Show this column by default if true. Hide otherwise.
+    public show = true,
+    // Column is not read only by defeault if true. Read only otherwise.
+    public disabled = false
   ) { }
 }
 
