@@ -21,41 +21,42 @@ import { IFsetService, FsetService } from './shared/fset.service';
   styleUrls: ['fset.component.css'],
 })
 /**
-* A Filterable, Searchable, and Editable Table (FSET) component, backed by a
+* A Filterable, Sortable, and Editable Table (FSET) component, backed by a
 * database containing rows of type `<T>`. Users can add, remove, and edit rows.
+*
 * Depends on `FSETConfig` to specify configuration, and `FSETService` to provide
 * CRUD operations on the backing database.
 */
 export class FsetComponent<T> implements OnInit {
 
-  private factory: () => T;
+  private _cols: Array<Column<T>>; // Array of all columns
+  private _rows: Array<T>; // Array of all rows
+  private filteredRows: Array<T>; // Array of displayed rows
 
-  private _cols: Array<Column<T>>;
-  private _rows: Array<T>;
-  private filteredRows: Array<T>;
-
+  // Observable for search focus navigation request
   private searchFocusSubject: Subject<any> = new Subject();
+  // Observable for add rows request
   private showRowAdderSubject: Subject<any> = new Subject();
 
-  private selRow: number;
+  private selRow: number; // Currently selected row
 
   constructor(
     @Inject(FsetConfig) public config: IFsetConfig<T>,
     @Inject(FsetService) private service: IFsetService<T>) {}
 
   ngOnInit() {
-    this.factory = this.config.factory;
     this._cols = new Array();
     this._rows = new Array();
     this.filteredRows = new Array();
-
+    // Init columns.
     for (let m of this.config.propertyMap){
       this._cols.push(
         new Column(
           m.display, m.setter, m.getter,
           m.validator, !Boolean(m.hide)));
     }
-
+    // Initialize rows by reading all from service.
+    // TODO: make fancy loading loops.
     this.service.readAll().subscribe(
       (rows) => { this._rows = rows; this.filteredRows = rows.slice(); },
       (err) => console.error('Error initializing rows: ' + err),
@@ -83,6 +84,8 @@ export class FsetComponent<T> implements OnInit {
     return this._cols.filter((c) => c.show);
   }
 
+  // Get the index of the speicified row within this._rows (not filteredRows).
+  // Uses the key function from IFSETService.
   private indexOfRow(row: T) {
     let rowKey = this.service.key(row);
     return this._rows.findIndex((c) => this.service.key(c) === rowKey);
@@ -100,6 +103,7 @@ export class FsetComponent<T> implements OnInit {
     this.searchFocusSubject.next(undefined);
   }
 
+  // Execute search (filter)
   protected applySearch(term: string) {
     if (term) {
       term = term.toLowerCase();
@@ -116,6 +120,7 @@ export class FsetComponent<T> implements OnInit {
     }
   }
 
+  // Clear row filter.
   protected removeSearch() {
     this.filteredRows = this._rows.slice(0);
   }
@@ -138,8 +143,8 @@ export class FsetComponent<T> implements OnInit {
 
   protected addRows(rows: T[]) {
     for (let r of rows) {
-      this.service.create(r).subscribe(() => {
-        this._rows.push(r);
+      this.service.create(r).subscribe((updatedT) => {
+        this._rows.push(updatedT);
         this.filteredRows.push(this._rows[this._rows.length - 1]);
       }, (err) => console.log('error creating row ' + err));
     }
@@ -152,12 +157,15 @@ export class FsetComponent<T> implements OnInit {
   protected editRow(editInfo: [number, string, Column<T>]) {
     let row = this.filteredRows[editInfo[0]];
     let oldVal = editInfo[2].getter(row);
-    let oldKey = this.service.key(row);
+    let index = this.indexOfRow(row);
     // Edit the column to have the new value.
     editInfo[2].setter(editInfo[1], row);
-    this.service.update(oldKey, row).subscribe(
-      null, // Nothing needs to be done on success.
-      (err) => { // Need to change back to old value on error.
+    this.service.update(row).subscribe(
+      (updatedT) => { // Update row with response.
+        this._rows[index] = updatedT;
+        this.filteredRows[editInfo[0]] = updatedT;
+      },
+      (err) => { // Change back to old value on error.
         console.log('error editing row ' + err);
         editInfo[2].setter(oldVal, row);
       },
@@ -168,7 +176,7 @@ export class FsetComponent<T> implements OnInit {
     this.service.delete(this.filteredRows[this.selRow])
       .subscribe(() => {
         let row = this.filteredRows.splice(this.selRow, 1)[0];
-        console.log(this._rows.splice(this.indexOfRow(row), 1));
+        this._rows.splice(this.indexOfRow(row), 1);
       }, (err) => console.log('error deleting row ' + err));
   }
 }

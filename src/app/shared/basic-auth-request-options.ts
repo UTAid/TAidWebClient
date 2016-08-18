@@ -11,7 +11,6 @@ export class BasicAuthRequestOptions extends BaseRequestOptions {
   constructor(cridentials: BasicAuthCridentials) {
     super();
     this.headers.append('Authorization', cridentials.getValue());
-    this.headers.append('Content-Type', 'application/json');
   }
 
 }

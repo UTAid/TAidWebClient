@@ -10,9 +10,9 @@ export interface IFsetService<T> {
   key (o: T): string;
   readAll(): Observable<Array<T>>;
 
-  create (o: T): Observable<any>;
+  create (o: T): Observable<T>;
   read (key: string): Observable<T>;
-  update (oldKey: string, o: T): Observable<any>;
+  update (o: T): Observable<T>;
   delete (o: T): Observable<any>;
 }
 /**
@@ -77,24 +77,16 @@ export abstract class FsetLocalService<T> implements IFsetService<T> {
     });
   }
 
-  update(oldKey: string, o: T) {
+  update(o: T) {
     return new Observable((ob) => {
-      let newKey = this.key(o);
-      // Check if oldKey exists
-      if (!this.localStore[oldKey]) {
-        ob.error('Key "' + oldKey + '" does not exist.');
-        return;
+      let key = this.key(o);
+      if (this.localStore[key]) {
+        ob.error('Key "' + key + '" already exists.');
+      } else {
+        this.localStore[key] = JSON.stringify(o);
+        ob.next(o);
+        ob.complete();
       }
-      // If newKey is different, check to see if newKey exists.
-      if (oldKey !== newKey) {
-        if (this.localStore[newKey]) {
-          ob.error('Cannot update old key "' + oldKey + '" to new key "'
-            + newKey + '". New key already exists.');
-        } else { // Delete old key.
-          delete this.localStore[oldKey];
-        }
-      }
-      this.localStore[newKey] = JSON.stringify(o);
     });
   }
 
