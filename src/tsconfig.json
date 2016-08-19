@@ -19,6 +19,7 @@
     "./**/*.ts"
   ],
   "files": [
+    "./app/app.component.spec.ts",
     "./app/app.component.ts",
     "./app/environment.ts",
     "./app/fse-table/column-selector/column-selector.component.spec.ts",
