@@ -10,6 +10,8 @@ import { RowAdderComponent } from './row-adder';
 import { Column, SortOrder } from './shared/column';
 import { IFsetConfig, FsetConfig } from './shared/fset-config';
 import { IFsetService, FsetService } from './shared/fset.service';
+import { Cell } from './shared/cell';
+import { SortEvent, CellEditEvent } from './shared/events';
 
 
 @Component({
@@ -31,6 +33,7 @@ export class FsetComponent<T> implements OnInit {
 
   private _cols: Array<Column<T>>; // Array of all columns
   private _rows: Array<T>; // Array of all rows
+  private _table: Cell<T>[][]; // Table of cells.
   private filteredRows: Array<T>; // Array of displayed rows
 
   // Observable for search focus navigation request
@@ -62,6 +65,17 @@ export class FsetComponent<T> implements OnInit {
       (err) => console.error('Error initializing rows: ' + err),
       () => console.log('readall completed')
     );
+    // Initialize cell matrix.
+    let rindex = 0, cindex = 0;
+    for (let r of this._rows) {
+      let cRow = new Array<Cell<T>>();
+      for (let c of this._cols) {
+        cRow.push(new Cell(r, c, rindex, cindex));
+        cindex += 1;
+      }
+      this._table.push(cRow);
+      rindex += 1;
+    }
   }
 
   /** Get the rows currently displayed */
@@ -91,8 +105,8 @@ export class FsetComponent<T> implements OnInit {
     return this._rows.findIndex((c) => this.service.key(c) === rowKey);
   }
 
-  protected selectRow(index: [number, number]) {
-    this.selRow = index[0];
+  protected selectRow(cell: Cell<T>) {
+    this.selRow = cell.rowi;
   }
 
   protected showRowAdder() {
@@ -125,9 +139,9 @@ export class FsetComponent<T> implements OnInit {
     this.filteredRows = this._rows.slice(0);
   }
 
-  protected sortContent(s: [Column<T>, SortOrder]) {
-    let col = s[0];
-    switch (s[1]) {
+  protected sortContent(s: SortEvent<T>) {
+    let col = s.col;
+    switch (s.sortOrder) {
       case SortOrder.ASC:
         this.filteredRows.sort((a, b) => sort(
           nullToEmpty(col.getter((a))).toLowerCase(),
@@ -154,20 +168,20 @@ export class FsetComponent<T> implements OnInit {
   * Edit the row's properties.
   * editInfo: [rowIndex, newValue, rowProperty]
   */
-  protected editRow(editInfo: [number, string, Column<T>]) {
-    let row = this.filteredRows[editInfo[0]];
-    let oldVal = editInfo[2].getter(row);
+  protected editRow(edit: CellEditEvent<T>) {
+    let row = edit.cell.row;
+    let oldVal = edit.cell.value;
     let index = this.indexOfRow(row);
-    // Edit the column to have the new value.
-    editInfo[2].setter(editInfo[1], row);
+    // Edit the row to have the new value
+    edit.cell.value = edit.newValue;
     this.service.update(row).subscribe(
       (updatedT) => { // Update row with response.
         this._rows[index] = updatedT;
-        this.filteredRows[editInfo[0]] = updatedT;
+        this.filteredRows[edit.cell.rowi] = updatedT;
       },
       (err) => { // Change back to old value on error.
         console.log('error editing row ' + err);
-        editInfo[2].setter(oldVal, row);
+        edit.cell.value = oldVal;
       },
     () => console.log('edit completed'));
   }

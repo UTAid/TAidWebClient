@@ -26,14 +26,12 @@
     <td *ngFor="let col of cols; let j=index"
       id="{{'fset-cell-' + i + '-' + j}}">
       <fse-cell
-        [row]="i"
-        [col]="j"
-        [value]="col.getter(row)"
+        [cell]="getCell(row, col, i, j)"
         [selection]="selectionSubject"
         [editRequestSubject]="editRequestSubject"
         (click)="selectCell(i, j)"
         (dblclick)="triggerEdit()"
-        (valueChange)="rowValueChange(i, $event, col)"
+        (valueChange)="rowValueChange($event)"
         (editExit)="navInputFocus()">
       </fse-cell>
     </td>

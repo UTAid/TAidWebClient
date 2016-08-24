@@ -6,6 +6,9 @@ import { Subject } from 'rxjs/Subject';
 
 import { FsecComponent } from '../fse-cell';
 import { Column, SortOrder } from '../shared/column';
+import { Row } from '../shared/row';
+import { CellEditEvent, SortEvent } from '../shared/events';
+import { Cell } from '../shared/cell';
 import { getKeyMap } from '../shared/keymap';
 
 export const DISABLE_OVERRIDE =
@@ -38,17 +41,18 @@ export class TableComponent<T> implements OnInit {
 
   @Input() rows: T[];
   @Input() cols: Column<T>[];
+  @Input() table: Row<T>[];
   @ViewChild('navInput') navInput;
 
   @Output() search: EventEmitter<any> = new EventEmitter();
-  @Output() sort: EventEmitter<[Column<T>, SortOrder]> = new EventEmitter();
-  @Output() selection: EventEmitter<[number, number]> = new EventEmitter();
-  @Output() rowChange: EventEmitter<[number, string, Column<T>]> = new EventEmitter();
+  @Output() sort: EventEmitter<SortEvent<T>> = new EventEmitter();
+  @Output() selection: EventEmitter<Cell<T>> = new EventEmitter();
+  @Output() rowChange: EventEmitter<CellEditEvent<T>> = new EventEmitter();
 
   // Subject that cells listen to for edit-mode requests.
-  private editRequestSubject: Subject<[number, number]> = new Subject();
+  private editRequestSubject: Subject<Cell<T>> = new Subject();
   // Subject that cells listen to for selection changes.
-  private selectionSubject: Subject<[number, number]> = new Subject();
+  private selectionSubject: Subject<Cell<T>> = new Subject();
 
   private sortCol: Column<T>;
   private sortOrder: SortOrder;
@@ -72,7 +76,7 @@ export class TableComponent<T> implements OnInit {
   }
 
   protected exitFocus() {
-    this.selectionSubject.next([-1, -1]);
+    this.selectionSubject.next(new Cell(undefined, undefined, -1, -1));
   }
 
   protected isSortedAsc(): boolean {
@@ -90,7 +94,7 @@ export class TableComponent<T> implements OnInit {
       this.sortCol = col;
       this.sortOrder = SortOrder.ASC;
     }
-    this.sort.emit([col, this.sortOrder]);
+    this.sort.emit(new SortEvent(this.sortCol, this.sortOrder));
   }
 
   // Reset sort column, and sort direction.
@@ -99,24 +103,37 @@ export class TableComponent<T> implements OnInit {
     this.sortOrder = SortOrder.NONE;
   }
 
+  private getSelectedCell(): Cell<T> {
+    return new Cell(
+      this.rows[this.selRow],
+      this.cols[this.selCol],
+      this.selRow,
+      this.selCol);
+  }
+
   protected selectCell(row: number, col: number) {
     this.selRow = row;
     this.selCol = col;
-    this.selectionSubject.next([row, col]); // notify children
-    this.selection.emit([row, col]); // notify parent
+    let cell = this.getSelectedCell();
+    this.selectionSubject.next(cell); // notify children
+    this.selection.emit(cell); // notify parent
   }
 
   // Trigger edit-mode on currently selected cell.
   private triggerEdit() {
     // Only allow edit if column is not disabled, or user specified override.
     if (this.disableOverride || !this.cols[this.selCol].disabled) {
-      this.editRequestSubject.next([this.selRow, this.selCol]);
+      this.editRequestSubject.next(this.getSelectedCell());
     }
   }
 
-  protected rowValueChange(i: number, newVal: string, col: Column<T>) {
-    this.rowChange.emit([i, newVal, col]);
+  protected rowValueChange(event: CellEditEvent<T>) {
+    this.rowChange.emit(event);
     this.resetSort();
+  }
+
+  protected getCell(row: T, col: Column<T>, i: number, j: number) {
+    return new Cell<T>(row, col, i, j);
   }
 
   get height() {
@@ -160,7 +177,7 @@ export class TableComponent<T> implements OnInit {
 
   protected navInputFocus() {
     this.navInput.nativeElement.focus();
-    this.selectionSubject.next([this.selRow, this.selCol]);
+    this.selectionSubject.next(this.getSelectedCell());
   }
 
   private navUp() {
