@@ -1,14 +1,10 @@
-<div id="fsec-wrapper" [class.selected]="isSelected">
-
-  <div fsecInput
-    *ngIf="edit"
-    [textContent]="value"
-    (editConfirm)="requestEditConfirm($event)"
-    (editCancel)="requestEditCancel()"
-    (blur)="requestEditCancel()"></div>
-  <div *ngIf="!edit"
-    [class.novalue]="!value">
-    {{value ? value : "None"}}
-  </div>
-
+<div fsecInput
+  *ngIf="edit"
+  [textContent]="value"
+  (editConfirm)="requestEditConfirm($event)"
+  (editCancel)="requestEditCancel()"
+  (blur)="requestEditCancel()"></div>
+<div *ngIf="!edit"
+  [class.novalue]="!value">
+  {{value ? value : "None"}}
 </div>

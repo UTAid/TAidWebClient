@@ -77,8 +77,6 @@ export class FsecComponent<T> implements OnInit {
   // row and column index within table.
   @Input() row: number;
   @Input() col: number;
-  // Subscribe to change in user selection to determine if I am selected.
-  @Input() selection: Subject<CellEvent<T>>;
   // To observe for external requests to enable editing.
   @Input() editRequestSubject: Subject<CellEvent<T>>;
   // Emitted when value changes are confirmed.
@@ -89,7 +87,6 @@ export class FsecComponent<T> implements OnInit {
   @Output() editEnter = new EventEmitter<CellEvent<T>>();
 
   private edit = false; // Whether editing mode is enabled.
-  private isSelected = false;
 
   constructor (private cd: ChangeDetectorRef) {};
 
@@ -100,31 +97,30 @@ export class FsecComponent<T> implements OnInit {
         this.cd.markForCheck();
       }
     });
-    this.selection.subscribe(event => {
-      this.isSelected =
-        event.rowi === this.row && event.coli === this.col;
-      this.cd.markForCheck();
-    });
   }
 
   get value() {
     return this.cell.value;
   }
 
+  private get cellEvent() {
+    return new CellEvent(this.cell, this.row, this.col);
+  }
+
   protected requestEdit() {
     this.edit = true;
-    this.editEnter.emit(new CellEvent(this.cell, this.row, this.col));
+    this.editEnter.emit(this.cellEvent);
   }
 
   protected requestEditConfirm(val: string) {
     this.edit = false;
     this.valueChange.emit(new CellEditEvent(
       this.cell, this.row, this.col, val));
-    this.editExit.emit(new CellEvent(this.cell, this.row, this.col));
+    this.editExit.emit(this.cellEvent);
   }
 
   protected requestEditCancel() {
     this.edit = false;
-    this.editExit.emit(new CellEvent(this.cell, this.row, this.col));
+    this.editExit.emit(this.cellEvent);
   }
 }

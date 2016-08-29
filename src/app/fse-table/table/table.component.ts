@@ -54,8 +54,6 @@ export class TableComponent<T> implements OnInit {
 
   // Subject that cells listen to for edit-mode requests.
   private editRequestSubject: Subject<CellEvent<T>> = new Subject();
-  // Subject that cells listen to for selection changes.
-  private selectionSubject: Subject<CellEvent<T>> = new Subject();
 
   private sortCol: Column<T>;
   private sortOrder: SortOrder;
@@ -80,15 +78,6 @@ export class TableComponent<T> implements OnInit {
     if (this.rows == null) { this.rows = []; }
   }
 
-  // Handler for when user de-focuses from this table.
-  protected exitFocus() {
-    this.selectionSubject.next(new CellEvent<T>(undefined, -1, -1));
-  }
-
-  // protected enterFocus() {
-  //   this.selectionSubject.next(this.selectedCellEvent);
-  // }
-
   protected isSortedAsc(): boolean {
     return this.sortOrder === SortOrder.ASC;
   }
@@ -105,8 +94,6 @@ export class TableComponent<T> implements OnInit {
       this.sortOrder = SortOrder.ASC;
     }
     this.sort.emit(new SortEvent(this.sortCol, i, this.sortOrder));
-    // Invalidate selected cell.
-    this.navInput.nativeElement.blur();
   }
 
   // Reset sort column, and sort direction.
@@ -125,7 +112,6 @@ export class TableComponent<T> implements OnInit {
   // Notify listeners of the currently selected cell.
   private notifySelection() {
     let cellEvent = this.selectedCellEvent;
-    this.selectionSubject.next(cellEvent); // notify children
     this.selection.emit(cellEvent); // notify parent
   }
 
@@ -141,6 +127,10 @@ export class TableComponent<T> implements OnInit {
   protected rowValueChange(event: CellEditEvent<T>) {
     this.rowChange.emit(event);
     this.resetSort();
+  }
+
+  protected isCellIndexSelected(rowi: number, coli: number) {
+    return this.selRow === rowi && this.selCol === coli;
   }
 
   private get selectedCellEvent() {
@@ -206,7 +196,6 @@ export class TableComponent<T> implements OnInit {
 
   protected navInputFocus() {
     this.navInput.nativeElement.focus();
-    this.selectionSubject.next(this.selectedCellEvent);
   }
 
   /* Navigation needs to skip over hidden columns and rows. Additional while
