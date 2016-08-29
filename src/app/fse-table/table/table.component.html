@@ -6,11 +6,12 @@
   tabindex attr makes the table focus-able, and therefore generate
   key-press events.
   -->
+
   <thead><tr>
-    <th
-      *ngFor="let col of cols; let i=index"
+    <template ngFor let-col [ngForOf]="cols" let-i="index"><th
+      *ngIf="showHiddenCols || col.show"
       id="{{'fset-col-' + i}}"
-      (click)="sortOn(col)">
+      (click)="sortOn(col, i)">
       <span>{{col.dispName}}</span>
       <span
         class="fa"
@@ -18,25 +19,32 @@
         [class.fa-chevron-down]="!isSortedAsc()"
         [style.visibility]="sortCol === col ? 'inherit' : 'hidden'">
       </span>
-    </th>
+    </th></template>
   </tr></thead>
-  <tbody><tr *ngFor="let row of rows; let i=index"
-    id="{{'fset-row-' + i}}"
-    [class.selected]="i===selRow">
-    <td *ngFor="let col of cols; let j=index"
-      id="{{'fset-cell-' + i + '-' + j}}">
-      <fse-cell
-        [cell]="getCell(row, col, i, j)"
-        [selection]="selectionSubject"
-        [editRequestSubject]="editRequestSubject"
-        (click)="selectCell(i, j)"
-        (dblclick)="triggerEdit()"
-        (valueChange)="rowValueChange($event)"
-        (editExit)="navInputFocus()">
-      </fse-cell>
-    </td>
-  </tr>
+
+  <tbody>
+    <template ngFor let-row [ngForOf]="rows" let-i="index" [ngForTrackBy]="trackByRow">
+    <tr *ngIf="row.show"
+      id="{{'fset-row-' + i}}"
+      [class.selected]="i===selRow">
+      <template ngFor let-col [ngForOf]="cols" let-j="index">
+      <td *ngIf="showHiddenCols || col.show"
+        id="{{'fset-cell-' + i + '-' + j}}">
+        <fse-cell
+          [cell]="row.cells[j]"
+          [row]="i"
+          [col]="j"
+          [selection]="selectionSubject"
+          [editRequestSubject]="editRequestSubject"
+          (click)="onClick(i, j)"
+          (dblclick)="triggerEdit()"
+          (valueChange)="rowValueChange($event)"
+          (editExit)="navInputFocus()">
+        </fse-cell>
+      </td></template>
+    </tr></template>
   <tr *ngIf="height === 0 || width === 0"><td [colSpan]="width">
     <div id="fset-empty-text">Nothing here!</div>
   </td></tr></tbody>
+
 </table>

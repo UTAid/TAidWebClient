@@ -7,7 +7,7 @@ import { Subject } from 'rxjs/Subject';
 
 import { getKeyMap } from '../shared/keymap';
 import { Cell } from '../shared/cell';
-import { CellEditEvent } from '../shared/events';
+import { CellEditEvent, CellEvent } from '../shared/events';
 
 /**
 * Directive for an editable input field within a fse-cell.
@@ -73,22 +73,20 @@ class FsecInputDirective implements AfterViewInit {
   styleUrls: ['./fsec.component.css']
 })
 export class FsecComponent<T> implements OnInit {
-  // // Contents of this cell.
-  // @Input() value: string;
-  // // row and column index within table.
-  // @Input() row: number;
-  // @Input() col: number;
   @Input() cell: Cell<T>;
+  // row and column index within table.
+  @Input() row: number;
+  @Input() col: number;
   // Subscribe to change in user selection to determine if I am selected.
-  @Input() selection: Subject<Cell<T>>;
+  @Input() selection: Subject<CellEvent<T>>;
   // To observe for external requests to enable editing.
-  @Input() editRequestSubject: Subject<Cell<T>>;
+  @Input() editRequestSubject: Subject<CellEvent<T>>;
   // Emitted when value changes are confirmed.
   @Output() valueChange = new EventEmitter<CellEditEvent<T>>();
   // Emitted when exiting editing mode.
-  @Output() editExit = new EventEmitter<Cell<T>>();
+  @Output() editExit = new EventEmitter<CellEvent<T>>();
   // Emitted when entering editing mode
-  @Output() editEnter = new EventEmitter<Cell<T>>();
+  @Output() editEnter = new EventEmitter<CellEvent<T>>();
 
   private edit = false; // Whether editing mode is enabled.
   private isSelected = false;
@@ -97,35 +95,36 @@ export class FsecComponent<T> implements OnInit {
 
   ngOnInit() {
     this.editRequestSubject.subscribe(event => {
-      if (event.rowi === this.cell.rowi && event.coli === this.cell.coli) {
+      if (event.rowi === this.row && event.coli === this.col) {
         this.requestEdit();
         this.cd.markForCheck();
       }
     });
     this.selection.subscribe(event => {
       this.isSelected =
-        event.rowi === this.cell.rowi && event.coli === this.cell.coli;
+        event.rowi === this.row && event.coli === this.col;
       this.cd.markForCheck();
     });
   }
 
   get value() {
-    return this.cell.col.getter(this.cell.row);
+    return this.cell.value;
   }
 
   protected requestEdit() {
     this.edit = true;
-    this.editEnter.emit(this.cell);
+    this.editEnter.emit(new CellEvent(this.cell, this.row, this.col));
   }
 
   protected requestEditConfirm(val: string) {
     this.edit = false;
-    this.valueChange.emit(new CellEditEvent(this.cell, val));
-    this.editExit.emit(this.cell);
+    this.valueChange.emit(new CellEditEvent(
+      this.cell, this.row, this.col, val));
+    this.editExit.emit(new CellEvent(this.cell, this.row, this.col));
   }
 
   protected requestEditCancel() {
     this.edit = false;
-    this.editExit.emit(this.cell);
+    this.editExit.emit(new CellEvent(this.cell, this.row, this.col));
   }
 }

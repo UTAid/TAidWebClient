@@ -27,7 +27,7 @@ export class StudentService implements IFsetService<Student> {
   }
 
   create(s: Student) {
-    return this.http.post(URL, JSON.stringify(s))
+    return this.http.post(URL, studentToJson(s))
       .map((r) => jsonToStudent(r.json()));
   }
 
@@ -38,7 +38,7 @@ export class StudentService implements IFsetService<Student> {
 
   update(o: Student) {
     // TODO: Does not support key changes.
-    return this.http.put(URL + this.key(o) + '/', JSON.stringify(o))
+    return this.http.put(URL + this.key(o) + '/', studentToJson(o))
       .map((r) => jsonToStudent(r.json()));
   }
 
@@ -52,3 +52,13 @@ function jsonToStudent(s: any) {
   return new Student(s.university_id, s.student_number,
     s.first_name, s.last_name, s.email);
   }
+
+function studentToJson(s: Student) {
+  return {
+    email: s.email,
+    first_name: s.first_name,
+    last_name: s.last_name,
+    student_number: s.student_number,
+    university_id: s.university_id
+  };
+}

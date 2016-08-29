@@ -3,13 +3,15 @@ import {
   Input, Output, EventEmitter,
   ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
-import {Subject} from 'rxjs/Subject';
-import {MODAL_DIRECTIVES, BS_VIEW_PROVIDERS} from 'ng2-bootstrap';
-import {ModalDirective} from 'ng2-bootstrap/components/modal/modal.component';
+import { Subject } from 'rxjs/Subject';
+import { MODAL_DIRECTIVES, BS_VIEW_PROVIDERS } from 'ng2-bootstrap';
+import { ModalDirective } from 'ng2-bootstrap/components/modal/modal.component';
 
-import {TableComponent} from '../table';
-import {Column} from '../shared/column';
-import {DISABLE_OVERRIDE} from '../table';
+import { TableComponent } from '../table';
+import { Column } from '../shared/column';
+import { Row } from '../shared/row';
+import { DISABLE_OVERRIDE, SHOW_HIDDEN_COLS } from '../table';
+import { CellEditEvent } from '../shared/events';
 
 @Component({
   moduleId: module.id,
@@ -18,7 +20,10 @@ import {DISABLE_OVERRIDE} from '../table';
   changeDetection: ChangeDetectionStrategy.OnPush,
   directives: [MODAL_DIRECTIVES, TableComponent],
   viewProviders: [BS_VIEW_PROVIDERS],
-  providers: [{provide: DISABLE_OVERRIDE, useValue: true}],
+  providers: [
+    { provide: DISABLE_OVERRIDE, useValue: true },
+    { provide: SHOW_HIDDEN_COLS, useValue: true }
+  ],
   templateUrl: 'row-adder.component.html',
   styleUrls: ['row-adder.component.css']
 })
@@ -32,11 +37,11 @@ export class RowAdderComponent<T> implements OnInit {
   @Input() show: Subject<any>; // Parent component trigger to show the modal.
 
   // Emits the list of new rows.
-  @Output() addRows: EventEmitter<T[]> = new EventEmitter();
+  @Output() addRows: EventEmitter<Row<T>[]> = new EventEmitter();
 
   @ViewChild('adderModal') adderModal: ModalDirective;
 
-  private rows: T[];
+  private rows: Row<T>[];
   private selRow: number;
 
   constructor(private cd: ChangeDetectorRef) {}
@@ -62,39 +67,26 @@ export class RowAdderComponent<T> implements OnInit {
 
   private clearRows() {
     this.rows = new Array(1);
-    this.rows[0] = this.factory();
+    this.rows[0] = new Row(this.factory(), this.columns);
   }
 
   protected newRow() {
-    this.rows.push(this.factory());
+    this.rows.push(new Row(this.factory(), this.columns));
   }
 
   protected removeRow() {
     this.rows.splice(this.selRow, 1);
   }
 
-  protected rowValueChange(editInfo: [number, string, Column<T>]) {
-    let row = this.rows[editInfo[0]];
-    editInfo[2].setter(editInfo[1], row);
+  protected rowValueChange(editInfo: CellEditEvent<T>) {
+    let cell = this.rows[editInfo.rowi].cells[editInfo.coli];
+    cell.value = editInfo.newValue;
   }
 
   protected addAll() {
-    let isValid = true;
-    for (let r of this.rows){
-      for (let c of this.columns){
-        if (c.validator == null) { continue; }
-        let result = c.validator(r);
-        if (!result[0]) {
-          console.log(result[1]);
-          isValid = false;
-        }
-      }
-    }
-    if (isValid) {
-      this.addRows.emit(this.rows);
-      this.hideAdder();
-      this.clearRows();
-    }
+    this.addRows.emit(this.rows);
+    this.hideAdder();
+    this.clearRows();
   }
 
   protected cancel() {

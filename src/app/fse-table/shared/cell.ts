@@ -1,26 +1,27 @@
 import { Column } from './column';
 
+/**
+* A cell within the FSETable.
+* Stores the model, and the column specifying the property of the model to
+* display.
+*/
 export class Cell<T> {
 
-  private _row: T;
+  private _model: T;
   private _col: Column<T>;
-  private _rowi: number;
-  private _coli: number;
 
-  constructor (row: T, col: Column<T>, rowi: number, coli: number) {
-    this._row = row;
+  /**
+  * `obj`: Model displayed within this cell.
+  * `col`: Column specifying the property of `obj` to display.
+  */
+  constructor (obj: T, col: Column<T>) {
+    this._model = obj;
     this._col = col;
-    this._rowi = rowi;
-    this._coli = coli;
-    console.log(':(');
   }
 
-  get row() { return this._row; }
+  get model() { return this._model; }
   get col() { return this._col; }
-  get rowi() { return this._rowi; }
-  get coli() {return this._coli; }
-
-  get value() { return this._col.getter(this._row); }
-  set value(o: string) { this._col.setter(o, this._row); }
+  get value() { return this._col.getter(this._model); }
+  set value(o: string) { this._col.setter(o, this._model); }
 
 }

@@ -14,24 +14,25 @@
       </button>
       <button id="fset-btn-remove" type="button" class="btn btn-default"
         (click)="removeRow()"
-        [disabled]="selRow >= height">
+        [disabled]="isRemoveRowDisabled()">
         <i class="fa fa-minus"></i>
       </button>
     </div>
-    <col-selector [columns]="_cols"></col-selector>
+    <col-selector [columns]="cols"></col-selector>
   </div>
 </div>
 
 <row-adder
   [factory]="config.factory"
-  [columns]="_cols"
+  [columns]="cols"
   [show]="showRowAdderSubject"
   (addRows)="addRows($event)">
 </row-adder>
 
 <fse-table
-  [rows]="filteredRows"
-  [cols]="shownCols"
+  [cols]="cols"
+  [rows]="table"
+  [key]="service.key"
   (selection)="selectRow($event)"
   (search)="focusSearch()"
   (sort)="sortContent($event)"

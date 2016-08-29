@@ -44,6 +44,7 @@
     "./app/fse-table/shared/fset.service.ts",
     "./app/fse-table/shared/keymap.ts",
     "./app/fse-table/shared/row.ts",
+    "./app/fse-table/shared/table.ts",
     "./app/fse-table/table/index.ts",
     "./app/fse-table/table/table.component.spec.ts",
     "./app/fse-table/table/table.component.ts",
