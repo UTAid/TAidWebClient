@@ -44,7 +44,7 @@ const barrels: string[] = [
   'app',
   'app/shared',
   'app/fse-table',
-  'app/fse-table/fse-cell',
+  'app/fse-table/cell',
   'app/fse-table/column-selector',
   'app/fse-table/search-bar',
   'app/fse-table/table',

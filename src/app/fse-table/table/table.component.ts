@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
-import { FsecComponent } from '../fse-cell';
+import { CellComponent } from '../cell';
 import { Column, SortOrder } from '../shared/column';
 import { Table } from '../shared/table';
 import { CellEditEvent, CellEvent, SortEvent } from '../shared/events';
@@ -20,7 +20,7 @@ export const SHOW_HIDDEN_ROWS =
 
 @Component({
   moduleId: module.id,
-  directives: [FsecComponent],
+  directives: [CellComponent],
   selector: 'fse-table',
   templateUrl: 'table.component.html',
   styleUrls: ['table.component.css'],

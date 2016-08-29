@@ -10,7 +10,7 @@ import {
   async, inject
 } from '@angular/core/testing';
 
-import { FsecComponent } from './fsec.component';
+import { CellComponent } from './cell.component';
 
 describe('Component: FseCell', () => {
   // it('should create an instance', () => {

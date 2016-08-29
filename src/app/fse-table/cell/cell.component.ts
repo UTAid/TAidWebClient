@@ -69,10 +69,10 @@ class FsecInputDirective implements AfterViewInit {
   selector: 'fse-cell',
   changeDetection: ChangeDetectionStrategy.OnPush, // All inputs immutable.
   directives: [FsecInputDirective],
-  templateUrl: './fsec.component.html',
-  styleUrls: ['./fsec.component.css']
+  templateUrl: './cell.component.html',
+  styleUrls: ['./cell.component.css']
 })
-export class FsecComponent<T> implements OnInit {
+export class CellComponent<T> implements OnInit {
   @Input() cell: Cell<T>;
   // row and column index within table.
   @Input() row: number;
