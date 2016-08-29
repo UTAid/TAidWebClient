@@ -7,11 +7,12 @@ import { ColumnSelectorComponent } from './column-selector';
 import { SearchBarComponent } from './search-bar';
 import { TableComponent } from './table';
 import { RowAdderComponent } from './row-adder';
-import { Column, SortOrder } from './shared/column';
+import { Column } from './shared/column';
 import { IFsetConfig, FsetConfig } from './shared/fset-config';
 import { IFsetService, FsetService } from './shared/fset.service';
-import { Row } from './shared/row';
+import { Table } from './shared/table';
 import { SortEvent, CellEditEvent, CellEvent } from './shared/events';
+import { nullToEmpty } from './shared/utils';
 
 
 @Component({
@@ -31,9 +32,7 @@ import { SortEvent, CellEditEvent, CellEvent } from './shared/events';
 */
 export class FsetComponent<T> implements OnInit {
 
-  private cols: Array<Column<T>>; // Array of all columns
-  // private _rows: Array<T>; // Array of all rows
-  private table: Row<T>[]; // Table of cells.
+  private table: Table<T>; // Table of cells.
   // private filteredRows: Array<T>; // Array of displayed rows
 
   // Observable for search focus navigation request
@@ -48,20 +47,20 @@ export class FsetComponent<T> implements OnInit {
     @Inject(FsetService) private service: IFsetService<T>) {}
 
   ngOnInit() {
-    this.cols = new Array();
+    let cols: Column<T>[] = new Array();
     // Init columns.
     for (let m of this.config.propertyMap){
-      this.cols.push(
+      cols.push(
         new Column(
           m.display, m.setter, m.getter,
           m.validator, !Boolean(m.hide), Boolean(m.disabled)));
     }
+    this.table = new Table(cols);
     // Initialize rows by reading all from service.
     // TODO: make fancy loading loops.
-    this.table = [];
     this.service.readAll().subscribe(
       (rows) => {
-        for (let r of rows) { this.table.push(new Row(r, this.cols, true)); }
+        for (let r of rows) { this.table.pushRow(r); }
       },
       (err) => console.error('Error initializing rows: ' + err),
       () => console.log('readall completed')
@@ -92,16 +91,15 @@ export class FsetComponent<T> implements OnInit {
   protected applySearch(term: string) {
     if (term) {
       term = term.toLowerCase();
-      for (let row of this.table) {
-        row.show = false; // First hide the row.
-        for (let cell of row.cells) {
+      this.table.filterRows((r) => {
+        for (let c of this.table.cols) {
           // If any cell matches the search term, show this row.
-          if (nullToEmpty(cell.value).toLowerCase().indexOf(term) >= 0) {
-            row.show = true;
-            break; // Skip to next row
+          if (nullToEmpty(c.getter(r)).toLowerCase().indexOf(term) >= 0) {
+            return true;
           }
         }
-      }
+        return false;
+      });
     } else {
       this.removeSearch();
     }
@@ -109,29 +107,18 @@ export class FsetComponent<T> implements OnInit {
 
   // Clear row filter.
   protected removeSearch() {
-    for (let row of this.table) { row.show = true; }
+    this.table.removeFilter();
   }
 
   protected sortContent(s: SortEvent<T>) {
-    switch (s.sortOrder) {
-      case SortOrder.ASC:
-        this.table.sort((a, b) => sort(
-          nullToEmpty(a.cells[s.coli].value).toLowerCase(),
-          nullToEmpty(b.cells[s.coli].value).toLowerCase()));
-        break;
-      case SortOrder.DEC:
-        this.table.sort((a, b) => -1 * sort(
-          nullToEmpty(a.cells[s.coli].value).toLowerCase(),
-          nullToEmpty(b.cells[s.coli].value).toLowerCase()));
-        break;
-    }
+    this.table.sort(s);
   }
 
-  protected addRows(table: Row<T>[]) {
-    for (let row of table) {
+  protected addRows(table: Table<T>) {
+    for (let row of table.rows) {
       let r = row.underlyingModel;
       this.service.create(r).subscribe((updatedT) => {
-        this.table.push(new Row(updatedT, this.cols, true));
+        this.table.pushRow(r);
       }, (err) => console.log('error creating row ' + err));
     }
   }
@@ -146,7 +133,7 @@ export class FsetComponent<T> implements OnInit {
     edit.cell.value = edit.newValue;
     this.service.update(edit.cell.model).subscribe(
       (updatedT) => { // Update row with response.
-        this.table[edit.rowi] = new Row(updatedT, this.cols, true);
+        this.table.updateRow(edit.rowi, updatedT);
       },
       (err) => { // Change back to old value on error.
         console.log('error editing row ' + err);
@@ -158,24 +145,13 @@ export class FsetComponent<T> implements OnInit {
   protected removeRow() {
     this.service.delete(this.table[this.selRow].underlyingModel)
       .subscribe(() => {
-        this.table.splice(this.selRow, 1);
+        this.table.deleteRow(this.selRow);
       }, (err) => console.log('error deleting row ' + err));
   }
 
   protected isRemoveRowDisabled() {
     return this.selRow < 0 ||
-      this.selRow > this.table.length ||
-      !this.table[this.selRow].show;
+      this.selRow >= this.table.rowLen ||
+      !this.table.row(this.selRow).show;
   }
-}
-
-function sort(a: string, b: string) {
-  if (a > b) { return 1; }
-  if (a < b) { return -1; }
-  return 0;
-}
-
-function nullToEmpty(str: string) {
-  if (str == null) { return ''; }
-  return str;
 }

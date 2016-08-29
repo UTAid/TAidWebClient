@@ -3,6 +3,12 @@
 * Note that two columns are equal if their display names are equal.
 */
 export class Column<T> {
+
+  public static getCopy<T>(col: Column<T>) {
+    return new Column(col.dispName, col.setter, col.getter, col.validator,
+      col.show, col.disabled);
+  }
+
   constructor (
     // The displayed name of this column
     public dispName: string,
@@ -16,11 +22,6 @@ export class Column<T> {
     // Column is not read only by defeault if true. Read only otherwise.
     public disabled = false
   ) { }
-
-  public static getCopy<T>(col: Column<T>) {
-    return new Column(col.dispName, col.setter, col.getter, col.validator,
-      col.show, col.disabled);
-  }
 }
 
 /**

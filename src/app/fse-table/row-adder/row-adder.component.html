@@ -11,17 +11,16 @@
 
   <div class="modal-body">
     <fse-table
-      [rows]="rows"
-      [cols]="columns"
+      [table]="table"
       (selection)="selectRow($event)"
-      (rowChange)="rowValueChange($event)">
+      (cellChange)="rowValueChange($event)">
     </fse-table>
     <button type="button" class="btn btn-secondary" (click)="newRow()">
       <i class="fa fa-plus"></i>
       <span>New</span>
     </button>
     <button type="button" class="btn btn-secondary" (click)="removeRow()"
-      [disabled]="rows.length===1">
+      [disabled]="table.fullHeight===1">
       <i class="fa fa-minus"></i>
       <span>Remove</span>
     </button>

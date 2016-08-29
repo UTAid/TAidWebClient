@@ -99,10 +99,6 @@ export class FsecComponent<T> implements OnInit {
     });
   }
 
-  get value() {
-    return this.cell.value;
-  }
-
   private get cellEvent() {
     return new CellEvent(this.cell, this.row, this.col);
   }

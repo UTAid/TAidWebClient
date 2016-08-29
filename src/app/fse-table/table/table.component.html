@@ -1,5 +1,5 @@
 <table #navInput id="fset" class="table table-bordered" tabindex="-1"
-  *ngIf="cols"
+  *ngIf="table"
   (keydown)=navInputHandler($event)>
   <!--
   tabindex attr makes the table focus-able, and therefore generate
@@ -7,7 +7,7 @@
   -->
 
   <thead><tr>
-    <template ngFor let-col [ngForOf]="cols" let-i="index"><th
+    <template ngFor let-col [ngForOf]="table.cols" let-i="index"><th
       *ngIf="showHiddenCols || col.show"
       id="{{'fset-col-' + i}}"
       (click)="sortOn(col, i)">
@@ -22,22 +22,22 @@
   </tr></thead>
 
   <tbody>
-    <template ngFor let-row [ngForOf]="rows" let-i="index" [ngForTrackBy]="trackByRow">
+    <template ngFor let-row [ngForOf]="table.rows" let-i="index">
     <tr *ngIf="row.show"
       id="{{'fset-row-' + i}}"
       [class.selected]="i===selRow">
-      <template ngFor let-col [ngForOf]="cols" let-j="index">
-      <td *ngIf="showHiddenCols || col.show"
+      <template ngFor let-cell [ngForOf]="row.cells" let-j="index">
+      <td *ngIf="showHiddenCols || cell.col.show"
         id="{{'fset-cell-' + i + '-' + j}}">
         <div id="fsec-wrapper" [class.selected]="isCellIndexSelected(i, j)">
         <fse-cell
-          [cell]="row.cells[j]"
+          [cell]="cell"
           [row]="i"
           [col]="j"
           [editRequestSubject]="editRequestSubject"
           (click)="onClick(i, j)"
           (dblclick)="triggerEdit()"
-          (valueChange)="rowValueChange($event)"
+          (valueChange)="cellValueChange($event)"
           (editExit)="navInputFocus()">
         </fse-cell></div>
       </td></template>

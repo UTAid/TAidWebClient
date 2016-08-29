@@ -6,7 +6,7 @@ import { Subject } from 'rxjs/Subject';
 
 import { FsecComponent } from '../fse-cell';
 import { Column, SortOrder } from '../shared/column';
-import { Row } from '../shared/row';
+import { Table } from '../shared/table';
 import { CellEditEvent, CellEvent, SortEvent } from '../shared/events';
 import { getKeyMap } from '../shared/keymap';
 
@@ -43,14 +43,13 @@ export const SHOW_HIDDEN_ROWS =
 */
 export class TableComponent<T> implements OnInit {
 
-  @Input() cols: Column<T>[];
-  @Input() rows: Row<T>[];
+  @Input() table: Table<T>;
   @ViewChild('navInput') navInput;
 
   @Output() search: EventEmitter<any> = new EventEmitter();
   @Output() sort: EventEmitter<SortEvent<T>> = new EventEmitter();
   @Output() selection: EventEmitter<CellEvent<T>> = new EventEmitter();
-  @Output() rowChange: EventEmitter<CellEditEvent<T>> = new EventEmitter();
+  @Output() cellChange: EventEmitter<CellEditEvent<T>> = new EventEmitter();
 
   // Subject that cells listen to for edit-mode requests.
   private editRequestSubject: Subject<CellEvent<T>> = new Subject();
@@ -75,7 +74,6 @@ export class TableComponent<T> implements OnInit {
     this.sortCol = undefined;
     this.sortOrder = SortOrder.NONE;
     this.selRow = this.selCol = 0;
-    if (this.rows == null) { this.rows = []; }
   }
 
   protected isSortedAsc(): boolean {
@@ -118,14 +116,14 @@ export class TableComponent<T> implements OnInit {
   // Trigger edit-mode on currently selected cell. Pass on to parent component.
   private triggerEdit() {
     // Only allow edit if column is not disabled, or user specified override.
-    if (this.disableOverride || !this.cols[this.selCol].disabled) {
+    if (this.disableOverride || !this.table.col(this.selCol).disabled) {
       this.editRequestSubject.next(this.selectedCellEvent);
     }
   }
 
   // Cell signaled value change.
-  protected rowValueChange(event: CellEditEvent<T>) {
-    this.rowChange.emit(event);
+  protected cellValueChange(event: CellEditEvent<T>) {
+    this.cellChange.emit(event);
     this.resetSort();
   }
 
@@ -135,29 +133,19 @@ export class TableComponent<T> implements OnInit {
 
   private get selectedCellEvent() {
     return new CellEvent(
-      this.rows[this.selRow].cells[this.selCol],
+      this.table.cell(this.selRow, this.selCol),
       this.selRow,
       this.selCol);
   }
 
   // Get height of table (wihtout hidden rows)
   private get height() {
-    if (this.showHiddenRows) { return this.rows.length; }
-    let height = 0;
-    for (let r of this.rows) {
-      if (r.show) { height += 1; }
-    }
-    return height;
+    return this.showHiddenRows ? this.table.rowLen : this.table.height;
   }
 
   // Get width of table (without hidden columns)
   private get width() {
-    if (this.showHiddenCols) { return this.cols.length; }
-    let width = 0;
-    for (let c of this.cols) {
-      if (c.show) { width += 1; }
-    }
-    return width;
+    return this.showHiddenCols ? this.table.colLen : this.table.width;
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -205,7 +193,7 @@ export class TableComponent<T> implements OnInit {
     let selRow = this.selRow;
     while (selRow > 0) {
       selRow -= 1;
-      if (this.showHiddenRows || this.rows[selRow].show) {
+      if (this.showHiddenRows || this.table.row(selRow).show) {
         this.selRow = selRow;
         return true;
       }
@@ -215,9 +203,9 @@ export class TableComponent<T> implements OnInit {
 
   private navDown() {
     let selRow = this.selRow;
-    while (selRow < this.rows.length - 1) {
+    while (selRow < this.table.rowLen - 1) {
       selRow += 1;
-      if (this.showHiddenRows || this.rows[selRow].show) {
+      if (this.showHiddenRows || this.table.row(selRow).show) {
         this.selRow = selRow;
         return true;
       }
@@ -229,7 +217,7 @@ export class TableComponent<T> implements OnInit {
     let selCol = this.selCol;
     while (selCol > 0) {
       selCol -= 1;
-      if (this.showHiddenCols || this.cols[selCol].show) {
+      if (this.showHiddenCols || this.table.col(selCol).show) {
         this.selCol = selCol;
         return true;
       }
@@ -238,22 +226,24 @@ export class TableComponent<T> implements OnInit {
   }
 
   private navLeftLoopover() {
-    if (this.cols.length === 0 || this.rows.length === 0) { return false; }
+    if (this.table.colLen === 0 || this.table.rowLen === 0) {
+      return false;
+    }
 
     let tmp: number;
     // Nav left to see if end is reached.
     if (!this.navLeft()) {
       // End reached, loop over to the last shown column.
-      tmp = this.cols.length - 1;
+      tmp = this.table.colLen - 1;
       while (tmp > 0 &&
-        !(this.showHiddenCols || this.cols[tmp].show)) { tmp -= 1; }
+        !(this.showHiddenCols || this.table.col(tmp).show)) { tmp -= 1; }
       this.selCol = tmp;
       // Nav up to select previous shown row.
       if (!this.navUp()) {
         // Top reached. Loop over to the last shown row.
-        tmp = this.rows.length - 1;
+        tmp = this.table.rowLen - 1;
         while (tmp > 0 &&
-          !(this.showHiddenRows || this.rows[tmp].show)) { tmp -= 1; }
+          !(this.showHiddenRows || this.table.row(tmp).show)) { tmp -= 1; }
         this.selRow = tmp;
       }
     }
@@ -262,9 +252,9 @@ export class TableComponent<T> implements OnInit {
 
   private navRight() {
     let selCol = this.selCol;
-    while (selCol < this.cols.length - 1) {
+    while (selCol < this.table.colLen - 1) {
       selCol += 1;
-      if (this.showHiddenCols || this.cols[selCol].show) {
+      if (this.showHiddenCols || this.table.col(selCol).show) {
         this.selCol = selCol;
         return true;
       }
@@ -273,22 +263,24 @@ export class TableComponent<T> implements OnInit {
   }
 
   private navRightLoopover() {
-    if (this.cols.length === 0 || this.rows.length === 0) { return false; }
+    if (this.table.colLen === 0 || this.table.rowLen === 0) {
+      return false;
+    }
 
     let tmp: number;
     // Nav right to see if end is reached.
     if (!this.navRight()) {
       // End reached, loop over to the first shown column.
       tmp = 0;
-      while (tmp < this.cols.length - 1 &&
-        !(this.showHiddenCols || this.cols[tmp].show)) { tmp += 1; }
+      while (tmp < this.table.colLen - 1 &&
+        !(this.showHiddenCols || this.table.col(tmp).show)) { tmp += 1; }
       this.selCol = tmp;
       // Nav down to select next shown row.
       if (!this.navDown()) {
         // Bottom reached. Loop over to the first shown row.
         tmp = 0;
-        while (tmp < this.rows.length - 1 &&
-          !(this.showHiddenRows || this.rows[tmp].show)) { tmp += 1; }
+        while (tmp < this.table.rowLen - 1 &&
+          !(this.showHiddenRows || this.table.row(tmp).show)) { tmp += 1; }
         this.selRow = tmp;
       }
     }

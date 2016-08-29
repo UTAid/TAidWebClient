@@ -9,7 +9,7 @@ import { ModalDirective } from 'ng2-bootstrap/components/modal/modal.component';
 
 import { TableComponent } from '../table';
 import { Column } from '../shared/column';
-import { Row } from '../shared/row';
+import { Table } from '../shared/table';
 import { DISABLE_OVERRIDE, SHOW_HIDDEN_COLS } from '../table';
 import { CellEditEvent } from '../shared/events';
 
@@ -37,17 +37,18 @@ export class RowAdderComponent<T> implements OnInit {
   @Input() show: Subject<any>; // Parent component trigger to show the modal.
 
   // Emits the list of new rows.
-  @Output() addRows: EventEmitter<Row<T>[]> = new EventEmitter();
+  @Output() addRows: EventEmitter<Table<T>> = new EventEmitter();
 
   @ViewChild('adderModal') adderModal: ModalDirective;
 
-  private rows: Row<T>[];
+  private table: Table<T>;
   private selRow: number;
 
   constructor(private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.clearRows();
+    this.table = new Table(this.columns);
+    this.table.pushRow(this.factory());
     this.show.subscribe(() => {
       this.showAdder();
     });
@@ -66,25 +67,25 @@ export class RowAdderComponent<T> implements OnInit {
   }
 
   private clearRows() {
-    this.rows = new Array(1);
-    this.rows[0] = new Row(this.factory(), this.columns);
+    this.table.clearRows();
+    this.table.pushRow(this.factory());
   }
 
   protected newRow() {
-    this.rows.push(new Row(this.factory(), this.columns));
+    this.table.pushRow(this.factory());
   }
 
   protected removeRow() {
-    this.rows.splice(this.selRow, 1);
+    this.table.deleteRow(this.selRow);
   }
 
   protected rowValueChange(editInfo: CellEditEvent<T>) {
-    let cell = this.rows[editInfo.rowi].cells[editInfo.coli];
+    let cell = this.table.cell(editInfo.rowi, editInfo.coli);
     cell.value = editInfo.newValue;
   }
 
   protected addAll() {
-    this.addRows.emit(this.rows);
+    this.addRows.emit(this.table);
     this.hideAdder();
     this.clearRows();
   }
