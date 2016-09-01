@@ -12,6 +12,7 @@
   <div class="modal-body">
     <fse-table
       [table]="table"
+      [validationRequestSubject]="validationRequest"
       (selection)="selectRow($event)"
       (cellChange)="rowValueChange($event)">
     </fse-table>

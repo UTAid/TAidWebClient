@@ -1,9 +1,13 @@
 @import '../shared/colors';
 
-div {
-  padding: 0.5em;
+div.invalid {
+  background-color: $error-bg;
+}
+
+div > div{
+  padding: 0.6em;
   &[contenteditable] {
-    background-color: $editing;
+    box-shadow: inset 0 0 0 0.1em $select;
   }
   /deep/ div, /deep/ br {
     display: none;

@@ -10,7 +10,7 @@ import { Table } from '../shared/table';
 import { CellEditEvent, CellEvent, SortEvent } from '../shared/events';
 import { getKeyMap } from '../shared/keymap';
 
-export const DISABLE_OVERRIDE =
+export const READONLY_OVERRIDE =
   new OpaqueToken('app.fse-table.table.disableOverride');
 export const SHOW_HIDDEN_COLS =
   new OpaqueToken('app.fse-table.table.showHiddenCols');
@@ -44,6 +44,7 @@ export const SHOW_HIDDEN_ROWS =
 export class TableComponent<T> implements OnInit {
 
   @Input() table: Table<T>;
+  @Input() validationRequestSubject: Subject<CellEvent<T>>;
   @ViewChild('navInput') navInput;
 
   @Output() search: EventEmitter<any> = new EventEmitter();
@@ -61,16 +62,14 @@ export class TableComponent<T> implements OnInit {
   private selCol: number;
 
   constructor(
-    // User of component can choose to override read-only columns.
-    // Override is false by default.
-    @Optional() @Inject(DISABLE_OVERRIDE) private disableOverride: boolean,
-    @Optional() @Inject(SHOW_HIDDEN_COLS) private showHiddenCols: boolean,
-    @Optional() @Inject(SHOW_HIDDEN_ROWS) private showHiddenRows: boolean
+    // Ignore read-only columns if true. Defaults to false.
+    @Optional() @Inject(READONLY_OVERRIDE) private disableOverride = false,
+    // Show hidden columns or rows if true. Defaults to false.
+    @Optional() @Inject(SHOW_HIDDEN_COLS) private showHiddenCols = false,
+    @Optional() @Inject(SHOW_HIDDEN_ROWS) private showHiddenRows = false
   ) {}
 
   ngOnInit() {
-    this.disableOverride = Boolean(this.disableOverride); // null => false
-    this.showHiddenCols = Boolean(this.showHiddenCols);
     this.sortCol = undefined;
     this.sortOrder = SortOrder.NONE;
     this.selRow = this.selCol = 0;

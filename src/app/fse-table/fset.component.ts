@@ -143,7 +143,7 @@ export class FsetComponent<T> implements OnInit {
   }
 
   protected removeRow() {
-    this.service.delete(this.table[this.selRow].underlyingModel)
+    this.service.delete(this.table.row(this.selRow).underlyingModel)
       .subscribe(() => {
         this.table.deleteRow(this.selRow);
       }, (err) => console.log('error deleting row ' + err));

@@ -10,8 +10,8 @@ import { ModalDirective } from 'ng2-bootstrap/components/modal/modal.component';
 import { TableComponent } from '../table';
 import { Column } from '../shared/column';
 import { Table } from '../shared/table';
-import { DISABLE_OVERRIDE, SHOW_HIDDEN_COLS } from '../table';
-import { CellEditEvent } from '../shared/events';
+import { READONLY_OVERRIDE, SHOW_HIDDEN_COLS } from '../table';
+import { CellEditEvent, CellEvent } from '../shared/events';
 
 @Component({
   moduleId: module.id,
@@ -21,7 +21,7 @@ import { CellEditEvent } from '../shared/events';
   directives: [MODAL_DIRECTIVES, TableComponent],
   viewProviders: [BS_VIEW_PROVIDERS],
   providers: [
-    { provide: DISABLE_OVERRIDE, useValue: true },
+    { provide: READONLY_OVERRIDE, useValue: true },
     { provide: SHOW_HIDDEN_COLS, useValue: true }
   ],
   templateUrl: 'row-adder.component.html',
@@ -41,6 +41,7 @@ export class RowAdderComponent<T> implements OnInit {
 
   @ViewChild('adderModal') adderModal: ModalDirective;
 
+  private validationRequest: Subject<CellEvent<T>> = new Subject();
   private table: Table<T>;
   private selRow: number;
 
@@ -85,9 +86,25 @@ export class RowAdderComponent<T> implements OnInit {
   }
 
   protected addAll() {
-    this.addRows.emit(this.table);
-    this.hideAdder();
-    this.clearRows();
+    let isAllValid = true;
+    // Check if all cells are valid.
+    for (let i = 0; i < this.table.rows.length; i++) {
+      let cells = this.table.cells(i);
+      for (let j = 0; j < cells.length; j++) {
+        let cell = cells[j];
+        if (!cell.validate()[0]) {
+          // Cell is not valid. Notify cell component via validationRequest
+          isAllValid = false;
+          this.validationRequest.next(new CellEvent(cell, i, j));
+        }
+      }
+    }
+    // Only add rows if all cells are valid.
+    if (isAllValid) {
+      this.addRows.emit(this.table);
+      this.hideAdder();
+      this.clearRows();
+    }
   }
 
   protected cancel() {

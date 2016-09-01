@@ -5,8 +5,11 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
+import { TOOLTIP_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap';
+
 import { getKeyMap } from '../shared/keymap';
 import { Cell } from '../shared/cell';
+import { ValidatorResult } from '../shared/validator-result';
 import { CellEditEvent, CellEvent } from '../shared/events';
 
 /**
@@ -68,7 +71,7 @@ class FsecInputDirective implements AfterViewInit {
   moduleId: module.id,
   selector: 'fse-cell',
   changeDetection: ChangeDetectionStrategy.OnPush, // All inputs immutable.
-  directives: [FsecInputDirective],
+  directives: [FsecInputDirective, TOOLTIP_DIRECTIVES],
   templateUrl: './cell.component.html',
   styleUrls: ['./cell.component.css']
 })
@@ -79,6 +82,8 @@ export class CellComponent<T> implements OnInit {
   @Input() col: number;
   // To observe for external requests to enable editing.
   @Input() editRequestSubject: Subject<CellEvent<T>>;
+  // Observe for external requests to validate contents.
+  @Input() validationRequestSubject: Subject<CellEvent<T>>;
   // Emitted when value changes are confirmed.
   @Output() valueChange = new EventEmitter<CellEditEvent<T>>();
   // Emitted when exiting editing mode.
@@ -87,6 +92,8 @@ export class CellComponent<T> implements OnInit {
   @Output() editEnter = new EventEmitter<CellEvent<T>>();
 
   private edit = false; // Whether editing mode is enabled.
+  private isValid = true;
+  private tooltipMsg = '';
 
   constructor (private cd: ChangeDetectorRef) {};
 
@@ -97,6 +104,16 @@ export class CellComponent<T> implements OnInit {
         this.cd.markForCheck();
       }
     });
+    if (this.validationRequestSubject) {
+      this.validationRequestSubject.subscribe((event) => {
+        // If no CellEvent is given, assume request to validate all cells.
+        if (event == null ||
+          (event.rowi === this.row && event.coli === this.col)) {
+          this.updateValidationStatus(this.cell.validate());
+          this.cd.markForCheck();
+        }
+      });
+    }
   }
 
   private get cellEvent() {
@@ -108,7 +125,15 @@ export class CellComponent<T> implements OnInit {
     this.editEnter.emit(this.cellEvent);
   }
 
+  private updateValidationStatus(v: ValidatorResult) {
+    this.isValid = v.isValid;
+    this.tooltipMsg = this.isValid ? '' : v.msg;
+  }
+
   protected requestEditConfirm(val: string) {
+    this.updateValidationStatus(this.cell.validate(val));
+    if (!this.isValid) { return; }
+
     this.edit = false;
     this.valueChange.emit(new CellEditEvent(
       this.cell, this.row, this.col, val));
@@ -117,6 +142,7 @@ export class CellComponent<T> implements OnInit {
 
   protected requestEditCancel() {
     this.edit = false;
+    this.updateValidationStatus(this.cell.validate());
     this.editExit.emit(this.cellEvent);
   }
 }

@@ -3,7 +3,8 @@ import { StudentService } from './student.service';
 
 import {
   FsetComponent, fsetConfig, FsetConfig,
-  FsetLocalService, FsetService
+  FsetLocalService, FsetService,
+  emailValidator, nonEmptyValidator
 } from './fse-table/';
 import {Student} from './student';
 
@@ -11,10 +12,7 @@ let studentFsetConfig = fsetConfig([
   { display: 'ID',
     setter: (v, o) => o.university_id = v,
     getter: (o) => o.university_id,
-    validator: (o) => {
-      if (!o.university_id) { return [false, 'ID cannot be empty!']; }
-      return [true, 'OK'];
-    },
+    validator: (o) => nonEmptyValidator(o.university_id, 'ID cannot be empty'),
     disabled: true
   },
   { display: 'First Name',
@@ -28,6 +26,7 @@ let studentFsetConfig = fsetConfig([
   { display: 'Email',
     setter: (v, o) => o.email = v,
     getter: (o) => o.email,
+    validator: (o) => emailValidator(o.email),
     hide: true
   }], () => new Student('', '', '', '', ''));
 
