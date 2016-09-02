@@ -21,7 +21,9 @@
   "files": [
     "./app/app.component.spec.ts",
     "./app/app.component.ts",
+    "./app/app.module.ts",
     "./app/environment.ts",
+    "./app/fse-table/cell/cell-input.directive.ts",
     "./app/fse-table/cell/cell.component.spec.ts",
     "./app/fse-table/cell/cell.component.ts",
     "./app/fse-table/cell/index.ts",
@@ -30,6 +32,7 @@
     "./app/fse-table/column-selector/index.ts",
     "./app/fse-table/fset.component.spec.ts",
     "./app/fse-table/fset.component.ts",
+    "./app/fse-table/fset.module.ts",
     "./app/fse-table/index.ts",
     "./app/fse-table/row-adder/index.ts",
     "./app/fse-table/row-adder/row-adder.component.spec.ts",

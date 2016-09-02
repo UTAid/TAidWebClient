@@ -1,13 +1,14 @@
-import { Component, OnInit, ViewContainerRef, Injectable } from '@angular/core';
-import { StudentService } from './student.service';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 
 import {
-  FsetComponent, fsetConfig, FsetConfig,
-  FsetLocalService, FsetService,
+  fsetConfig, FsetConfig, FsetService,
   emailValidator, nonEmptyValidator
 } from './fse-table/';
+import { StudentService } from './student.service';
 import {Student} from './student';
 
+
+// FsetComponent configuration.
 let studentFsetConfig = fsetConfig([
   { display: 'ID',
     setter: (v, o) => o.university_id = v,
@@ -28,7 +29,34 @@ let studentFsetConfig = fsetConfig([
     getter: (o) => o.email,
     validator: (o) => emailValidator(o.email),
     hide: true
-  }], () => new Student('', '', '', '', ''));
+  }], () => new Student('', '', '', '', '')
+);
+
+
+@Component({
+  moduleId: module.id,
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  providers: [
+    { provide: FsetConfig, useValue: studentFsetConfig },
+    { provide: FsetService, useClass: StudentService }
+  ]
+})
+export class AppComponent implements OnInit {
+
+  constructor(public viewContainerRef: ViewContainerRef) { }
+
+  ngOnInit() {}
+
+}
+
+
+// @Injectable()
+// class StudentLocalService extends FsetLocalService<Student> {
+//   key(s: Student) {
+//     return s.university_id;
+//   }
+// }
 
 // let studentList: Student[] = [
 //   {
@@ -60,28 +88,3 @@ let studentFsetConfig = fsetConfig([
 //     email: ''
 //   }
 // ];
-
-@Injectable()
-class StudentLocalService extends FsetLocalService<Student> {
-  key(s: Student) {
-    return s.university_id;
-  }
-}
-
-@Component({
-  moduleId: module.id,
-  selector: 'app-root',
-  templateUrl: 'app.component.html',
-  providers: [
-    {provide: FsetConfig, useValue: studentFsetConfig},
-    {provide: FsetService, useClass: StudentService}
-  ],
-  directives: [FsetComponent],
-})
-export class AppComponent implements OnInit {
-
-  constructor(public viewContainerRef: ViewContainerRef) { }
-
-  ngOnInit() {}
-
-}

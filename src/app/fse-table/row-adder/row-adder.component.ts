@@ -4,10 +4,8 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { MODAL_DIRECTIVES, BS_VIEW_PROVIDERS } from 'ng2-bootstrap';
 import { ModalDirective } from 'ng2-bootstrap/components/modal/modal.component';
 
-import { TableComponent } from '../table';
 import { Column } from '../shared/column';
 import { Table } from '../shared/table';
 import { READONLY_OVERRIDE, SHOW_HIDDEN_COLS } from '../table';
@@ -18,8 +16,6 @@ import { CellEditEvent, CellEvent } from '../shared/events';
   selector: 'row-adder',
   // No deep changes should occur on any input.
   changeDetection: ChangeDetectionStrategy.OnPush,
-  directives: [MODAL_DIRECTIVES, TableComponent],
-  viewProviders: [BS_VIEW_PROVIDERS],
   providers: [
     { provide: READONLY_OVERRIDE, useValue: true },
     { provide: SHOW_HIDDEN_COLS, useValue: true }
@@ -92,7 +88,7 @@ export class RowAdderComponent<T> implements OnInit {
       let cells = this.table.cells(i);
       for (let j = 0; j < cells.length; j++) {
         let cell = cells[j];
-        if (!cell.validate()[0]) {
+        if (!cell.validate().isValid) {
           // Cell is not valid. Notify cell component via validationRequest
           isAllValid = false;
           this.validationRequest.next(new CellEvent(cell, i, j));

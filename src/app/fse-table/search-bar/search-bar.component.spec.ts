@@ -4,10 +4,7 @@ import { By }           from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import {
-  beforeEach, addProviders,
-  describe, xdescribe,
-  expect, it, xit,
-  async, inject,
+  async, inject, addProviders,
   TestComponentBuilder, ComponentFixture
 } from '@angular/core/testing';
 

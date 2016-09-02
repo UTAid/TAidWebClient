@@ -3,10 +3,6 @@ import {
 } from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 
-import { ColumnSelectorComponent } from './column-selector';
-import { SearchBarComponent } from './search-bar';
-import { TableComponent } from './table';
-import { RowAdderComponent } from './row-adder';
 import { Column } from './shared/column';
 import { IFsetConfig, FsetConfig } from './shared/fset-config';
 import { IFsetService, FsetService } from './shared/fset.service';
@@ -17,8 +13,6 @@ import { nullToEmpty } from './shared/utils';
 
 @Component({
   moduleId: module.id,
-  directives: [ColumnSelectorComponent, SearchBarComponent,
-    TableComponent, RowAdderComponent],
   selector: 'fset-component',
   templateUrl: 'fset.component.html',
   styleUrls: ['fset.component.css'],
