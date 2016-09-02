@@ -4,8 +4,7 @@ import { By }           from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import {
-  async, inject, addProviders,
-  TestComponentBuilder, ComponentFixture
+  async, inject, ComponentFixture
 } from '@angular/core/testing';
 
 import { SearchBarComponent } from './search-bar.component';
@@ -26,15 +25,15 @@ describe('Component: FSETable', () => {
   // Setup the fixture, and provide shortcuts to the component and
   // native element.
   beforeEach((done) => {
-    addProviders([TestComponentBuilder]);
-    inject([TestComponentBuilder], (t) => {
-      t.createAsync(SearchBarComponent).then(f => {
-        fixture = f;
-        comp = fixture.debugElement.componentInstance;
-        elem = fixture.debugElement.nativeElement;
-        done(); // Signal jasmine that beforeEach is complete.
-      }).catch((e) => done.fail(e));
-    })(); // Call the function that inject returns.
+    // addProviders([TestComponentBuilder]);
+    // inject([TestComponentBuilder], (t) => {
+    //   t.createAsync(SearchBarComponent).then(f => {
+    //     fixture = f;
+    //     comp = fixture.debugElement.componentInstance;
+    //     elem = fixture.debugElement.nativeElement;
+    //     done(); // Signal jasmine that beforeEach is complete.
+    //   }).catch((e) => done.fail(e));
+    // })(); // Call the function that inject returns.
   });
 
   it('should have a search input', () => {
