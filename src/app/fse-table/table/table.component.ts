@@ -19,11 +19,9 @@ export const SHOW_HIDDEN_ROWS =
 
 
 @Component({
-  moduleId: module.id,
-  directives: [CellComponent],
   selector: 'fse-table',
   templateUrl: 'table.component.html',
-  styleUrls: ['table.component.css'],
+  styleUrls: ['table.component.scss']
 })
 /**
 * Filterable, Sortable, Editable table component.

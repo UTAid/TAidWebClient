@@ -12,6 +12,9 @@ import {ApplicationRef, ComponentFactory, ComponentRef, Injectable, Injector, Ng
 /**
  * A no-op implementation of {@link ApplicationRef}, useful for testing.
  */
+
+ /* everything used here are no longer compatible, update later
+ /*
 @Injectable()
 export class MockApplicationRef extends ApplicationRef {
   registerBootstrapListener(listener: (ref: ComponentRef<any>) => void): void {}
@@ -34,3 +37,4 @@ export class MockApplicationRef extends ApplicationRef {
 
   get componentTypes(): Type[] { return null; };
 }
+*/

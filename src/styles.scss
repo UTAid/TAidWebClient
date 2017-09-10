@@ -1,0 +1,9 @@
+/* You can add global styles to this file, and also import other style files */
+$font-stack:    Helvetica, sans-serif;
+$primary-color: #333;
+
+body {
+  font: 100% $font-stack;
+  color: $primary-color;
+}
+@import './app/fse-table/shared/_colors.scss';

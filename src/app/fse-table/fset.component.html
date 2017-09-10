@@ -1,40 +1,37 @@
 <div>
-
-<div id="fset-tool-bar" class="row">
-  <search-bar
+  <div id="fset-tool-bar" class="row">
+    <search-bar
     [focus]="searchFocusSubject"
     (search)="applySearch($event)"
     (clear)="removeSearch()"></search-bar>
-
-  <div class="col-md-4">
-    <div class="btn-group">
-      <button id="fset-btn-add" type="button" class="btn btn-default"
+    <div class="col-md-4">
+      <div class="btn-group">
+        <button id="fset-btn-add" type="button" class="btn btn-default"
         (click)="showRowAdder()">
         <i class="fa fa-plus"></i>
       </button>
       <button id="fset-btn-remove" type="button" class="btn btn-default"
-        (click)="removeRow()"
-        [disabled]="isRemoveRowDisabled()">
-        <i class="fa fa-minus"></i>
-      </button>
-    </div>
-    <col-selector [columns]="table.cols"></col-selector>
+      (click)="removeRow()"
+      [disabled]="isRemoveRowDisabled()">
+      <i class="fa fa-minus"></i>
+    </button>
   </div>
+  <col-selector [columns]="table.cols"></col-selector>
 </div>
-
+</div>
 <row-adder
-  [factory]="config.factory"
-  [columns]="table.cols"
-  [show]="showRowAdderSubject"
-  (addRows)="addRows($event)">
+[factory]="config.factory"
+[columns]="table.cols"
+[show]="showRowAdderSubject"
+(addRows)="addRows($event)">
 </row-adder>
 
 <fse-table
-  [table]="table"
-  (selection)="selectRow($event)"
-  (search)="focusSearch()"
-  (sort)="sortContent($event)"
-  (cellChange)="editRow($event)">
+[table]="table"
+(selection)="selectRow($event)"
+(search)="focusSearch()"
+(sort)="sortContent($event)"
+(cellChange)="editRow($event)">
 </fse-table>
 
 </div>

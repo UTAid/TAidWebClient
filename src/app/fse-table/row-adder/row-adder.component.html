@@ -1,44 +1,36 @@
-<div bsModal #adderModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
-  aria-labelledby="myLargeModalLabel" aria-hidden="true">
-<div class="modal-dialog modal-lg"><div class="modal-content">
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Add rows</h4>
+    </div>
 
-  <div class="modal-header">
-    <button type="button" class="close" (click)="cancel()" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    <h4 class="modal-title">Add rows</h4>
-  </div>
+    <div class="modal-body">
+      <fse-table
+        [table]="table"
+        [validationRequestSubject]="validationRequest"
+        (selection)="selectRow($event)"
+        (cellChange)="rowValueChange($event)">
+      </fse-table>
+      <button type="button" class="btn btn-secondary" (click)="newRow()">
+        <i class="fa fa-plus"></i>
+        <span>New</span>
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="removeRow()"
+        [disabled]="table.rowLen===1">
+        <i class="fa fa-minus"></i>
+        <span>Remove</span>
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="clearRows()">
+        <i class="fa fa-remove"></i>
+        <span>Clear</span>
+      </button>
+    </div>
 
-  <div class="modal-body">
-    <fse-table
-      [table]="table"
-      [validationRequestSubject]="validationRequest"
-      (selection)="selectRow($event)"
-      (cellChange)="rowValueChange($event)">
-    </fse-table>
-    <button type="button" class="btn btn-secondary" (click)="newRow()">
-      <i class="fa fa-plus"></i>
-      <span>New</span>
-    </button>
-    <button type="button" class="btn btn-secondary" (click)="removeRow()"
-      [disabled]="table.rowLen===1">
-      <i class="fa fa-minus"></i>
-      <span>Remove</span>
-    </button>
-    <button type="button" class="btn btn-secondary" (click)="clearRows()">
-      <i class="fa fa-remove"></i>
-      <span>Clear</span>
-    </button>
-  </div>
-
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="addAll()">
-      <span>Add</span>
-    </button>
-    <button type="button" class="btn btn-secondary" (click)="cancel()">
-      <span>Cancel</span>
-    </button>
-  </div>
-
-</div></div>
-</div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="addAll()">
+        <span>Add</span>
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="c('Close click')">
+        <span>Cancel</span>
+      </button>
+    </div>
+</ng-template>

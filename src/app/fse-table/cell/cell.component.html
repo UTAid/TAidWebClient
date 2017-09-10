@@ -1,8 +1,7 @@
+<ng-template #tipContent>{{ tooltipMsg }}</ng-template>
 <div [class.invalid]="!isValid"
-  [tooltip]="tooltipMsg"
-  [tooltipEnable]="!isValid"
-  [tooltipIsOpen]="true"
-  tooltipPlacement="bottom">
+  [ngbTooltip]="tipContent"
+  placement="bottom">
   <div fsecInput
     *ngIf="edit"
     [textContent]="cell.value"

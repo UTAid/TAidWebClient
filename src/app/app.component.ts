@@ -69,14 +69,12 @@ class StudentLocalService extends FsetLocalService<Student> {
 }
 
 @Component({
-  moduleId: module.id,
   selector: 'app-root',
   templateUrl: 'app.component.html',
   providers: [
     {provide: FsetConfig, useValue: studentFsetConfig},
     {provide: FsetService, useClass: StudentService}
   ],
-  directives: [FsetComponent],
 })
 export class AppComponent implements OnInit {
 

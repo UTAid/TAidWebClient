@@ -4,10 +4,9 @@ import {
 import { Subject } from 'rxjs/Subject';
 
 @Component({
-  moduleId: module.id,
   selector: 'search-bar',
   templateUrl: 'search-bar.component.html',
-  styleUrls: ['search-bar.component.css']
+  styleUrls: ['search-bar.component.scss']
 })
 /**
 * Search bar for FSET

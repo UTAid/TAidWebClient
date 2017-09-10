@@ -1,25 +1,12 @@
-import { bootstrap } from '@angular/platform-browser-dynamic';
 import { enableProdMode } from '@angular/core';
-import { HTTP_PROVIDERS, RequestOptions } from '@angular/http';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { AppComponent, environment, app_base_url } from './app/';
-import {
-  BasicAuthRequestOptions, BasicAuthCridentials, APP_BASE_URL
-} from './app/shared';
+import { AppModule } from './app/app.module';
+import { environment } from './environments/environment';
+
 
 if (environment.production) {
   enableProdMode();
 }
 
-function basicAuthFactory(crid: BasicAuthCridentials) {
-  return new BasicAuthRequestOptions(crid);
-}
-
-bootstrap(AppComponent, [
-  HTTP_PROVIDERS,
-  { provide: RequestOptions, useFactory: basicAuthFactory,
-    deps: [BasicAuthCridentials] },
-  { provide: BasicAuthCridentials,
-    useValue: new BasicAuthCridentials('admin', 'admin') },
-  { provide: APP_BASE_URL, useValue: app_base_url }
-]);
+platformBrowserDynamic().bootstrapModule(AppModule);

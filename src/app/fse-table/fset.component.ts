@@ -8,20 +8,19 @@ import { SearchBarComponent } from './search-bar';
 import { TableComponent } from './table';
 import { RowAdderComponent } from './row-adder';
 import { Column } from './shared/column';
-import { IFsetConfig, FsetConfig } from './shared/fset-config';
-import { IFsetService, FsetService } from './shared/fset.service';
+import { IFsetConfig } from './shared/fset-config-map-interface';
+import { IFsetService } from './shared/fset-interface-service';
+import { FsetService } from './shared/fset-OT-service';
+import { FsetConfig } from './shared/fset-config-OT';
 import { Table } from './shared/table';
 import { SortEvent, CellEditEvent, CellEvent } from './shared/events';
 import { nullToEmpty } from './shared/utils';
 
 
 @Component({
-  moduleId: module.id,
-  directives: [ColumnSelectorComponent, SearchBarComponent,
-    TableComponent, RowAdderComponent],
   selector: 'fset-component',
   templateUrl: 'fset.component.html',
-  styleUrls: ['fset.component.css'],
+  styleUrls: ['fset.component.scss'],
 })
 /**
 * A Filterable, Sortable, and Editable Table (FSET) component, backed by a
@@ -79,12 +78,12 @@ export class FsetComponent<T> implements OnInit {
     this.selRow = cellEvent.rowi;
   }
 
-  protected showRowAdder() {
-    this.showRowAdderSubject.next(undefined);
-  }
-
   protected focusSearch() {
     this.searchFocusSubject.next(undefined);
+  }
+
+  protected showRowAdder() {
+    this.showRowAdderSubject.next(undefined);
   }
 
   // Execute search (filter)

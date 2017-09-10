@@ -1,70 +1,18 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "",
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "mapRoot": "/",
-    "module": "commonjs",
+    "lib": ["es6", "dom"],
+    "mapRoot": "./",
+    "module": "es6",
     "moduleResolution": "node",
-    "noEmitOnError": true,
-    "noImplicitAny": false,
-    "outDir": "../dist/",
-    "rootDir": ".",
+    "outDir": "../dist/out-tsc",
     "sourceMap": true,
     "target": "es5",
-    "inlineSources": true
-  },
-  "filesGlob": [
-    "./**/*.ts"
-  ],
-  "files": [
-    "./app/app.component.spec.ts",
-    "./app/app.component.ts",
-    "./app/environment.ts",
-    "./app/fse-table/cell/cell.component.spec.ts",
-    "./app/fse-table/cell/cell.component.ts",
-    "./app/fse-table/cell/index.ts",
-    "./app/fse-table/column-selector/column-selector.component.spec.ts",
-    "./app/fse-table/column-selector/column-selector.component.ts",
-    "./app/fse-table/column-selector/index.ts",
-    "./app/fse-table/fset.component.spec.ts",
-    "./app/fse-table/fset.component.ts",
-    "./app/fse-table/index.ts",
-    "./app/fse-table/row-adder/index.ts",
-    "./app/fse-table/row-adder/row-adder.component.spec.ts",
-    "./app/fse-table/row-adder/row-adder.component.ts",
-    "./app/fse-table/search-bar/index.ts",
-    "./app/fse-table/search-bar/search-bar.component.spec.ts",
-    "./app/fse-table/search-bar/search-bar.component.ts",
-    "./app/fse-table/shared/cell.ts",
-    "./app/fse-table/shared/column.ts",
-    "./app/fse-table/shared/events.ts",
-    "./app/fse-table/shared/fset-config.ts",
-    "./app/fse-table/shared/fset.service.ts",
-    "./app/fse-table/shared/keymap.ts",
-    "./app/fse-table/shared/table.ts",
-    "./app/fse-table/shared/utils.ts",
-    "./app/fse-table/shared/validator-result.ts",
-    "./app/fse-table/shared/validators.ts",
-    "./app/fse-table/table/index.ts",
-    "./app/fse-table/table/table.component.spec.ts",
-    "./app/fse-table/table/table.component.ts",
-    "./app/fse-table/testing/mock-content.ts",
-    "./app/index.ts",
-    "./app/shared/basic-auth-cridentials.ts",
-    "./app/shared/basic-auth-request-options.ts",
-    "./app/shared/config-injectables.ts",
-    "./app/shared/http-client.ts",
-    "./app/shared/index.ts",
-    "./app/shared/testing/mock-application-ref.ts",
-    "./app/student.service.ts",
-    "./app/student.ts",
-    "./main.ts",
-    "./system-config.ts",
-    "./typings.d.ts"
-  ],
-  "atom": {
-    "rewriteTsconfig": true
+    "typeRoots": [
+      "../node_modules/@types"
+    ]
   }
 }
