@@ -1,0 +1,90 @@
+Figure out what libraries have been used:
+  Looked at angular4 branch in file:
+    - attempted to get 'BsDropdownModule' and 'ToolTip' module from
+      'ngx-bootstrap' but commented out
+
+    - got 'NgbModule' from '@ng-bootstrap/ng-bootstrap'
+    - got 'ModalModule' from 'ngx-bootstrap'
+
+    Not sure yet if needed:
+    - got 'FormsModule' from '@angular/forms'
+    - got 'HttpModule' and 'RequestOptions' from '@angular/http'
+
+    - using bootstrap
+
+Looking at master to understand thought process:
+* : means important commit
+- : means not so important
+  * Commit 3:  Start FSETable
+               Basic table that can be sorted ascending and descending order
+  - Commit 4:  Integrated gulp
+               Gulp can compile sass files, uglify and compress js files and
+               much more. Its like pipes in bash.
+  * Commit 5:  Integrated browser-sync for cells
+               Cells are editable
+               Curr files: fse-table.component.html, fes-table.component.ts,
+               fse-table-content.ts - this is for sorting
+               No seperate files for cells yet
+  - Commit 6:  Sort direction arror for header
+               Cell is being seperated into its own file
+  * Commit 8:  Angular-cli
+               Project now looks like more of the typical angular project
+               New shared directory but all code is still in fse-table
+  * Commit 9:  Implement editing, sorting, navigation for FSETable
+               Included bootstrap and refactored code
+               Lots of styling
+               Big Upgrade
+  * Commit 10: fse-cell is now its own folder inside fse-table
+               fse-table now has a shared folder
+  - Commit 11: Moved click handling from fse-cell to fset
+  - Commit 12: Selected row is now highlighted
+               Implemented add/remove function to fset
+  * Commit 13: Implemented search feature
+               Ctrl+F on table triggers search
+               Table is sorted after search
+
+  FSET is completed. After this point it is adding tests and refactoring
+
+  - Commit 16: Shortened class names
+  - Commit 20: Introduced ng2-bootstrap
+  - Commit 21: Column-selector its own component
+  - Commit 22: Search bar its own component
+  - Commit 24: Row adding prep
+  - Commit 25: Refactoring
+  * Commit 26: Row adding feature
+  - Commit 28: Prep for backend
+  * Commit 29: Implement connection to backend
+  - Commit 30: General refactoring
+  - Commit 33: Added validator for student id
+
+
+Libraries used after looking at master-
+  This info can be found in `package.json` file in the master branch.
+  The main ones are -
+  Angular2, NPM, Gulp, Typescript, ng2-bootstrap, karma
+
+
+Architecture of current project-
+  A UML diagram for this project does not make sense.
+
+  Angular projects are compromised of components. Components are a set of files
+  that work together to do a very specific task. Combining several components
+  together we get the app that we are building.
+
+  The goal of this app is to create a fse-table. Therefore the master component
+  for this app is called:
+  `fse-table`
+      - `cell`
+      - `column-selector`
+      - `row-adder`
+      - `search-bar`
+      - `table`
+  The fse-table is compromised of the components listed above.
+      - `shared`: this folder in fes-table is not a component but it is
+                  compromised of differnt typescript files that is shared
+                  between the components
+
+
+fse-cell
+  - Directive: FSETableInputDirective - binds enter and esc to input box
+  
