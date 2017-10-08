@@ -13,23 +13,26 @@ Figure out what libraries have been used:
     - using bootstrap
 
 Looking at master to understand thought process:
-* : means important commit
+* : means important commit 
 - : means not so important
   * Commit 3:  Start FSETable
-               Basic table that can be sorted ascending and descending order
+               Basic table that can be sorted ascending and descending order // ANYA: "filterable, sortable, editable table"
   - Commit 4:  Integrated gulp
                Gulp can compile sass files, uglify and compress js files and
                much more. Its like pipes in bash.
+               // ANYA: I'm afraid this is not a very acurate description. For Part II, please have a paragraph on gulp explaining what it is and how it work.
   * Commit 5:  Integrated browser-sync for cells
                Cells are editable
                Curr files: fse-table.component.html, fes-table.component.ts,
                fse-table-content.ts - this is for sorting
+               // ANYA: For Part II: how does sorting work, exactly?
                No seperate files for cells yet
-  - Commit 6:  Sort direction arror for header
+  - Commit 6:  Sort direction arrow for header 
                Cell is being seperated into its own file
   * Commit 8:  Angular-cli
                Project now looks like more of the typical angular project
                New shared directory but all code is still in fse-table
+               // ANYA: I think, the "typical" structure changed between 2 and 4, need to investigate
   * Commit 9:  Implement editing, sorting, navigation for FSETable
                Included bootstrap and refactored code
                Lots of styling
@@ -42,6 +45,7 @@ Looking at master to understand thought process:
   * Commit 13: Implemented search feature
                Ctrl+F on table triggers search
                Table is sorted after search
+   // ANYA: good work! Need to go into technical details for Part II, explaining all technology involved, what it is, how it is incorporated in this project.
 
   FSET is completed. After this point it is adding tests and refactoring
 
@@ -57,20 +61,21 @@ Looking at master to understand thought process:
   - Commit 30: General refactoring
   - Commit 33: Added validator for student id
 
+// ANYA: Need a good explanation of connection to backend for Part II.
 
 Libraries used after looking at master-
   This info can be found in `package.json` file in the master branch.
   The main ones are -
   Angular2, NPM, Gulp, Typescript, ng2-bootstrap, karma
-
+// ANYA: explain the use of each component in Part II
 
 Architecture of current project-
-  A UML diagram for this project does not make sense.
+  A UML diagram for this project does not make sense. // ANYA: really? :)
 
-  Angular projects are compromised of components. Components are a set of files
+  Angular projects are comprised of components. Components are collections of files
   that work together to do a very specific task. Combining several components
-  together we get the app that we are building.
-
+  together, we get the app that we are building. // ANYA: UML seems perfect for depocting this, no?
+  
   The goal of this app is to create a fse-table. Therefore the master component
   for this app is called:
   `fse-table`
@@ -88,3 +93,4 @@ Architecture of current project-
 fse-cell
   - Directive: FSETableInputDirective - binds enter and esc to input box
   
+// ANYA: unfinished?
