@@ -1,3 +1,40 @@
-<p>
-  table works!
-</p>
+<table #navInput id="fset" class="table table-bordered" tabindex="-1">
+  <!--
+  tabindex attr makes the table focus-able, and therefore generate
+  key-press events.
+  -->
+
+  <thead><tr>
+    <template><th>
+      <span></span>
+      <span>
+      </span>
+    </th></template>
+  </tr></thead>
+
+  <tbody>
+    <template>
+    <tr>
+      <template>
+      <td>
+        <div>
+          <!-- <fse-cell
+            [cell]="cell"
+            [row]="i"
+            [col]="j"
+            [editRequestSubject]="editRequestSubject"
+            [validationRequestSubject]="validationRequestSubject"
+            (click)="onClick(i, j)"
+            (dblclick)="triggerEdit()"
+            (valueChange)="cellValueChange($event)"
+            (editExit)="navInputFocus()">
+          </fse-cell> -->
+        </div>
+      </td></template>
+    </tr></template>
+  <tr><td>
+    <div>Nothing here!</div>
+    <p>Table component html</p>
+  </td></tr></tbody>
+
+</table>

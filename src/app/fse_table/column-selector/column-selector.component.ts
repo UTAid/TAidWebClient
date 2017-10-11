@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'col-selector',
   templateUrl: './column-selector.component.html',
-  styleUrls: ['./column-selector.component.css']
+  styleUrls: ['./column-selector.component.scss']
 })
 export class ColumnSelectorComponent implements OnInit {
 
