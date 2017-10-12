@@ -1,7 +1,17 @@
-<div>
-  <div>
+<div [class.invalid]="!isValid"
+  [tooltip]="tooltipMsg"
+  [tooltipEnable]="!isValid"
+  [tooltipIsOpen]="true"
+  tooltipPlacement="bottom">
+  <div fsecInput
+    *ngIf="edit"
+    [textContent]="cell.value"
+    (editConfirm)="requestEditConfirm($event)"
+    (editCancel)="requestEditCancel()"
+    (blur)="requestEditCancel()">
   </div>
-  <div>
-    <p>Cell remove later</p>
+  <div *ngIf="!edit"
+    [class.novalue]="!cell.value">
+    {{cell.value ? cell.value : "None"}}
   </div>
 </div>
