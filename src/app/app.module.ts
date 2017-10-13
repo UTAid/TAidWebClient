@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 import { AppComponent } from './app.component';
@@ -29,6 +30,7 @@ import { FsecInputDirective } from './fse_table/cell/cell.directive';
     BrowserModule,
     BsDropdownModule.forRoot(),
     FormsModule,
+    ModalModule.forRoot(),
     TooltipModule.forRoot()
   ],
   providers: [],

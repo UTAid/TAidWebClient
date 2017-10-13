@@ -27,6 +27,9 @@ export class SearchBarComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    //this.focus.subscribe(() => {
+    //  this.searchInput.nativeElement.focus();
+    //});
   }
 
   protected searchRequest() {

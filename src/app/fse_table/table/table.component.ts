@@ -98,11 +98,11 @@ export class TableComponent<T> implements OnInit {
   }
 
   // Handler for cell clicks.
-  //protected onClick(row: number, col: number) {
-    //this.selRow = row;
-    //this.selCol = col;
-    //this.notifySelection();
-  //}
+  protected onClick(row: number, col: number) {
+    this.selRow = row;
+    this.selCol = col;
+    this.notifySelection();
+  }
 
   // Notify listeners of the currently selected cell.
   private notifySelection() {

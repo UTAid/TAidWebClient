@@ -7,18 +7,19 @@
   -->
 
   <thead><tr>
-    <template ngFor let-col [ngForOf]="table.cols" let-i="index"><th
-      *ngIf="showHiddenCols || col.show"
-      id="{{'fset-col-' + i}}"
-      (click)="sortOn(col, i)">
-      <span>{{col.dispName}}</span>
-      <span
-        class="fa"
-        [class.fa-chevron-up]="isSortedAsc()"
-        [class.fa-chevron-down]="!isSortedAsc()"
-        [style.visibility]="sortCol === col ? 'inherit' : 'hidden'">
-      </span>
-    </th></template>
+    <ng-template ngFor let-col [ngForOf]="table.cols" let-i="index">
+      <th *ngIf="showHiddenCols || col.show"
+        id="{{'fset-col-' + i}}"
+        (click)="sortOn(col, i)">
+        <span>{{col.dispName}}</span>
+        <span
+          class="fa"
+          [class.fa-chevron-up]="isSortedAsc()"
+          [class.fa-chevron-down]="!isSortedAsc()"
+          [style.visibility]="sortCol === col ? 'inherit' : 'hidden'">
+        </span>
+      </th>
+    </ng-template>
   </tr></thead>
 
   <tbody>
