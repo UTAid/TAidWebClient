@@ -1,7 +1,6 @@
 import {
-  Component, Directive, Input, Output, ElementRef, EventEmitter, OnInit,
+  Component, Input, Output, EventEmitter, OnInit,
   ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit,
-  HostBinding, HostListener
 } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 

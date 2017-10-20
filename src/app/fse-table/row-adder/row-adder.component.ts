@@ -5,8 +5,6 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
-//import { ModalDirective } from 'ngx-bootstrap';
-
 import { TableComponent } from '../table';
 import { Column } from '../shared/column';
 import { Table } from '../shared/table';

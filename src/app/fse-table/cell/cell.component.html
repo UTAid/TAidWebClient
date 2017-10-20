@@ -1,6 +1,7 @@
-<ng-template #tipContent>{{ tooltipMsg }}</ng-template>
 <div [class.invalid]="!isValid"
-  [ngbTooltip]="tipContent"
+  [tooltip]="tooltipMsg"
+  [isDisabled]="!isValid"
+  [isOpen]="true"
   placement="bottom">
   <div fsecInput
     *ngIf="edit"
