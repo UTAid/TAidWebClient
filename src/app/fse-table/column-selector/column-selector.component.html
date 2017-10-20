@@ -1,14 +1,14 @@
-<div ngbDropdown class="btn-group" autoClose="outsideClick">
+<div ngbDropdown class="d-inline-block">
 
   <button ngbDropdownToggle id="fset-btn-col" type="button" class="btn btn-default">
     Columns <span class="caret"></span>
   </button>
 
-  <ul class="dropdown-menu" id="fset-dd-col" aria-labelledby="fset-btn-col">
+  <div ngbDropdownMenu>
     <li class="dropdown-item" *ngFor="let col of columns">
       <a class="checkbox"><div class="chkbox-wrapper">
         <input [(ngModel)]="col.show" type="checkbox">{{col.dispName}}
       </div></a>
     </li>
-  </ul>
+  </div>
 </div>
