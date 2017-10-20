@@ -1,0 +1,40 @@
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+import {ApplicationRef, ComponentFactory, ComponentRef, Injectable, Injector, NgZone, Type} from '@angular/core';
+
+
+/**
+ * A no-op implementation of {@link ApplicationRef}, useful for testing.
+ */
+
+ /* everything used here are no longer compatible, update later
+ /*
+@Injectable()
+export class MockApplicationRef extends ApplicationRef {
+  registerBootstrapListener(listener: (ref: ComponentRef<any>) => void): void {}
+
+  registerDisposeListener(dispose: () => void): void {}
+
+  bootstrap<C>(componentFactory: ComponentFactory<C>): ComponentRef<C> { return null; }
+
+  get injector(): Injector { return null; };
+
+  get zone(): NgZone { return null; };
+
+  run(callback: Function): any { return null; }
+
+  waitForAsyncInitializers(): Promise<any> { return null; }
+
+  dispose(): void {}
+
+  tick(): void {}
+
+  get componentTypes(): Type[] { return null; };
+}
+*/

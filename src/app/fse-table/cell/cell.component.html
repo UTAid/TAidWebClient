@@ -1,0 +1,16 @@
+<ng-template #tipContent>{{ tooltipMsg }}</ng-template>
+<div [class.invalid]="!isValid"
+  [ngbTooltip]="tipContent"
+  placement="bottom">
+  <div fsecInput
+    *ngIf="edit"
+    [textContent]="cell.value"
+    (editConfirm)="requestEditConfirm($event)"
+    (editCancel)="requestEditCancel()"
+    (blur)="requestEditCancel()">
+  </div>
+  <div *ngIf="!edit"
+    [class.novalue]="!cell.value">
+    {{cell.value ? cell.value : "None"}}
+  </div>
+</div>
