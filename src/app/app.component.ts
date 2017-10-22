@@ -15,6 +15,11 @@ let studentFsetConfig = fsetConfig([
     validator: (o) => nonEmptyValidator(o.university_id, 'ID cannot be empty'),
     disabled: true
   },
+  { display: 'Student Number',
+    setter: (v, o) => o.student_number = v,
+    getter: (o) => o.student_number,
+    hide: true
+  },
   { display: 'First Name',
     setter: (v, o) => o.first_name = v,
     getter: (o) => o.first_name

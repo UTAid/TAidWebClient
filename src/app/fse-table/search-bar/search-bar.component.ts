@@ -21,7 +21,7 @@ export class SearchBarComponent implements OnInit {
   // Triggered when user clears the search.
   @Output() clear: EventEmitter<any> = new EventEmitter();
 
-  private searchTerm = '';
+  public searchTerm = '';
 
   constructor() {}
 
@@ -31,11 +31,11 @@ export class SearchBarComponent implements OnInit {
     });
   }
 
-  protected searchRequest() {
+  public searchRequest() {
     this.search.emit(this.searchTerm);
   }
 
-  protected searchClear() {
+  public searchClear() {
     this.searchTerm = '';
     this.clear.emit(null);
   }

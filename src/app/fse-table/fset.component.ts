@@ -31,13 +31,13 @@ import { nullToEmpty } from './shared/utils';
 */
 export class FsetComponent<T> implements OnInit {
 
-  private table: Table<T>; // Table of cells.
+  public table: Table<T>; // Table of cells.
   // private filteredRows: Array<T>; // Array of displayed rows
 
   // Observable for search focus navigation request
-  private searchFocusSubject: Subject<any> = new Subject();
+  public searchFocusSubject: Subject<any> = new Subject();
   // Observable for add rows request
-  private showRowAdderSubject: Subject<any> = new Subject();
+  public showRowAdderSubject: Subject<any> = new Subject();
 
   private selRow: number; // Currently selected row
 
@@ -74,20 +74,20 @@ export class FsetComponent<T> implements OnInit {
   //   return this._rows.findIndex((c) => this.service.key(c) === rowKey);
   // }
 
-  protected selectRow(cellEvent: CellEvent<T>) {
+  public selectRow(cellEvent: CellEvent<T>) {
     this.selRow = cellEvent.rowi;
   }
 
-  protected focusSearch() {
+  public focusSearch() {
     this.searchFocusSubject.next(undefined);
   }
 
-  protected showRowAdder() {
+  public showRowAdder() {
     this.showRowAdderSubject.next(undefined);
   }
 
   // Execute search (filter)
-  protected applySearch(term: string) {
+  public applySearch(term: string) {
     if (term) {
       term = term.toLowerCase();
       this.table.filterRows((r) => {
@@ -105,15 +105,15 @@ export class FsetComponent<T> implements OnInit {
   }
 
   // Clear row filter.
-  protected removeSearch() {
+  public removeSearch() {
     this.table.removeFilter();
   }
 
-  protected sortContent(s: SortEvent<T>) {
+  public sortContent(s: SortEvent<T>) {
     this.table.sort(s);
   }
 
-  protected addRows(table: Table<T>) {
+  public addRows(table: Table<T>) {
     for (let row of table.rows) {
       let r = row.underlyingModel;
       this.service.create(r).subscribe((updatedT) => {
@@ -126,7 +126,7 @@ export class FsetComponent<T> implements OnInit {
   * Edit the row's properties.
   * editInfo: [rowIndex, newValue, rowProperty]
   */
-  protected editRow(edit: CellEditEvent<T>) {
+  public editRow(edit: CellEditEvent<T>) {
     let oldVal = edit.cell.value;
     // Edit the row to have the new value
     edit.cell.value = edit.newValue;
@@ -141,14 +141,14 @@ export class FsetComponent<T> implements OnInit {
     () => console.log('edit completed'));
   }
 
-  protected removeRow() {
+  public removeRow() {
     this.service.delete(this.table.row(this.selRow).underlyingModel)
       .subscribe(() => {
         this.table.deleteRow(this.selRow);
       }, (err) => console.log('error deleting row ' + err));
   }
 
-  protected isRemoveRowDisabled() {
+  public isRemoveRowDisabled() {
     return this.selRow < 0 ||
       this.selRow >= this.table.rowLen ||
       !this.table.row(this.selRow).show;

@@ -36,9 +36,9 @@ export class CellComponent<T> implements OnInit {
   // Emitted when entering editing mode
   @Output() editEnter = new EventEmitter<CellEvent<T>>();
 
-  private edit = false; // Whether editing mode is enabled.
-  private isValid = true;
-  private tooltipMsg = '';
+  public edit = false; // Whether editing mode is enabled.
+  public isValid = true;
+  public tooltipMsg = '';
 
   constructor (private cd: ChangeDetectorRef) {};
 
