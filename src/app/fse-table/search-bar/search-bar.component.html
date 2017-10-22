@@ -3,7 +3,7 @@
   <input #searchInput id="fset-input-search" class="form-control"
     placeholder="Search" type="text"
     [(ngModel)]="searchTerm"
-    (keyup.enter)="searchRequest()">
+    (keyup)="searchRequest()">
 
   <div class="btn-group">
     <a id="fset-btn-clear" class="btn btn-default"

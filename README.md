@@ -20,7 +20,11 @@ Follow the instructions to setup a local version in your machine:
 
 ### Set-up Backend
 Follow the set up instructions for the backend available [here](https://github.com/UTAid/TAidBackend)
-When creating superuser for backend set `username and password as admin`
+When creating superuser for backend `set username and password as admin`. This is so
+the frontend can connect with the backend.
+
+`WARNING: change username and password before deploying. The credentials for the frontend
+can be changed at the file src/app/app.module.ts in the function authCred`
 
 Once all the instructions are followed our backend wil be set up and the
 frontend and backend would be connected

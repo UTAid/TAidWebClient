@@ -1,0 +1,9 @@
+{
+    "short_name": "Taid",
+    "name": "TAidWebClient",
+    "start_url": "/",
+    "theme_color": "#f48c5b",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "orientation": "portrait"
+}
