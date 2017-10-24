@@ -1,3 +1,5 @@
+[![BuildStatus](https://travis-ci.org/UTAid/TAidWebClient.svg?branch=migration-d94)](https://travis-ci.org/UTAid/TAidWebClient)
+
 # TAidWebClient
 
 **TAid** is an application for managing grades and courses.
