@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { FsetComponent } from './fse-table/fset.component';
 import { CellComponent } from './fse-table/cell/cell.component';
 import { ColumnSelectorComponent } from './fse-table/column-selector/column-selector.component';
-import { RowAdderComponent } from './fse-table/row-adder/row-adder.component';
+import { BatchRowAdderComponent } from './fse-table/batch-row-adder/batch-row-adder.component';
 import { SearchBarComponent } from './fse-table/search-bar/search-bar.component';
 import { TableComponent } from './fse-table/table/table.component';
 import { FsecInputDirective } from './fse-table/cell/cell.directive';
@@ -36,7 +36,7 @@ export function authCred(){
     AppComponent,
     CellComponent,
     ColumnSelectorComponent,
-    RowAdderComponent,
+    BatchRowAdderComponent,
     SearchBarComponent,
     TableComponent,
     FsetComponent,

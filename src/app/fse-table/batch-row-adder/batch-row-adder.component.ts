@@ -15,20 +15,20 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
-  selector: 'row-adder',
+  selector: 'batch-row-adder',
   // No deep changes should occur on any input.
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     { provide: READONLY_OVERRIDE, useValue: true },
     { provide: SHOW_HIDDEN_COLS, useValue: true }
   ],
-  templateUrl: 'row-adder.component.html',
-  styleUrls: ['row-adder.component.scss']
+  templateUrl: 'batch-row-adder.component.html',
+  styleUrls: ['batch-row-adder.component.scss']
 })
 /**
 * Component that allows for bulk addition of rows to the FSET
 */
-export class RowAdderComponent<T> implements OnInit {
+export class BatchRowAdderComponent<T> implements OnInit {
   @ViewChild('content') content;
   @Input() factory: () => T; // Factory function to init a new row.
   @Input() columns: Column<T>[];

@@ -19,12 +19,12 @@
   <col-selector [columns]="table.cols"></col-selector>
 </div>
 </div>
-<row-adder
+<batch-row-adder
 [factory]="config.factory"
 [columns]="table.cols"
 [show]="showRowAdderSubject"
 (addRows)="addRows($event)">
-</row-adder>
+</batch-row-adder>
 
 <fse-table
 [table]="table"
