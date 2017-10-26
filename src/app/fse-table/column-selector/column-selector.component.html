@@ -8,7 +8,9 @@
     <li class="dropdown-item" *ngFor="let col of columns">
       <a class="checkbox">
         <div class="chkbox-wrapper">
+          <label>
           <input [(ngModel)]="col.show" type="checkbox">{{col.dispName}}
+          </label>
         </div>
       </a>
     </li>

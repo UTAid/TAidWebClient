@@ -19,7 +19,7 @@ export class StudentService implements IFsetService<Student> {
 
   readAll(): Observable<Array<Student>> {
     return this.http.get(URL)
-      .map((r) => r.json().results
+      .map((r) => r.json()
         .map((s) => new Student(
           s.university_id, s.student_number,
           s.first_name, s.last_name, s.email
