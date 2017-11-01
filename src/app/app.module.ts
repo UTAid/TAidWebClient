@@ -15,6 +15,8 @@ import { BatchRowAdderComponent } from './fse-table/batch-row-adder/batch-row-ad
 import { SearchBarComponent } from './fse-table/search-bar/search-bar.component';
 import { TableComponent } from './fse-table/table/table.component';
 import { FsecInputDirective } from './fse-table/cell/cell.directive';
+import { RowAdderComponent } from './fse-table/row-adder/row-adder.component';
+import { UndoActionComponent } from './fse-table/undo-action/undo-action.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalModule } from 'ngx-bootstrap';
@@ -41,6 +43,8 @@ export function authCred(){
     TableComponent,
     FsetComponent,
     FsecInputDirective,
+    RowAdderComponent,
+    UndoActionComponent,
   ],
   imports: [
     NgbModule.forRoot(),

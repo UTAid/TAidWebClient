@@ -86,8 +86,7 @@ export class FsetComponent<T> implements OnInit {
     this.showRowAdderSubject.next(undefined);
   }
 
-  // Execute search (filter)
-  public applySearch(term: string) {
+  private applySearchString(term:string){
     if (term) {
       term = term.toLowerCase();
       this.table.filterRows((r) => {
@@ -104,6 +103,18 @@ export class FsetComponent<T> implements OnInit {
     }
   }
 
+  // Execute search (filter)
+  public applySearch(term: any) {
+    // If it is an event such as escape key or remove button pressed
+    if (term.target){
+      this.removeSearch();
+    }
+    // if string then apply regular search
+    else{
+      this.applySearchString(<string>term);
+    }
+  }
+
   // Clear row filter.
   public removeSearch() {
     this.table.removeFilter();
@@ -114,11 +125,30 @@ export class FsetComponent<T> implements OnInit {
   }
 
   public addRows(table: Table<T>) {
+    // for (let row of table.rows) {
+    //   let r = row.underlyingModel;
+    //   this.service.create(r).subscribe((updatedT) => {
+    //     this.table.pushRow(r);
+    //   }, (err) => console.log('error creating row ' + err));
+    // }
     for (let row of table.rows) {
       let r = row.underlyingModel;
       this.service.create(r).subscribe((updatedT) => {
         this.table.pushRow(r);
-      }, (err) => console.log('error creating row ' + err));
+      },
+      (err: any) => {
+        if (err.error instanceof Error) {
+          // A client-side or network error occurred. Handle it accordingly.
+          console.log('An error occurred:', err.error.message);
+        } else {
+          // The backend returned an unsuccessful response code.
+          // The response body may contain clues as to what went wrong,
+          this.service.update(r).subscribe((updatedT) => {
+            this.ngOnInit();  // this is so changes are reflected without
+                              // reloading page
+          }, (err) => console.log('error updating row ' + err));
+        }
+      });
     }
   }
 

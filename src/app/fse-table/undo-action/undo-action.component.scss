@@ -1,0 +1,21 @@
+.undo-button{
+  font-size: 24px;
+  border-radius: 50%;
+  background-color: #0000FF;
+  color: #fff;
+
+  border: none;
+  display: inline-block;
+  outline: 0;
+  padding: 8px 12px;
+  vertical-align: middle;
+  overflow: hidden;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.undo-button:hover{
+  background-color: #9999ff;
+}

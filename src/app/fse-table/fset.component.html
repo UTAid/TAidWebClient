@@ -1,37 +1,49 @@
 <div>
   <div id="fset-tool-bar" class="row">
-    <search-bar
-    [focus]="searchFocusSubject"
-    (search)="applySearch($event)"
-    (clear)="removeSearch()"></search-bar>
+    <div class="col-md-4">
+      <search-bar
+      [focus]="searchFocusSubject"
+      (search)="applySearch($event)"
+      (clear)="removeSearch()"></search-bar>
+    </div>
     <div class="col-md-4">
       <div class="btn-group">
         <button id="fset-btn-add" type="button" class="btn btn-default"
-        (click)="showRowAdder()">
-        <i class="fa fa-plus"></i>
-      </button>
-      <button id="fset-btn-remove" type="button" class="btn btn-default"
-      (click)="removeRow()"
-      [disabled]="isRemoveRowDisabled()">
-      <i class="fa fa-minus"></i>
-    </button>
+          tooltip="Batch Row Add"
+          (click)="showRowAdder()">
+          <i class="fa fa-plus"></i>
+        </button>
+        <div class="tooltip-wrapper" tooltip="Remove Row">
+        <button id="fset-btn-remove" type="button" class="btn btn-default"
+          (click)="removeRow()"
+          [disabled]="isRemoveRowDisabled()">
+          <i class="fa fa-minus"></i>
+        </button>
+      </div>
+      </div>
+      <col-selector [columns]="table.cols"></col-selector>
+    </div>
+    <div class="col-md-4">
+      <div class="btn-group" style="float:right;">
+        <undo-action style="padding-right:10px;"></undo-action>
+        <row-adder></row-adder>
+      </div>
+    </div>
   </div>
-  <col-selector [columns]="table.cols"></col-selector>
-</div>
-</div>
-<batch-row-adder
-[factory]="config.factory"
-[columns]="table.cols"
-[show]="showRowAdderSubject"
-(addRows)="addRows($event)">
-</batch-row-adder>
+  <batch-row-adder
+    [factory]="config.factory"
+    [columns]="table.cols"
+    [show]="showRowAdderSubject"
+    (addRows)="addRows($event)">
+  </batch-row-adder>
 
-<fse-table
-[table]="table"
-(selection)="selectRow($event)"
-(search)="focusSearch()"
-(sort)="sortContent($event)"
-(cellChange)="editRow($event)">
-</fse-table>
+
+  <fse-table
+    [table]="table"
+    (selection)="selectRow($event)"
+    (search)="focusSearch()"
+    (sort)="sortContent($event)"
+    (cellChange)="editRow($event)">
+  </fse-table>
 
 </div>
