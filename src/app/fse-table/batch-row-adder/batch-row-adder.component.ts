@@ -76,8 +76,8 @@ export class BatchRowAdderComponent<T> implements OnInit {
   }
 
 
-  protected selectRow(index: [number, number]) {
-    this.selRow = index[0];
+  protected selectRow(cellEvent: CellEvent<T>) {
+    this.selRow = cellEvent.rowi;
   }
 
   private clearRows() {
