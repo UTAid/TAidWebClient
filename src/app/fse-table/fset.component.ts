@@ -124,13 +124,26 @@ export class FsetComponent<T> implements OnInit {
     this.table.sort(s);
   }
 
+  private reinitializeTable():void{
+    let columns: Column<T>[] = new Array();
+    for (let c of this.table.cols) {
+        columns.push(c);
+    }
+    this.table = new Table(columns);
+
+    this.service.readAll().subscribe(
+      (rows) => {
+        for (let r of rows) { this.table.pushRow(r); }
+      },
+      (err) => console.error('Error initializing rows: ' + err),
+      () => console.log('readall completed')
+    );
+    this.selRow = -1;
+  }
+
   public addRows(table: Table<T>) {
-    // for (let row of table.rows) {
-    //   let r = row.underlyingModel;
-    //   this.service.create(r).subscribe((updatedT) => {
-    //     this.table.pushRow(r);
-    //   }, (err) => console.log('error creating row ' + err));
-    // }
+    let updated:boolean = false;
+
     for (let row of table.rows) {
       let r = row.underlyingModel;
       this.service.create(r).subscribe((updatedT) => {
@@ -144,8 +157,7 @@ export class FsetComponent<T> implements OnInit {
           // The backend returned an unsuccessful response code.
           // The response body may contain clues as to what went wrong,
           this.service.update(r).subscribe((updatedT) => {
-            this.ngOnInit();  // this is so changes are reflected without
-                              // reloading page
+            this.reinitializeTable();
           }, (err) => console.log('error updating row ' + err));
         }
       });

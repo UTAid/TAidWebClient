@@ -15,21 +15,37 @@ Figure out what libraries have been used:
 Looking at master to understand thought process:
 * : means important commit
 - : means not so important
-  * Commit 3:  Start FSETable
+  * Commit 3:  Start FSETable (filterable, sortable, editable table)
                Basic table that can be sorted ascending and descending order
   - Commit 4:  Integrated gulp
                Gulp can compile sass files, uglify and compress js files and
                much more. Its like pipes in bash.
+
+               Gulp was removed in commit 8 when angular cli was implemented.
+               Gulp was used as a build tool
+
   * Commit 5:  Integrated browser-sync for cells
                Cells are editable
                Curr files: fse-table.component.html, fes-table.component.ts,
                fse-table-content.ts - this is for sorting
                No seperate files for cells yet
-  - Commit 6:  Sort direction arror for header
+  - Commit 6:  Sort direction arrow for header
                Cell is being seperated into its own file
+
+               The logic for sorting is in the file fse-table-content.ts, the
+               majority of this is done in the method sort
+               with fse-table.component.ts calling on it.
+               A column can be in one of three states: sorted ascending,
+               descending or not sorted at all.
+
   * Commit 8:  Angular-cli
-               Project now looks like more of the typical angular project
+               Project now looks more like a typical angular project
                New shared directory but all code is still in fse-table
+
+               The structure for angular 2 is very similar to that of angular 4.
+               For the angular 4 project almost no new code was written but it
+               was just split up into different files.
+
   * Commit 9:  Implement editing, sorting, navigation for FSETable
                Included bootstrap and refactored code
                Lots of styling
@@ -57,34 +73,122 @@ Looking at master to understand thought process:
   - Commit 30: General refactoring
   - Commit 33: Added validator for student id
 
+Connection to backend:
+  - the backend server has to be running the same time as frontend
+  - username and password to login to the restapi can be found at in
+    app.module.ts in the function authCred(). By default the username and password
+    is admin
+  - fset-interface-service.ts is an abstract class that holds methods that
+    all rest api operations that should be available
+  - fset.component.ts implements all the methods in fset-interface-service.ts
+    and therefore deals with the rest api. It makes all the changes and displays
+    them in the table
+  - student.service.ts is a child of fset-interface-service.ts and performs
+    operations on the student url of the rest api
+
 
 Libraries used after looking at master-
   This info can be found in `package.json` file in the master branch.
   The main ones are -
-  Angular2, NPM, Gulp, Typescript, ng2-bootstrap, karma
+  Angular2, NPM, Typescript, ng2-bootstrap, karma
+
+  - Angular2 has been updated to angular4. This provides the framework to create
+    the app. It integrates html and typescript and makes dom manipulation easier
+  - NPM makes it easy to download the different packages required by the app.
+  - Typescript is a superscript of javascript and this is the language used by
+    angular
+  - ng2-bootstrap has been changed to ngx-bootstrap. Not all of the functions
+    of ng2-bootstrap were available in ngx-bootstrap so ngb-bootstrap was used
+    as well. Use of ngb-bootstrap can be found in batch-row-adder and column-selector
+  - Karma is used to write unit tests. Unit tests were not convertable from angular2
+    version and need to be re-written. The karma files exists in .spec.ts files that
+    are found in the different components
 
 
 Architecture of current project-
   A UML diagram for this project does not make sense.
 
-  Angular projects are compromised of components. Components are a set of files
+  Angular projects are comprised of components. Components are a set of files
   that work together to do a very specific task. Combining several components
   together we get the app that we are building.
 
   The goal of this app is to create a fse-table. Therefore the master component
   for this app is called:
   `fse-table`
+      - `batch-row-adder`
       - `cell`
       - `column-selector`
       - `row-adder`
       - `search-bar`
       - `table`
+      - `undo-action`
   The fse-table is compromised of the components listed above.
       - `shared`: this folder in fes-table is not a component but it is
                   compromised of differnt typescript files that is shared
                   between the components
 
 
-fse-cell
-  - Directive: FSETableInputDirective - binds enter and esc to input box
-  
+batch-row-adder: open modal to add multiple rows
+  - Component: batch-row-adder - getDismissReason(keyPress) - if escape key or key pressed outside of modal leave modal screen
+                               - selectRow(row and column number) - select head of row
+                               - clearRows() - delete all rows
+                               - newRow() - add a new row
+                               - removeRow() - remove selected row
+                               - rowValueChange() - change value of cell in row
+                               - addAll() - only add rows that are valid to the table
+
+fse-cell: cells of the table
+  - Directive: [fsecInput] - binds enter and esc to input box
+                              - enter to edit box
+                              - esc to leave box
+                            - binds single and double click to the box
+                              - single click to select box
+                              - double click to edit box
+  - Component: fse-cell - requestEdit() - makes the box editable by setting boolean val
+                        - updateValidationStatus(ValidatorResult) - checks if the content of the box is valid
+                        - requestEditConfirm(string) - once enter is pressed check if content of the box is valid and make it uneditable
+                        - requestEditCancel() - once escape is pressed, ignore edit and make box uneditable. check if previous content of box is valid
+
+column-selector: filter for columns
+  - Component: col-selector
+
+search-bar: search the table for the input being searched
+  -  Component: search-bar - searchRequest() - search the text in the search box
+                           - searchClear() - clear search box
+
+table:
+  - Component: fse-table - isSortedAsc() - return boolean telling whether column is sorted in ascending order
+                         - sortOn(Column, col_number) - sort column ascending or descending. Default ascending
+                         - resetSort() - column is not sorted. Sort order is none
+                         - onClick(row_number, col_number) - identify which cell is clicked
+                         - notifySelection() - notify listeners of the currently selected cell
+                         - triggerEdit() - Trigger edit-mode on currently selected cell. Pass on to parent component.
+                         - cellValueChange() - Cell signaled value change
+                         - isCellIndexSelected(row_num, col_num) - is the cell clicked, selected
+                         - selectedCellEvent() - give the selected cell event
+                         - height() - Get height of table (wihtout hidden rows)
+                         - width() - Get width of table (without hidden columns)
+                         The next functions are to loop through the table
+                         - navInputHandler(KeyboardEvent)
+                         - navInputFocus() - focus on the current cell
+                         - navUp()
+                         - navDown()
+                         - navLeft()
+                         - navLeftLoopover()
+                         - navRight()
+                         - navRightLoopover()
+
+fse-table:
+  - Component: fset-component - selectRow(selectedCell) - given the cell selected, select rowLen
+                              - focusSearch() - search focus navigation request
+                              - showRowAdder() - observable for add row request
+                              - applySearchString(string) - given a string search term searches it on the table
+                              - applySearch() - this can take event or string and processes the search request
+                              - removeSearch() - this removes the search filter applied to the table
+                              - sortContent() - this is to sort the table
+                              - reinitializeTable() - this is done to update the table when update changes are made
+                                                    through batch-row-adder
+                              - addRows() - add rows from batch-row-adder. Modifies info on database as well
+                              - editRow() - it a cell in a row. Modifies info on database as well
+                              - removeRow() - deletes a row. Modifies database as well
+                              - isRemoveRowDisabled() - checks if a row can be removed
