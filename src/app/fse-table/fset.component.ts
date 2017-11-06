@@ -7,6 +7,7 @@ import { ColumnSelectorComponent } from './column-selector';
 import { SearchBarComponent } from './search-bar';
 import { TableComponent } from './table';
 import { BatchRowAdderComponent } from './batch-row-adder';
+import { RowAdderComponent } from './row-adder';
 import { Column } from './shared/column';
 import { IFsetConfig } from './shared/fset-config-map-interface';
 import { IFsetService } from './shared/fset-interface-service';

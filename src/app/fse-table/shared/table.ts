@@ -41,6 +41,10 @@ export class Table<T> {
     this.rows = [];
   }
 
+  public addRowTop(m: T){
+    this.rows.unshift(new Row(m, this.cols, true));
+  }
+
   public pushRow(m: T) {
     this.rows.push(new Row(m, this.cols, true));
   }
