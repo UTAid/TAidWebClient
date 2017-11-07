@@ -26,15 +26,18 @@
     <div class="col-md-4">
       <div class="btn-group" style="float:right;">
         <undo-action style="padding-right:10px;"></undo-action>
-        <row-adder [table]="table" [factory]="config.factory"></row-adder>
+        <row-adder
+          [table]="table"
+          [factory]="config.factory"
+          [currRow]="currRow()">
+        </row-adder>
       </div>
     </div>
   </div>
   <batch-row-adder
     [factory]="config.factory"
     [columns]="table.cols"
-    [show]="showRowAdderSubject"
-    (addRows)="addRows($event)">
+    [show]="showRowAdderSubject">
   </batch-row-adder>
 
 

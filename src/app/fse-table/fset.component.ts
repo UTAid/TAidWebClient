@@ -14,6 +14,7 @@ import { IFsetService } from './shared/fset-interface-service';
 import { FsetService } from './shared/fset-OT-service';
 import { FsetConfig } from './shared/fset-config-OT';
 import { Table } from './shared/table';
+import { Cell } from './shared/cell'
 import { SortEvent, CellEditEvent, CellEvent } from './shared/events';
 import { nullToEmpty } from './shared/utils';
 
@@ -77,6 +78,10 @@ export class FsetComponent<T> implements OnInit {
 
   public selectRow(cellEvent: CellEvent<T>) {
     this.selRow = cellEvent.rowi;
+  }
+
+  public currRow(){
+    return this.selRow;
   }
 
   public focusSearch() {
