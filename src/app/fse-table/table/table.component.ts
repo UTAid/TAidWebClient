@@ -1,6 +1,6 @@
 import {
   Component, OnInit, ViewChild, Input, Output, EventEmitter,
-  Optional, Inject, OpaqueToken
+  Optional, Inject, OpaqueToken, AfterContentChecked
 } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
@@ -39,7 +39,7 @@ export const SHOW_HIDDEN_ROWS =
 * `rowChange: [index, newValue, column]` - User has changed the value of row
 *   at `index` to `newValue` at property `column`.
 */
-export class TableComponent<T> implements OnInit {
+export class TableComponent<T> implements OnInit, AfterContentChecked {
 
   @Input() table: Table<T>;
   @Input() validationRequestSubject: Subject<CellEvent<T>>;
@@ -71,6 +71,15 @@ export class TableComponent<T> implements OnInit {
     this.sortCol = undefined;
     this.sortOrder = SortOrder.NONE;
     this.selRow = this.selCol = 0;
+  }
+
+  ngAfterContentChecked(){
+    if (this.selRow != this.table.get_sel_row_index()
+        || this.selCol != this.table.get_sel_col_index()){
+      this.selCol = this.table.get_sel_row_index();
+      this.selRow = this.table.get_sel_col_index();
+      this.notifySelection();
+    }
   }
 
   protected isSortedAsc(): boolean {
@@ -106,6 +115,9 @@ export class TableComponent<T> implements OnInit {
 
   // Notify listeners of the currently selected cell.
   private notifySelection() {
+    this.table.set_sel_row_index(this.selRow);
+    this.table.set_sel_col_index(this.selCol);
+
     let cellEvent = this.selectedCellEvent;
     this.selection.emit(cellEvent); // notify parent
   }

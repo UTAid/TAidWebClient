@@ -29,7 +29,8 @@
         <row-adder
           [table]="table"
           [factory]="config.factory"
-          [currRow]="currRow()">
+          (row_adder_active)="isRowAdderActive($event)"
+          (addCreatedRow)="addRow($event)">
         </row-adder>
       </div>
     </div>

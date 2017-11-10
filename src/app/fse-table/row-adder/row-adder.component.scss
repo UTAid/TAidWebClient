@@ -19,3 +19,7 @@
 .add-button:hover{
   background-color: #ff6666;
 }
+
+.add-button:disabled{
+  background-color: #cccccc;
+}

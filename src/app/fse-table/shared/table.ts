@@ -3,7 +3,7 @@ import { Cell } from './cell';
 import { SortEvent } from './events';
 import { nullToEmpty } from './utils';
 
-class Row<T> {
+export class Row<T> {
 
   public cells: Cell<T>[];
   public show: boolean;
@@ -32,6 +32,8 @@ export class Table<T> {
 
   public rows: Row<T>[];
   public cols: Column<T>[];
+  private selected_row_index: number = 0;
+  private selected_col_index: number = 0;
 
   /**
   * Create an empty table with the specified array of columns.
@@ -136,6 +138,11 @@ export class Table<T> {
         break;
     }
   }
+
+  get_sel_row_index(){ return this.selected_row_index;}
+  get_sel_col_index(){ return this.selected_col_index;}
+  set_sel_row_index(row_index: number) {this.selected_row_index = row_index;}
+  set_sel_col_index(col_index: number) {this.selected_col_index = col_index;}
 }
 
 

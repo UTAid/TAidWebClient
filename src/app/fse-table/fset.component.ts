@@ -13,7 +13,7 @@ import { IFsetConfig } from './shared/fset-config-map-interface';
 import { IFsetService } from './shared/fset-interface-service';
 import { FsetService } from './shared/fset-OT-service';
 import { FsetConfig } from './shared/fset-config-OT';
-import { Table } from './shared/table';
+import { Table, Row } from './shared/table';
 import { Cell } from './shared/cell'
 import { SortEvent, CellEditEvent, CellEvent } from './shared/events';
 import { nullToEmpty } from './shared/utils';
@@ -42,6 +42,7 @@ export class FsetComponent<T> implements OnInit {
   public showRowAdderSubject: Subject<any> = new Subject();
 
   private selRow: number; // Currently selected row
+  private activeRowAdder: boolean = false;
 
   constructor(
     @Inject(FsetConfig) public config: IFsetConfig<T>,
@@ -78,10 +79,6 @@ export class FsetComponent<T> implements OnInit {
 
   public selectRow(cellEvent: CellEvent<T>) {
     this.selRow = cellEvent.rowi;
-  }
-
-  public currRow(){
-    return this.selRow;
   }
 
   public focusSearch() {
@@ -148,26 +145,28 @@ export class FsetComponent<T> implements OnInit {
   }
 
   public addRows(table: Table<T>) {
-    let updated:boolean = false;
-
     for (let row of table.rows) {
-      let r = row.underlyingModel;
-      this.service.create(r).subscribe((updatedT) => {
-        this.table.pushRow(r);
-      },
-      (err: any) => {
-        if (err.error instanceof Error) {
-          // A client-side or network error occurred. Handle it accordingly.
-          console.log('An error occurred:', err.error.message);
-        } else {
-          // The backend returned an unsuccessful response code.
-          // The response body may contain clues as to what went wrong,
-          this.service.update(r).subscribe((updatedT) => {
-            this.reinitializeTable();
-          }, (err) => console.log('error updating row ' + err));
-        }
-      });
+      this.addRow(row);
     }
+  }
+
+  public addRow(row: Row<T>){
+    let r = row.underlyingModel;
+    this.service.create(r).subscribe((updatedT) => {
+      this.table.pushRow(r);
+    },
+    (err: any) => {
+      if (err.error instanceof Error) {
+        // A client-side or network error occurred. Handle it accordingly.
+        console.log('An error occurred:', err.error.message);
+      } else {
+        // The backend returned an unsuccessful response code.
+        // The response body may contain clues as to what went wrong,
+        this.service.update(r).subscribe((updatedT) => {
+          this.reinitializeTable();
+        }, (err) => console.log('error updating row ' + err));
+      }
+    });
   }
 
   /*
@@ -175,6 +174,10 @@ export class FsetComponent<T> implements OnInit {
   * editInfo: [rowIndex, newValue, rowProperty]
   */
   public editRow(edit: CellEditEvent<T>) {
+    // if filling cells for row adder does not enter cell info to database
+    // one at a time
+    if (this.activeRowAdder) {edit.cell.value = edit.newValue; return;}
+    
     let oldVal = edit.cell.value;
     // Edit the row to have the new value
     edit.cell.value = edit.newValue;
@@ -200,5 +203,9 @@ export class FsetComponent<T> implements OnInit {
     return this.selRow < 0 ||
       this.selRow >= this.table.rowLen ||
       !this.table.row(this.selRow).show;
+  }
+
+  isRowAdderActive(event:boolean){
+    this.activeRowAdder = event;
   }
 }
