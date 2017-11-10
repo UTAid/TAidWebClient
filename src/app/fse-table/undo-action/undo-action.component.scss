@@ -19,3 +19,7 @@
 .undo-button:hover{
   background-color: #9999ff;
 }
+
+.undo-button:disabled{
+  background-color: #cccccc;
+}

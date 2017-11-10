@@ -61,7 +61,6 @@ export class RowAdderComponent<T> implements OnInit, AfterContentChecked {
       col.show = true;
       col.disabled = false;
     }
-    console.log(this.original_col_info);
   }
 
   private restoreColumnInfo():void{
