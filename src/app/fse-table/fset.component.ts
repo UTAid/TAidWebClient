@@ -8,6 +8,8 @@ import { SearchBarComponent } from './search-bar';
 import { TableComponent } from './table';
 import { BatchRowAdderComponent } from './batch-row-adder';
 import { RowAdderComponent } from './row-adder';
+import { UndoActionComponent } from './undo-action';
+
 import { Column } from './shared/column';
 import { IFsetConfig } from './shared/fset-config-map-interface';
 import { IFsetService } from './shared/fset-interface-service';
@@ -17,6 +19,7 @@ import { Table, Row } from './shared/table';
 import { Cell } from './shared/cell'
 import { SortEvent, CellEditEvent, CellEvent } from './shared/events';
 import { nullToEmpty } from './shared/utils';
+import { RecentActions, EditCellOperation, DeleteOperation, Operations } from './shared/recent_actions';
 
 
 @Component({
@@ -34,6 +37,8 @@ import { nullToEmpty } from './shared/utils';
 export class FsetComponent<T> implements OnInit {
 
   public table: Table<T>; // Table of cells.
+  public actions: RecentActions;
+
   // private filteredRows: Array<T>; // Array of displayed rows
 
   // Observable for search focus navigation request
@@ -42,13 +47,15 @@ export class FsetComponent<T> implements OnInit {
   public showRowAdderSubject: Subject<any> = new Subject();
 
   private selRow: number; // Currently selected row
-  private activeRowAdder: boolean = false;
+  public activeRowAdder: boolean = false;
 
   constructor(
     @Inject(FsetConfig) public config: IFsetConfig<T>,
     @Inject(FsetService) private service: IFsetService<T>) {}
 
   ngOnInit() {
+    this.actions = new RecentActions();
+
     let cols: Column<T>[] = new Array();
     // Init columns.
     for (let m of this.config.propertyMap){
@@ -164,7 +171,8 @@ export class FsetComponent<T> implements OnInit {
         // The response body may contain clues as to what went wrong,
         this.service.update(r).subscribe((updatedT) => {
           this.reinitializeTable();
-        }, (err) => console.log('error updating row ' + err));
+        },
+        (err) => console.log('error updating row ' + err));
       }
     });
   }
@@ -177,7 +185,7 @@ export class FsetComponent<T> implements OnInit {
     // if filling cells for row adder does not enter cell info to database
     // one at a time
     if (this.activeRowAdder) {edit.cell.value = edit.newValue; return;}
-    
+
     let oldVal = edit.cell.value;
     // Edit the row to have the new value
     edit.cell.value = edit.newValue;
@@ -189,12 +197,18 @@ export class FsetComponent<T> implements OnInit {
         console.log('error editing row ' + err);
         this.table[edit.rowi].cells[edit.coli].value = oldVal;
       },
-    () => console.log('edit completed'));
+    () => {
+      console.log('edit completed');
+      // Send info to recent actions for undo to occur
+      this.actions.add_action(new EditCellOperation(edit.cell, oldVal, edit.rowi, edit.coli));
+      },
+    );
   }
 
   public removeRow() {
     this.service.delete(this.table.row(this.selRow).underlyingModel)
       .subscribe(() => {
+        this.actions.add_action(new DeleteOperation(this.table.row(this.selRow)));
         this.table.deleteRow(this.selRow);
       }, (err) => console.log('error deleting row ' + err));
   }
@@ -207,5 +221,34 @@ export class FsetComponent<T> implements OnInit {
 
   isRowAdderActive(event:boolean){
     this.activeRowAdder = event;
+  }
+
+  private editCell(action:EditCellOperation<T>){
+    // this function is used for undo
+    let oldVal = action.cell.value;
+    action.cell.value = action.cell_info;
+
+    this.service.update(action.cell.model).subscribe(
+      (updatedT) => { // Update cell
+        this.table.updateRow(action.row_num, updatedT);
+      },
+      (err) => {
+        console.log('error undoing cell' + err);
+        this.table[action.row_num].cells[action.col_num].value = oldVal;
+      },
+      () => {
+        console.log('undo completed');
+      },
+    );
+  }
+
+  undoAction(action: Operations){
+    if(action instanceof EditCellOperation){
+      this.editCell(action);
+    }
+    else if (action instanceof DeleteOperation){
+      // if row was deleted this will restore it
+      this.addRow(action.row);
+    }
   }
 }

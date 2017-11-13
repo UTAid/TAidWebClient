@@ -3,6 +3,6 @@
   class="undo-button"
   tooltip="Undo Action [Alt+z]"
   (click)="undoAction()"
-  [disabled]="!canUndoAction()">
+  [disabled]="canUndoAction()">
   <i class="fa fa-undo" aria-hidden="true"></i>
 </button>

@@ -25,7 +25,10 @@
     </div>
     <div class="col-md-4">
       <div class="btn-group" style="float:right;">
-        <undo-action style="padding-right:10px;"></undo-action>
+        <undo-action style="padding-right:10px;"
+          [actions]="actions"
+          (recentAction)="undoAction($event)">
+        </undo-action>
         <row-adder
           [table]="table"
           [factory]="config.factory"
@@ -44,6 +47,7 @@
 
   <fse-table
     [table]="table"
+    [firstRowAdded]="activeRowAdder"
     (selection)="selectRow($event)"
     (search)="focusSearch()"
     (sort)="sortContent($event)"

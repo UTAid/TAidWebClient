@@ -5,8 +5,6 @@ import { Column } from '../shared/column';
 import { Cell } from '../shared/cell';
 import { SortEvent, CellEditEvent, CellEvent } from '../shared/events';
 
-import { TableComponent } from '../table';
-
 @Component({
   selector: 'row-adder',
   templateUrl: './row-adder.component.html',

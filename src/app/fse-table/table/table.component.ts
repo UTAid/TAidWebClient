@@ -43,6 +43,7 @@ export class TableComponent<T> implements OnInit, AfterContentChecked {
 
   @Input() table: Table<T>;
   @Input() validationRequestSubject: Subject<CellEvent<T>>;
+  @Input() firstRowAdded: boolean;
   @ViewChild('navInput') navInput;
 
   @Output() search: EventEmitter<any> = new EventEmitter();
@@ -74,11 +75,13 @@ export class TableComponent<T> implements OnInit, AfterContentChecked {
   }
 
   ngAfterContentChecked(){
-    if (this.selRow != this.table.get_sel_row_index()
-        || this.selCol != this.table.get_sel_col_index()){
-      this.selCol = this.table.get_sel_row_index();
-      this.selRow = this.table.get_sel_col_index();
-      this.notifySelection();
+    if (this.firstRowAdded){
+      if (this.selRow != this.table.get_sel_row_index()
+          || this.selCol != this.table.get_sel_col_index()){
+        this.selCol = this.table.get_sel_row_index();
+        this.selRow = this.table.get_sel_col_index();
+        this.notifySelection();
+      }
     }
   }
 

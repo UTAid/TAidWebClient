@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { RecentActions } from '../shared/recent_actions';
+import { RecentActions, Operations } from '../shared/recent_actions';
 
 @Component({
   selector: 'undo-action',
@@ -9,7 +9,8 @@ import { RecentActions } from '../shared/recent_actions';
 })
 export class UndoActionComponent implements OnInit {
 
-  actions = new RecentActions();
+  @Input() actions: RecentActions;
+  @Output() recentAction = new EventEmitter<Operations>();
 
   constructor() { }
 
@@ -17,11 +18,11 @@ export class UndoActionComponent implements OnInit {
   }
 
   undoAction() {
-    console.log("Hi");
+    this.recentAction.emit(this.actions.remove_action());
   }
 
   canUndoAction(){
-    this.actions.is_empty();
+    return this.actions.is_empty();
   }
 
 }
