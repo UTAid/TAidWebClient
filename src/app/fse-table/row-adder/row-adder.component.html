@@ -1,8 +1,10 @@
-<button
-  accesskey="A"
-  class="add-button"
-  tooltip="Add Row [Alt+a]"
-  (click)="addRow()"
-  [disabled]="isRowCreated()">
-  <i class="fa fa-plus" aria-hidden="true"></i>
-</button>
+<div class="tooltip-wrapper" tooltip="Add Row [Alt+a]">
+  <button
+    accesskey="A"
+    class="add-button"
+    tooltip="Add Row [Alt+a]"
+    (click)="addRow()"
+    [disabled]="isRowCreated()">
+    <i class="fa fa-plus" aria-hidden="true"></i>
+  </button>
+</div>

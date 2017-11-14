@@ -14,12 +14,12 @@
           <i class="fa fa-plus"></i>
         </button>
         <div class="tooltip-wrapper" tooltip="Remove Row">
-        <button id="fset-btn-remove" type="button" class="btn btn-default"
-          (click)="removeRow()"
-          [disabled]="isRemoveRowDisabled()">
-          <i class="fa fa-minus"></i>
-        </button>
-      </div>
+          <button id="fset-btn-remove" type="button" class="btn btn-default"
+            (click)="removeRow()"
+            [disabled]="isRemoveRowDisabled()">
+            <i class="fa fa-minus"></i>
+          </button>
+        </div>
       </div>
       <col-selector [columns]="table.cols"></col-selector>
     </div>
