@@ -9,5 +9,3 @@ before_script:
 
 script:
   - ng build --env=prod
-  - npm run sw
-  - npm run static-serve

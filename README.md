@@ -19,6 +19,12 @@ Follow the instructions to setup a local version in your machine:
 * `sudo npm install` - This will install all the dependencies
 * `ng serve` - This will set up dev server at `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
+### Set-up frontend for production
+* `sudo npm install` - This will install all the dependencies
+* `ng build --env=prod` - Set up production environment
+* `npm run sw` - Set up service worker
+* `npm run static-serve` - display content made by ng build
+
 
 ### Set-up Backend
 Follow the set up instructions for the backend available [here](https://github.com/UTAid/TAidBackend)
