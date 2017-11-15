@@ -6,7 +6,7 @@ module.exports = {
     root: 'dist/',
     plugins: [
         new SWPrecacheWebpackPlugin({
-          cacheId: 'firestarter',
+          cacheId: 'TAidWebClient',
           filename: 'service-worker.js',
           staticFileGlobs: [
             'dist/index.html',

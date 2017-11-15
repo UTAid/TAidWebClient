@@ -8,6 +8,6 @@ before_script:
   - npm install -g @angular/cli
 
 script:
-  #- ng build --prod
-  #- ng build --prod --aot=false  # this is temporary. use the previous command
-  - npm run pwa   # set aot to true for this command in package.json
+  - ng build --env=prod --aot==false
+  - npm run sw
+  - npm run static-serve

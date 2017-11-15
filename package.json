@@ -9,7 +9,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "pwa": "ng build --prod --aot=false && sw-precache --root=dist --config=precache-config.js"
+    "sw": "sw-precache --root=dist --config=precache-config.js",
+    "static-serve": "cd dist && live-server --port=4200 --host=localhost --entry-file=/index.html"
   },
   "private": true,
   "dependencies": {
