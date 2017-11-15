@@ -8,6 +8,6 @@ before_script:
   - npm install -g @angular/cli
 
 script:
-  - ng build --env=prod --aot==false
+  - ng build --env=prod
   - npm run sw
   - npm run static-serve

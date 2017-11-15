@@ -1,0 +1,2 @@
+Instructions to set up PWA was found:
+https://coryrylan.com/blog/fast-offline-angular-apps-with-service-workers
