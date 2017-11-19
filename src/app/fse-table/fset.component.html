@@ -1,6 +1,6 @@
 <div>
   <div id="fset-tool-bar" class="row">
-    <div class="col-md-4">
+    <div class="col-8 col-sm-8 col-md-4">
       <search-bar
       [focus]="searchFocusSubject"
       (search)="applySearch($event)"
@@ -13,8 +13,9 @@
           (click)="showRowAdder()">
           <i class="fa fa-plus"></i>
         </button>
-        <div class="tooltip-wrapper" tooltip="Remove Row">
+        <div class="tooltip-wrapper" tooltip="Remove Row [Alt+d]">
           <button id="fset-btn-remove" type="button" class="btn btn-default"
+            accesskey="D"
             (click)="removeRow()"
             [disabled]="isRemoveRowDisabled()">
             <i class="fa fa-minus"></i>
@@ -23,8 +24,8 @@
       </div>
       <col-selector [columns]="table.cols"></col-selector>
     </div>
-    <div class="col-md-4">
-      <div class="btn-group" style="float:right;">
+    <div class="container" style="position:fixed;">
+      <div class="btn-group pull-right">
         <undo-action style="padding-right:10px;"
           [actions]="actions"
           (recentAction)="undoAction($event)">
@@ -41,7 +42,8 @@
   <batch-row-adder
     [factory]="config.factory"
     [columns]="table.cols"
-    [show]="showRowAdderSubject">
+    [show]="showRowAdderSubject"
+    (addRows)="addRows($event)">
   </batch-row-adder>
 
 

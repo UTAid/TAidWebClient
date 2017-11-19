@@ -33,7 +33,7 @@ export class RowAdderComponent<T> implements OnInit, AfterContentChecked {
       if (this.table.get_sel_row_index() != 0){
         this.created_row = false;
         this.validate_row();
-        this.table.deleteRow(0);
+        // this.table.deleteRow(0);
         this.restoreColumnInfo();
         this.row_adder_active.emit(this.isRowCreated());
       }

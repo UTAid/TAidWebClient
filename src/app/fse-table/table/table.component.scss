@@ -13,6 +13,8 @@ table > tbody > tr {
   }
 }
 
+tr:nth-child(even){background-color: #fbfbfb}
+
 table {
   margin: 1em 0;
 }
