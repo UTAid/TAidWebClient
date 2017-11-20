@@ -31,7 +31,15 @@ export class RecentActions {
 }
 
 export abstract class Operations {
-  abstract nameOfType():string;
+}
+
+export abstract class RowOperations<T> extends Operations {
+  row: Row<T>;
+
+  constructor(row:Row<T>){
+    super();
+    this.row = row;
+  }
 }
 
 export class EditCellOperation<T> extends Operations {
@@ -48,18 +56,16 @@ export class EditCellOperation<T> extends Operations {
     this.row_num = row_num;
     this.col_num = col_num;
   }
-
-  nameOfType():string{ return("Edit Cell"); }
 }
 
-export class DeleteOperation<T> extends Operations {
+export class DeleteRowOperation<T> extends RowOperations<T> {
+  // Row was deleted. Re-add it
+}
 
-  row: Row<T>;
+export class AddRowOperation<T> extends RowOperations<T> {
+  // Row was added. Delete it
+}
 
-  constructor(row:Row<T>){
-    super();
-    this.row = row;
-  }
-
-  nameOfType():string{ return("Delete Cell"); }
+export class EditRowOperation<T> extends RowOperations<T> {
+  // Row was added. Delete it
 }

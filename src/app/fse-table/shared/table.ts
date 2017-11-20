@@ -15,7 +15,7 @@ export class Row<T> {
   *   display.
   * - `show?`: If true, this row will be shown (default). Hidden otherwise.
   */
-  constructor (model: T, columns: Column<T>[], show = true) {
+  constructor (model: T, columns: Column<T>[], show:boolean = true) {
     this.cells = [];
     this._underlyingModel = model;
     for (let col of columns) {

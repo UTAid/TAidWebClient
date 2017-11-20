@@ -1,5 +1,19 @@
 <div>
   <div id="fset-tool-bar" class="row">
+    <div class="container" style="position:fixed;">
+      <div class="btn-group pull-right">
+        <undo-action style="padding-right:10px;"
+          [actions]="actions"
+          (recentAction)="undoAction($event)">
+        </undo-action>
+        <row-adder
+          [table]="table"
+          [factory]="config.factory"
+          (row_adder_active)="isRowAdderActive($event)"
+          (addCreatedRow)="addSingleRow($event)">
+        </row-adder>
+      </div>
+    </div>
     <div class="col-8 col-sm-8 col-md-4">
       <search-bar
       [focus]="searchFocusSubject"
@@ -23,20 +37,6 @@
         </div>
       </div>
       <col-selector [columns]="table.cols"></col-selector>
-    </div>
-    <div class="container" style="position:fixed;">
-      <div class="btn-group pull-right">
-        <undo-action style="padding-right:10px;"
-          [actions]="actions"
-          (recentAction)="undoAction($event)">
-        </undo-action>
-        <row-adder
-          [table]="table"
-          [factory]="config.factory"
-          (row_adder_active)="isRowAdderActive($event)"
-          (addCreatedRow)="addRow($event)">
-        </row-adder>
-      </div>
     </div>
   </div>
   <batch-row-adder

@@ -19,7 +19,8 @@ import { Table, Row } from './shared/table';
 import { Cell } from './shared/cell'
 import { SortEvent, CellEditEvent, CellEvent } from './shared/events';
 import { nullToEmpty } from './shared/utils';
-import { RecentActions, EditCellOperation, DeleteOperation, Operations } from './shared/recent_actions';
+import { RecentActions, EditCellOperation, DeleteRowOperation,
+  Operations, AddRowOperation, EditRowOperation } from './shared/recent_actions';
 
 
 @Component({
@@ -177,12 +178,48 @@ export class FsetComponent<T> implements OnInit {
     });
   }
 
+  public addSingleRow(row: Row<T>){
+    let r = row.underlyingModel;
+
+    let key = row.cells[0].value;
+    // check if info exists. If it does store the old info
+    this.service.read(key).subscribe((oldRowInfo) => {
+      let cols: Column<T>[] = new Array();
+      for (let m of this.config.propertyMap){
+        cols.push(
+          new Column(
+            m.display, m.setter, m.getter,
+            m.validator, !Boolean(m.hide), Boolean(m.disabled)));
+      }
+      let old_row = new Row(oldRowInfo, cols);
+      this.actions.add_action(new EditRowOperation(old_row));
+    });
+
+    this.service.create(r).subscribe((updatedT) => {
+      this.actions.add_action(new AddRowOperation(row));
+      this.table.pushRow(r);
+    },
+    (err: any) => {
+      if (err.error instanceof Error) {
+        // A client-side or network error occurred. Handle it accordingly.
+        console.log('An error occurred:', err.error.message);
+      } else {
+        // The backend returned an unsuccessful response code.
+        // The response body may contain clues as to what went wrong,
+        this.service.update(r).subscribe((updatedT) => {
+          this.reinitializeTable();
+        },
+        (err) => console.log('error updating row ' + err));
+      }
+    });
+  }
+
   /*
   * Edit the row's properties.
   * editInfo: [rowIndex, newValue, rowProperty]
   */
   public editRow(edit: CellEditEvent<T>) {
-    // if filling cells for row adder does not enter cell info to database
+    // if filling cells for row adder, does not enter cell info to database
     // one at a time
     if (this.activeRowAdder) {edit.cell.value = edit.newValue; return;}
 
@@ -208,7 +245,7 @@ export class FsetComponent<T> implements OnInit {
   public removeRow() {
     this.service.delete(this.table.row(this.selRow).underlyingModel)
       .subscribe(() => {
-        this.actions.add_action(new DeleteOperation(this.table.row(this.selRow)));
+        this.actions.add_action(new DeleteRowOperation(this.table.row(this.selRow)));
         this.table.deleteRow(this.selRow);
       }, (err) => console.log('error deleting row ' + err));
   }
@@ -242,12 +279,27 @@ export class FsetComponent<T> implements OnInit {
     );
   }
 
+  private removeGivenRow(row:Row<T>) {
+    let key = row.cells[0].value;
+    this.service.delete(row.underlyingModel).subscribe(() => {});
+  }
+
   undoAction(action: Operations){
     if(action instanceof EditCellOperation){
       this.editCell(action);
     }
-    else if (action instanceof DeleteOperation){
+    else if (action instanceof DeleteRowOperation){
       // if row was deleted this will restore it
+      this.addRow(action.row);
+      this.reinitializeTable();
+    }
+    else if (action instanceof AddRowOperation){
+      // if row is added delete it
+      this.removeGivenRow(action.row);
+      this.reinitializeTable();
+    }
+    else if (action instanceof EditRowOperation){
+      // if row is updated then revert it
       this.addRow(action.row);
     }
   }

@@ -20,7 +20,6 @@ export class RowAdderComponent<T> implements OnInit, AfterContentChecked {
   @Output() addCreatedRow: EventEmitter<Row<T>> = new EventEmitter();
 
   private created_row: boolean = false;
-  private first_cell: Cell<T>;
   private original_col_info:boolean[][] = [];
 
   constructor() { }
@@ -41,6 +40,10 @@ export class RowAdderComponent<T> implements OnInit, AfterContentChecked {
   }
 
   public addRow():void{
+    // scroll document to top
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+
     this.created_row = true;
     this.row_adder_active.emit(this.isRowCreated());
 
@@ -82,10 +85,6 @@ export class RowAdderComponent<T> implements OnInit, AfterContentChecked {
 
     if (isAllValid){
       this.addCreatedRow.emit(this.table.row(0));
-      console.log("Row has been added");
-    }
-    else{
-      console.log("Row has not been added. There were errors");
     }
   }
 
