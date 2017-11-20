@@ -1,5 +1,9 @@
+<div class="alert alert-warning" *ngIf="message!=''">
+  <strong>Warning!</strong> {{message}}
+</div>
+
 <div class="container" style="padding-top: 1%;">
   <h2>Student List</h2>
   <hr>
-  <fset-component></fset-component>
+  <fset-component (message)=setMessage($event)></fset-component>
 </div>

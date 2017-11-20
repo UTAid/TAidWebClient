@@ -10,7 +10,8 @@
           [table]="table"
           [factory]="config.factory"
           (row_adder_active)="isRowAdderActive($event)"
-          (addCreatedRow)="addSingleRow($event)">
+          (addCreatedRow)="addSingleRow($event)"
+          (keyStatus)="checkKeyPresent($event)">
         </row-adder>
       </div>
     </div>

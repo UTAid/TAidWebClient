@@ -18,9 +18,11 @@ export class RowAdderComponent<T> implements OnInit, AfterContentChecked {
 
   @Output() row_adder_active = new EventEmitter<boolean>();
   @Output() addCreatedRow: EventEmitter<Row<T>> = new EventEmitter();
+  @Output() keyStatus = new EventEmitter<boolean>();
 
   private created_row: boolean = false;
   private original_col_info:boolean[][] = [];
+  private oldKey:string = '';
 
   constructor() { }
 
@@ -32,9 +34,18 @@ export class RowAdderComponent<T> implements OnInit, AfterContentChecked {
       if (this.table.get_sel_row_index() != 0){
         this.created_row = false;
         this.validate_row();
-        // this.table.deleteRow(0);
+        this.table.deleteRow(0);
         this.restoreColumnInfo();
         this.row_adder_active.emit(this.isRowCreated());
+      }
+      else if (this.table.get_sel_row_index() == 0){
+        if (this.table.cell(0,0).validate().isValid && this.table.cell(0,0).value != this.oldKey){
+          this.oldKey = this.table.cell(0,0).value;
+          this.keyStatus.emit(true);
+        }
+        else{
+          this.keyStatus.emit(false);
+        }
       }
     }
   }
@@ -87,6 +98,4 @@ export class RowAdderComponent<T> implements OnInit, AfterContentChecked {
       this.addCreatedRow.emit(this.table.row(0));
     }
   }
-
-
 }

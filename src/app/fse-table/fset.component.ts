@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, Inject
+  Component, OnInit, Inject, Output, EventEmitter
 } from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 
@@ -50,6 +50,8 @@ export class FsetComponent<T> implements OnInit {
   private selRow: number; // Currently selected row
   public activeRowAdder: boolean = false;
 
+  @Output() message = new EventEmitter<string>();
+
   constructor(
     @Inject(FsetConfig) public config: IFsetConfig<T>,
     @Inject(FsetService) private service: IFsetService<T>) {}
@@ -95,6 +97,28 @@ export class FsetComponent<T> implements OnInit {
 
   public showRowAdder() {
     this.showRowAdderSubject.next(undefined);
+  }
+
+  setMessage(message:string):void{
+    this.message.emit(message);
+    // scroll document to top
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    
+    setTimeout(() =>
+    {
+      this.message.emit("");
+    },
+    3000);
+  }
+
+  checkKeyPresent(status:boolean):void{
+    if (status){
+      let key = this.table.cell(0,0).value;
+      this.service.read(key).subscribe(() => {
+        this.setMessage("ID is already present. Contents of this user will be updated");
+      });
+    }
   }
 
   private applySearchString(term:string){

@@ -76,6 +76,7 @@ class StudentLocalService extends FsetLocalService<Student> {
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
+  styleUrls: ['app.component.scss'],
   providers: [
     {provide: FsetConfig, useValue: studentFsetConfig},
     {provide: FsetService, useClass: StudentService}
@@ -86,5 +87,11 @@ export class AppComponent implements OnInit {
   constructor(public viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {}
+
+  message:string = "";
+
+  setMessage(message:string){
+    this.message = message;
+  }
 
 }
