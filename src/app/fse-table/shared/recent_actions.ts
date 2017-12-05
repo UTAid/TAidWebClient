@@ -67,5 +67,5 @@ export class AddRowOperation<T> extends RowOperations<T> {
 }
 
 export class EditRowOperation<T> extends RowOperations<T> {
-  // Row was added. Delete it
+  // Row was updated. Revert it
 }

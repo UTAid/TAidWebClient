@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { IFsetService } from './fse-table';
-import { Student } from './student';
+import { IFsetService } from '../fse-table';
+import { Student } from '../structure/student';
 
 const URL = 'http://127.0.0.1:8000/api/v0/students/';
 

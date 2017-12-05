@@ -72,6 +72,7 @@ export class TableComponent<T> implements OnInit, AfterContentChecked {
     this.sortCol = undefined;
     this.sortOrder = SortOrder.NONE;
     this.selRow = this.selCol = 0;
+    this.sortOn(this.table.col(this.selCol), this.selCol);
   }
 
   ngAfterContentChecked(){

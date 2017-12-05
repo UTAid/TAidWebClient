@@ -1,12 +1,18 @@
 import { Component, OnInit, ViewContainerRef, Injectable } from '@angular/core';
-import { StudentService } from './student.service';
+
+import { StudentService } from './services/student.service';
+import { TeachingAssistantService } from './services/teaching_assistant.service';
+import { InstructorService } from './services/instructor.service';
 
 import {
   FsetComponent, fsetConfig, FsetConfig,
   FsetLocalService, FsetService,
   emailValidator, nonEmptyValidator
 } from './fse-table/';
-import {Student} from './student';
+
+import {Student} from './structure/student';
+import {Teaching_Assistant} from './structure/teaching_assistant';
+import {Instructor} from './structure/instructor';
 
 let studentFsetConfig = fsetConfig([
   { display: 'ID',
@@ -34,6 +40,50 @@ let studentFsetConfig = fsetConfig([
     validator: (o) => emailValidator(o.email),
     hide: true
   }], () => new Student('', '', '', '', ''));
+
+let teachingAssistantFsetConfig = fsetConfig([
+  { display: 'ID',
+    setter: (v, o) => o.university_id = v,
+    getter: (o) => o.university_id,
+    validator: (o) => nonEmptyValidator(o.university_id, 'ID cannot be empty'),
+    disabled: true
+  },
+  { display: 'First Name',
+    setter: (v, o) => o.first_name = v,
+    getter: (o) => o.first_name
+  },
+  { display: 'Last Name',
+    setter: (v, o) => o.last_name = v,
+    getter: (o) => o.last_name
+  },
+  { display: 'Email',
+    setter: (v, o) => o.email = v,
+    getter: (o) => o.email,
+    validator: (o) => emailValidator(o.email),
+    hide: true
+  }], () => new Teaching_Assistant('', '', '', ''));
+
+let instructorFsetConfig = fsetConfig([
+  { display: 'ID',
+    setter: (v, o) => o.university_id = v,
+    getter: (o) => o.university_id,
+    validator: (o) => nonEmptyValidator(o.university_id, 'ID cannot be empty'),
+    disabled: true
+  },
+  { display: 'First Name',
+    setter: (v, o) => o.first_name = v,
+    getter: (o) => o.first_name
+  },
+  { display: 'Last Name',
+    setter: (v, o) => o.last_name = v,
+    getter: (o) => o.last_name
+  },
+  { display: 'Email',
+    setter: (v, o) => o.email = v,
+    getter: (o) => o.email,
+    validator: (o) => emailValidator(o.email),
+    hide: true
+  }], () => new Instructor('', '', '', ''));
 
 // let studentList: Student[] = [
 //   {
@@ -73,6 +123,7 @@ class StudentLocalService extends FsetLocalService<Student> {
   }
 }
 
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -80,6 +131,10 @@ class StudentLocalService extends FsetLocalService<Student> {
   providers: [
     {provide: FsetConfig, useValue: studentFsetConfig},
     {provide: FsetService, useClass: StudentService}
+    // {provide: FsetConfig, useValue: teachingAssistantFsetConfig},
+    // {provide: FsetService, useClass: TeachingAssistantService}
+    // {provide: FsetConfig, useValue: instructorFsetConfig},
+    // {provide: FsetService, useClass: InstructorService}
   ],
 })
 export class AppComponent implements OnInit {
